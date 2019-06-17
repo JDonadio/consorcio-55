@@ -9,3 +9,31 @@
 @import '~@ionic/angular/css/text-alignment.css';
 @import '~@ionic/angular/css/text-transformation.css';
 @import '~@ionic/angular/css/flex-utils.css';
+
+ion-item {
+  cursor: pointer;
+}
+ion-icon {
+  color: var(--ion-color-primary);
+}
+ion-fab-button {
+  ion-icon {
+    color: #fff;
+  }
+}
+.consortium {
+  color: var(--ion-color-secondary);
+  background: var(--ion-color-light);
+}
+.person {
+  background: var(--ion-color-light);
+}
+.img {
+  margin: 0 .7rem;
+  ion-icon {
+    font-size: 25px;
+    border-radius: 50%;
+    font-size: 35px;
+    padding: 5px;
+  }
+}

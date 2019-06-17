@@ -5,13 +5,12 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { HomePage } from './home.page';
-import { SharedModule } from '../shared/shared-module.module';
+import { AddPage } from './add.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: HomePage
+    component: AddPage
   }
 ];
 
@@ -21,12 +20,8 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     ReactiveFormsModule,
-    RouterModule.forChild(routes),
-    SharedModule
+    RouterModule.forChild(routes)
   ],
-  declarations: [
-    HomePage,
-  ],
-  entryComponents: []
+  declarations: [AddPage]
 })
-export class HomePageModule {}
+export class AddPageModule {}

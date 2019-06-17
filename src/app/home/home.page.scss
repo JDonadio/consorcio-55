@@ -1,4 +1,22 @@
-.welcome-card ion-img {
-  max-height: 35vh;
-  overflow: hidden;
+ion-grid {
+  display: flex;
+}
+ion-col {
+  --ion-grid-column-padding: 0px;
+  ion-card {
+    min-width: 330px;
+  }
+}
+ion-avatar {
+  ion-icon {
+    font-size: 30px;
+    margin: 5px;
+  }
+}
+.content {
+  margin: 15px;
+  ion-label {
+    font-size: 18px;
+    font-weight: 600;
+  }
 }
