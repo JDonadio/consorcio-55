@@ -15,6 +15,7 @@ export class AddPage implements OnInit {
 
   public clientForm: FormGroup;
   public currentYear: number;
+  public type: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -31,13 +32,18 @@ export class AddPage implements OnInit {
       dateContractTo: ['', Validators.required],
     });
     this.currentYear = new Date().getFullYear();
+    this.type = 'client';
   }
   
   ngOnInit() {}
 
-  addContract() {}
+  public addContract() {}
 
-  addClient() {
+  public setType(type: string) {
+    this.type = type;
+  }
+
+  public addClient() {
     console.log(this.clientForm.value);
     let opts = {
       name: this.clientForm.get('name').value,

@@ -5,8 +5,8 @@
         <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
-
-    <ion-title text-center>
+    
+    <ion-title text-center *ngIf="data">
       <div class="header-ttl">
         <div class="img">
           <ion-icon name="business" *ngIf="data.type == 'consortium'" class="consortium"></ion-icon>
@@ -18,14 +18,20 @@
       </div>
     </ion-title>
     
-    <ion-buttons slot="primary">
-      <ion-button></ion-button>
+    <ion-buttons slot="end" *ngIf="editMode">
+      <ion-button (click)="ngOnInit()" class="close-button">
+        <ion-icon slot="icon-only" name="refresh"></ion-icon>
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content *ngIf="data">
+  <!-- Personal information -->
   <ion-list *ngIf="!editMode">
+    <ion-list-header>
+      <ion-label>Datos personales</ion-label>
+    </ion-list-header>
     <ion-item>
       <div class="info">
         <div class="property">Nombre:</div>
@@ -35,7 +41,7 @@
     <ion-item>
       <div class="info">
         <div class="property">Tipo:</div>
-        <div class="description">{{data.type == 'client' ? 'Cliente' : 'Consorcio'}}</div>
+        <div class="description">{{data.type == 'client' ? (data.owner ? 'Cliente - Propietario' : 'Cliente - Inquilino') : 'Consorcio'}}</div>
       </div>
     </ion-item>
     <ion-item>
@@ -46,34 +52,75 @@
     </ion-item>
     <ion-item>
       <div class="info">
-        <div class="property">Vigencia:</div>
+        <div class="property">Contrato:</div>
         <div class="description">{{data.dateContractFrom | date}} - {{data.dateContractTo | date}}</div>
       </div>
     </ion-item>
   </ion-list>
 
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="!editMode">
-    <ion-fab-button size="small">
-      <ion-icon name="more"></ion-icon>
-    </ion-fab-button>
+  <!-- Payment details -->
+  <ion-list *ngIf="!editMode">
+    <ion-list-header>
+      <ion-label>Pagos</ion-label>
+      <div class="date">
+        <ion-button (click)="getPreviousMonthInformation()">&lt;</ion-button>
+        {{selectedDateStr | capitalize}}
+        <ion-button (click)="getNextMonthInformation()">&gt;</ion-button>
+      </div>
+    </ion-list-header>
 
-    <ion-fab-list side="start">
-      <ion-fab-button (click)="askForRemove()">
-        <ion-icon name="trash" color="danger"></ion-icon>
-      </ion-fab-button>
-    </ion-fab-list>
+    <ion-item (click)="addPayment('Alquiler', 'rent')">
+      <div class="info">
+        <div class="property">Alquiler:</div>
+        <div class="description">{{(data.payments && data.payments.rent | currency:'ARS':'symbol':'3.2-2') || 'No hay pagos realizados'}}</div>
+      </div>
+    </ion-item>
+    <ion-item (click)="addPayment('Expensas', 'expenses')">
+      <div class="info">
+        <div class="property">Expensas:</div>
+        <div class="description">{{(data.payments && data.payments.expenses | currency:'ARS':'symbol':'3.2-2') || 'No hay pagos realizados'}}</div>
+      </div>
+    </ion-item>
+    <ion-item (click)="addPayment('Cochera', 'garage')">
+      <div class="info">
+        <div class="property">Cochera:</div>
+        <div class="description">{{(data.payments && data.payments.garage | currency:'ARS':'symbol':'3.2-2') || 'No hay pagos realizados'}}</div>
+      </div>
+    </ion-item>
+    <ion-item (click)="addPayment('Luz', 'electricity')">
+      <div class="info">
+        <div class="property">Luz:</div>
+        <div class="description">{{(data.payments && data.payments.electricity | currency:'ARS':'symbol':'3.2-2') || 'No hay pagos realizados'}}</div>
+      </div>
+    </ion-item>
+    <ion-item (click)="addPayment('Gas', 'gas')">
+      <div class="info">
+        <div class="property">Gas:</div>
+        <div class="description">{{(data.payments && data.payments.gas | currency:'ARS':'symbol':'3.2-2') || 'No hay pagos realizados'}}</div>
+      </div>
+    </ion-item>
+    <ion-item (click)="addPayment('CISI', 'cisi')">
+      <div class="info">
+        <div class="property">CISI:</div>
+        <div class="description">{{(data.payments && data.payments.cisi | currency:'ARS':'symbol':'3.2-2') || 'No hay pagos realizados'}}</div>
+      </div>
+    </ion-item>
+    <ion-item (click)="addPayment('Extras', 'extras')">
+      <div class="info">
+        <div class="property">Extras:</div>
+        <div class="extras">
+          <div class="description">{{(data.payments.extras.amount | currency:'ARS':'symbol':'3.2-2') || 'No hay pagos realizados'}}</div>
+          <div class="description">{{data.payments.extras.details || 'No hay detalles'}}</div>
+        </div>
+      </div>
+    </ion-item>
+  </ion-list>
 
-    <ion-fab-list side="top">
-      <ion-fab-button (click)="editMode = !editMode">
-        <ion-icon name="create" color="primary"></ion-icon>
-      </ion-fab-button>
-    </ion-fab-list>
-  </ion-fab>
-
+  <!-- Edit mode -->
   <form [formGroup]="clientForm" *ngIf="editMode">
     <ion-radio-group formControlName="type">
       <ion-row>
-        <ion-col>
+        <ion-col *ngIf="type == 'client'">
           <ion-card>
             <ion-item>
               <ion-label>Particular</ion-label>
@@ -82,7 +129,7 @@
           </ion-card>
         </ion-col>
   
-        <ion-col>
+        <ion-col *ngIf="type == 'consortium'">
           <ion-card>
             <ion-item>
               <ion-label>Consorcio</ion-label>
@@ -158,9 +205,31 @@
       </ion-col>
     </ion-row>
   </form>
+
+  <!-- Fab buttons -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="!editMode">
+    <ion-fab-button size="small">
+      <ion-icon name="more"></ion-icon>
+    </ion-fab-button>
+  
+    <ion-fab-list side="start">
+      <ion-fab-button (click)="askForRemove()">
+        <ion-icon name="trash" color="danger"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  
+    <ion-fab-list side="top">
+      <ion-fab-button (click)="editMode = !editMode">
+        <ion-icon name="create" color="primary"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+
+  <div class="padding-bottom"></div>
 </ion-content>
 
-<ion-footer *ngIf="editMode">
+<ion-footer>
   <ion-button class="btn submit" expand="block" type="submit" [disabled]="clientForm.invalid" block
-    (click)="askForEdit()">Editar</ion-button>
+    (click)="askForEdit()" *ngIf="editMode">Editar</ion-button>
+  <ion-button class="btn submit" expand="block" type="submit" block (click)="openHistory()" *ngIf="!editMode">Ver historial</ion-button>
 </ion-footer>

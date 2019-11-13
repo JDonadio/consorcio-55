@@ -14,16 +14,16 @@
     <ion-radio-group formControlName="type">
       <ion-row>
         <ion-col>
-          <ion-card>
+          <ion-card (click)="setType('client')">
             <ion-item>
-              <ion-label>Particular</ion-label>
+              <ion-label>Cliente</ion-label>
               <ion-radio slot="start" value="client" checked></ion-radio>
             </ion-item>
           </ion-card>
         </ion-col>
 
         <ion-col>
-          <ion-card>
+          <ion-card (click)="setType('consortium')">
             <ion-item>
               <ion-label>Consorcio</ion-label>
               <ion-radio slot="start" value="consortium"></ion-radio>
@@ -39,7 +39,7 @@
           <ion-card>
             <ion-item>
               <ion-label>Propietario</ion-label>
-              <ion-radio slot="start" [value]="true" checked></ion-radio>
+              <ion-radio slot="start" [value]="true" checked [disabled]="type == 'consortium'"></ion-radio>
             </ion-item>
           </ion-card>
         </ion-col>
@@ -48,7 +48,7 @@
           <ion-card>
             <ion-item>
               <ion-label>Inquilino</ion-label>
-              <ion-radio slot="start" [value]="false"></ion-radio>
+              <ion-radio slot="start" [value]="false" [disabled]="type == 'consortium'"></ion-radio>
             </ion-item>
           </ion-card>
         </ion-col>
@@ -70,7 +70,7 @@
       </ion-col>
     </ion-row>
     
-    <ion-row>
+    <ion-row *ngIf="type == 'client'">
       <ion-col>
         <ion-item>
           <ion-icon name="calendar"></ion-icon>
@@ -87,7 +87,7 @@
       </ion-col>
     </ion-row>
 
-    <ion-row>
+    <ion-row *ngIf="type == 'client'">
       <ion-col>
         <ion-item>
           <ion-label position="stacked">Contrato</ion-label>
