@@ -37,6 +37,13 @@ ion-footer {
     text-align: right;
     padding: 5px 0;
   }
+  .services, .extras {
+    display: flex;
+    justify-content: space-between;
+    .details {
+      margin-right: 3rem;
+    }
+  }
 }
 .date {
   padding-right: 1rem;
