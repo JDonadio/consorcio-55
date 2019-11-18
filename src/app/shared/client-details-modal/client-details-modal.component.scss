@@ -31,11 +31,13 @@ ion-footer {
     color: var(--ion-color-primary);
     font-size: 18px;
     font-weight: 600;
+    font-family: var(--roboto-slab);
   }
   .description {
     font-size: 16px;
     text-align: right;
     padding: 5px 0;
+    color: var(--ion-color-medium);
   }
   .services, .extras {
     display: flex;
@@ -46,7 +48,11 @@ ion-footer {
   }
 }
 .date {
-  padding-right: 1rem;
+  padding-right: .5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 195px;
 }
 .padding-bottom {
   padding: 35px 0;

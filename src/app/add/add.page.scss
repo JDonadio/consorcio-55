@@ -5,6 +5,13 @@
 ion-col {
   min-width: 300px;
 }
+ion-radio-group {
+  ion-row {
+    ion-col {
+      --ion-grid-column-padding: 0px;
+    }
+  }
+}
 ion-footer {
   padding: .7rem;
   ion-button {

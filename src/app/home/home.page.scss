@@ -11,6 +11,15 @@ ion-col {
     }
   }
 }
+ion-card {
+  .card {
+    display: flex;
+    align-items: center;
+  }
+  background: white;
+  padding: 10px;
+  margin: 15px;
+}
 ion-avatar {
   ion-icon {
     font-size: 30px;
