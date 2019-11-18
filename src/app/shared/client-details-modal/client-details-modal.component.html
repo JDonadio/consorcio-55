@@ -146,7 +146,7 @@
       </ion-list-header>
     
       <ion-item (click)="addPayment('Servicios', 'services')">
-        <div class="info">
+        <div class="info pt1">
           <div class="property">Servicios:</div>
           <div *ngIf="data.payments && data.payments.services">
             <div class="services" *ngFor="let service of data.payments.services">

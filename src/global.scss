@@ -67,3 +67,9 @@ ion-footer {
     padding: 5px;
   }
 }
+@media only screen and (min-height: 768px) and (min-width: 768px) {
+  .sc-ion-modal-md-h {
+    --width: 900px !important;
+    --height: 900px !important;
+  }
+}
