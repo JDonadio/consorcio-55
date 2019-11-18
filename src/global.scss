@@ -13,13 +13,40 @@
 ion-item {
   cursor: pointer;
 }
-ion-icon {
-  color: var(--ion-color-primary);
-}
 ion-fab-button {
   ion-icon {
     color: #fff;
   }
+}
+ion-content {
+  --background: var(--bg-color);
+}
+.blue {
+  --background: var(--ion-color-primary);
+  background: var(--ion-color-primary);
+  ion-item {
+    --background: var(--ion-color-primary);
+  }
+  ion-icon {
+    color: white;
+  }
+  ion-label {
+    --color: white !important;
+    font-weight: 600;
+  }
+}
+.header-md {
+  &::after {
+    height: 0px;
+  }
+}
+.footer-md {
+  &::before {
+    height: 0px;
+  }
+}
+.searchbar-input.sc-ion-searchbar-ios {
+  border-radius: 4px;
 }
 .consortium {
   color: var(--ion-color-secondary);

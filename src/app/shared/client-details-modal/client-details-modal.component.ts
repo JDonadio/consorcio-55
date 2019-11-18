@@ -173,9 +173,12 @@ export class ClientDetailsModalComponent implements OnInit {
     delete commons.extras;
     delete commons.services;
     if (_.isEmpty(commons)) commons = [0];
+    else commons = _.values(commons);
     let extras = payments && payments.extras ? _.map(payments.extras, 'amount') : [0];
     let services = payments && payments.services ? _.map(payments.services, 'amount') : [0];
-    this.data.balance = _.sumBy(Array.from(_.values(commons), v => Number(v))) + _.sumBy(Array.from(extras), v => Number(v)) + _.sumBy(Array.from(services), v => Number(v));
+    let total = _.concat(commons, _.concat(extras, services));
+    console.log('total:', total)
+    this.data.balance = _.sumBy(Array.from(_.values(total), v => Number(v)));
     // console.log('_.sumBy(Array.from(_.values(commons), v => Number(v))):', _.sumBy(Array.from(_.values(commons), v => Number(v))))
     // console.log('_.sumBy(Array.from(extras), v => Number(v)):', _.sumBy(Array.from(extras), v => Number(v)))
     // console.log('_.sumBy(Array.from(services), v => Number(v)):', _.sumBy(Array.from(services), v => Number(v)))
