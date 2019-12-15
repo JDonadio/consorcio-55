@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { SharingService } from 'src/services/sharing.service';
+import { Chart } from "chart.js";
 import * as _ from 'lodash';
 
 const MONTHS = {
@@ -23,6 +24,7 @@ const MONTHS = {
   styleUrls: ['./history.page.scss'],
 })
 export class HistoryPage implements OnInit {
+  @ViewChild('balanceCanvas') balanceCanvas: ElementRef;
 
   public client: any;
   public monthCounter: number;
@@ -37,6 +39,7 @@ export class HistoryPage implements OnInit {
   public byMonths: any;
   public months: any;
   public superTotal: number;
+  public chart: any;
   private sub: any;
 
   constructor(
@@ -52,6 +55,7 @@ export class HistoryPage implements OnInit {
     this.totalExtrasArray = [];
     this.superTotal = 0;
     this.months = MONTHS;
+    this.chart = null;
   }
 
   ngOnInit() {
@@ -87,10 +91,6 @@ export class HistoryPage implements OnInit {
   }
 
   private processPayments() {
-    // let months = this.client.payments && this.client.payments[this.selectedDate.getFullYear()];
-    // console.log('months:', months)
-    // console.log('months keys:', _.keys(months))
-    
     _.each(_.keys(this.months), month => {
       console.log('Processing month: ' + month);
       let payments = this.client.payments && this.client.payments[this.selectedDate.getFullYear()] 
@@ -137,5 +137,38 @@ export class HistoryPage implements OnInit {
     console.log('this.totalExtrasArray:', this.totalExtrasArray)
     console.log('this.byMonths:', this.byMonths)
     console.log('this.superTotal:', this.superTotal)
+
+    this.drawChart();
+  }
+
+  private drawChart() {
+    let commons = _.sumBy(Array.from(_.values(_.map(this.totalCommonsArray, 'amount')), v => Number(v)));
+    let extras = _.sumBy(Array.from(_.values(_.map(this.totalExtrasArray, 'amount')), v => Number(v)));
+    let y = [commons, extras, this.superTotal];
+    let x = ['Gastos comunes', 'Gastos extras', 'Total anual'];
+
+    // If a chart is already drew, clean chart object it before re-draw it
+    if (this.chart) {
+      this.chart.destroy();
+      this.chart = null;
+    }
+
+    this.chart = new Chart(this.balanceCanvas.nativeElement, {
+      type: "doughnut",
+      data: {
+        labels: x,
+        datasets: [
+          {
+            data: y,
+            backgroundColor: [
+              "rgba(255, 99, 132, 0.65)",
+              "rgba(54, 162, 235, 0.65)",
+              "rgba(255, 206, 86, 0.65)",
+            ],
+            hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"]
+          }
+        ]
+      }
+    });
   }
 }

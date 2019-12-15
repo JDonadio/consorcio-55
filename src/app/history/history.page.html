@@ -10,6 +10,8 @@
 <ion-content>
   <div class="current-year">{{selectedDateStr | capitalize}}</div>
 
+  <canvas #balanceCanvas></canvas>
+
   <div class="payments" *ngIf="client && client.payments">
     <div>Total gastos por mes</div>
     <div *ngFor="let m of byMonths">
@@ -32,6 +34,7 @@
       <div>{{extra.name | capitalize}}</div>
       <div>{{extra.amount | currency:'ARS':'symbol-narrow':'1.2-2'}}</div>
     </div>
+
     <div>Total: {{superTotal | currency:'ARS':'symbol-narrow':'1.2-2'}}</div>
   </div>
 
