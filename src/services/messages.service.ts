@@ -69,7 +69,7 @@ export class MessagesService {
   public async showToast(opts) {
     const toast = await this.toastCtrl.create({
       message: opts.msg,
-      duration: opts.duration || 2000
+      duration: opts.duration || 3000
     });
     toast.present();
   }

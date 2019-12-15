@@ -1,0 +1,24 @@
+<form [formGroup]="consortiumForm" (ngSubmit)="addConsortium()">
+  <ion-row>
+    <ion-col>
+      <ion-item>
+        <ion-label position="stacked">Nombre</ion-label>
+        <ion-input type="text" #name formControlName="name"></ion-input>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+  
+  <ion-row>
+    <ion-col>
+      <ion-item>
+        <ion-label position="stacked">Dirección</ion-label>
+        <ion-input type="text" formControlName="address"></ion-input>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+</form>
+
+<ion-footer>
+  <ion-button class="btn submit" expand="block" [disabled]="consortiumForm.invalid" block (click)="addConsortium()">Agregar
+  </ion-button>
+</ion-footer>

@@ -6,6 +6,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { AddPage } from './add.page';
+import { ClientFormComponent } from './client-form/client-form.component';
+import { ConsortiumFormComponent } from './consortium-form/consortium-form.component';
 
 const routes: Routes = [
   {
@@ -22,6 +24,10 @@ const routes: Routes = [
     ReactiveFormsModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [AddPage]
+  declarations: [
+    AddPage,
+    ClientFormComponent,
+    ConsortiumFormComponent,
+  ]
 })
 export class AddPageModule {}
