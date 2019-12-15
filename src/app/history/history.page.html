@@ -8,13 +8,34 @@
 </ion-header>
 
 <ion-content>
-  <div class="payments" *ngIf="client && client.payments">
-    <!-- <div class="year" *ngFor="let months of client.payments[currentYear]">
-      <ion-label>{{currentYear}}</ion-label>
+  <div class="current-year">{{selectedDateStr | capitalize}}</div>
 
-      <div class="month" *ngFor="let month of months">
-        <ion-label>{{month}}</ion-label>
+  <div class="payments" *ngIf="client && client.payments">
+    <div>Total gastos por mes</div>
+    <div *ngFor="let m of byMonths">
+      <div>{{m.name | capitalize}}</div>
+      <div *ngIf="m.balance == 0">No se realizaron pagos</div>
+      <div *ngIf="m.balance > 0">
+        <div>{{m.commons | currency:'ARS':'symbol-narrow':'1.2-2'}}</div>
+        <div>{{m.extras | currency:'ARS':'symbol-narrow':'1.2-2'}}</div>
       </div>
-    </div> -->
+    </div>
+
+    <div>Total de gastos comunes</div>
+    <div *ngFor="let common of totalCommonsArray">
+      <div>{{common.name | capitalize}}</div>
+      <div>{{common.amount | currency:'ARS':'symbol-narrow':'1.2-2'}}</div>
+    </div>
+
+    <div>Total de gastos extras</div>
+    <div *ngFor="let extra of totalExtrasArray">
+      <div>{{extra.name | capitalize}}</div>
+      <div>{{extra.amount | currency:'ARS':'symbol-narrow':'1.2-2'}}</div>
+    </div>
+    <div>Total: {{superTotal | currency:'ARS':'symbol-narrow':'1.2-2'}}</div>
+  </div>
+
+  <div *ngIf="client && !client.payments">
+    No hay balance
   </div>
 </ion-content>
