@@ -28,7 +28,6 @@ export class HomePage implements OnInit {
       this.zone.run(() => {
         this.clients = clients;
         this.filteredClients = _.clone(clients);
-        // console.log(clients);
       });
     });
   }

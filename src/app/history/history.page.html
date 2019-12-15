@@ -1,9 +1,20 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
     <ion-title>Historial</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <div class="payments" *ngIf="client && client.payments">
+    <!-- <div class="year" *ngFor="let months of client.payments[currentYear]">
+      <ion-label>{{currentYear}}</ion-label>
 
+      <div class="month" *ngFor="let month of months">
+        <ion-label>{{month}}</ion-label>
+      </div>
+    </div> -->
+  </div>
 </ion-content>

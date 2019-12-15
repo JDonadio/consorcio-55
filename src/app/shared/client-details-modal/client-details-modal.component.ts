@@ -5,6 +5,7 @@ import { MessagesService } from 'src/services/messages.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AngularFireDatabase } from 'angularfire2/database';
+import { SharingService } from 'src/services/sharing.service';
 import * as _ from 'lodash';
 
 @Component({
@@ -14,8 +15,8 @@ import * as _ from 'lodash';
 })
 export class ClientDetailsModalComponent implements OnInit {
 
-  public data: any;
   public client: any;
+  public data: any;
   public clientForm: FormGroup;
   public editMode: boolean;
   public currentYear: number;
@@ -23,6 +24,7 @@ export class ClientDetailsModalComponent implements OnInit {
   public now: Date;
   public selectedDate: Date;
   public selectedDateStr: string;
+  private sub: any;
   
   constructor(
     private modalCtrl: ModalController,
@@ -31,18 +33,18 @@ export class ClientDetailsModalComponent implements OnInit {
     private messagesService: MessagesService,
     private formBuilder: FormBuilder,
     private router: Router,
-    private db: AngularFireDatabase
+    private db: AngularFireDatabase,
+    private sharingService: SharingService,
   ) {
     this.currentYear = new Date().getFullYear();
     this.now = new Date();
-    this.db.object('clients/' + this.navParams.data.key).valueChanges().subscribe((client: any) => {
+    this.sub = this.db.object('clients/' + this.navParams.data.key).valueChanges().subscribe((client: any) => {
       if (_.isEmpty(client)) return;
-// console.log('client:', client)
       this.client = _.cloneDeep(client);
       this.data = _.cloneDeep(client);
       this.processPayments();
       this.setClientForm(client);
-console.log('this.data:', this.data)
+      this.sharingService.setClient(client);
     });
   }
   
@@ -51,6 +53,10 @@ console.log('this.data:', this.data)
     this.monthCounter = this.now.getMonth();
     this.selectedDate = new Date();
     this.selectedDateStr = this.selectedDate.toLocaleDateString('es-AR', { year: 'numeric', month: 'short' });
+  }
+
+  ionViewWillLeave() {
+    this.sub.unsubscribe();
   }
 
   private setClientForm(client: any) {
@@ -163,11 +169,12 @@ console.log('this.data:', this.data)
 
   public openHistory() {
     this.close();
+    this.sharingService.setClient(this.client);
     this.router.navigate(['history']);
   }
 
   private processPayments() {
-    let payments = this.client.payments && this.client.payments[this.selectedDate.getFullYear()] && this.client.payments[this.selectedDate.getFullYear()][this.monthCounter + 1];
+    let payments = this.data.payments && this.data.payments[this.selectedDate.getFullYear()] && this.data.payments[this.selectedDate.getFullYear()][this.monthCounter + 1];
     this.data.payments = payments;
     let commons = _.cloneDeep(payments) || [];
     delete commons.extras;
@@ -177,11 +184,6 @@ console.log('this.data:', this.data)
     let extras = payments && payments.extras ? _.map(payments.extras, 'amount') : [0];
     let services = payments && payments.services ? _.map(payments.services, 'amount') : [0];
     let total = _.concat(commons, _.concat(extras, services));
-    console.log('total:', total)
     this.data.balance = _.sumBy(Array.from(_.values(total), v => Number(v)));
-    // console.log('_.sumBy(Array.from(_.values(commons), v => Number(v))):', _.sumBy(Array.from(_.values(commons), v => Number(v))))
-    // console.log('_.sumBy(Array.from(extras), v => Number(v)):', _.sumBy(Array.from(extras), v => Number(v)))
-    // console.log('_.sumBy(Array.from(services), v => Number(v)):', _.sumBy(Array.from(services), v => Number(v)))
-    // console.log('this.data.balance:', this.data.balance )
   }
 }
