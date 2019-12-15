@@ -1,6 +1,7 @@
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouteReuseStrategy } from '@angular/router';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
@@ -15,6 +16,7 @@ import { AngularFireAuthModule } from "@angular/fire/auth";
 import { AngularFireDatabase } from '@angular/fire/database';
 
 import localeEsAr from '@angular/common/locales/es-AR';
+import { TokenInterceptor } from 'src/services/token-interceptor';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCLYOiEOeR4uMAtL6VhjpA542t87dmXDxE",
@@ -37,12 +39,18 @@ registerLocaleData(localeEsAr, 'es-Ar');
     AppRoutingModule,
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireAuthModule,
+    HttpClientModule,
   ],
   providers: [
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: LOCALE_ID, useValue: 'es-Ar' },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true,
+    },
     AngularFireDatabase
   ],
   bootstrap: [AppComponent]

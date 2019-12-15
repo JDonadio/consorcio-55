@@ -14,6 +14,9 @@ export class SharingService {
   private clients = new BehaviorSubject<any>(null);
   currentClients = this.clients.asObservable();
 
+  private client = new BehaviorSubject<any>(null);
+  currentClient = this.client.asObservable();
+
   constructor(
     private db: AngularFireDatabase
   ) {
@@ -34,5 +37,9 @@ export class SharingService {
 
   setClients(clients: any) {
     this.clients.next(clients);
+  }
+
+  setClient(client: any) {
+    this.client.next(client);
   }
 }

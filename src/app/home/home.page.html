@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
@@ -12,12 +12,12 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
+
+  <ion-searchbar color="secondary" mode="ios" debounce="300" placeholder="Buscar..." [(ngModel)]="searchText" (ionChange)="searchClient()"></ion-searchbar>
 </ion-header>
 
 <ion-content>
-  <ion-searchbar debounce="300" placeholder="Buscar..." [(ngModel)]="searchText" (ionChange)="searchClient()"></ion-searchbar>
-
-  <ion-grid>
+  <!-- <ion-grid>
     <ion-row>
       <ion-col *ngFor="let c of filteredClients">
         <ion-card (click)="openModal(c)">
@@ -28,11 +28,26 @@
             </div>
             <div class="content">
               <ion-label>{{c.name | capitalize}}</ion-label>
-              <div>{{c.address | capitalize}}</div>
+              <div class="address">{{c.address | capitalize}}</div>
             </div>
           </ion-item>
         </ion-card>
       </ion-col>
     </ion-row>
-  </ion-grid>
+  </ion-grid> -->
+
+  <ion-virtual-scroll [items]="filteredClients" approxItemHeight="80px">
+    <ion-card *virtualItem="let client">
+      <div class="card" (click)="openModal(client)">
+        <div class="img">
+          <ion-icon name="business" *ngIf="client.type == 'consortium'" class="consortium"></ion-icon>
+          <ion-icon name="person" *ngIf="client.type != 'consortium'" class="person"></ion-icon>
+        </div>
+        <div class="content">
+          <ion-label>{{client.name | capitalize}}</ion-label>
+          <div>{{client.address | capitalize}}</div>
+        </div>
+      </div>
+    </ion-card>
+  </ion-virtual-scroll>
 </ion-content>

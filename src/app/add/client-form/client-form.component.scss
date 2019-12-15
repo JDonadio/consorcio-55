@@ -1,0 +1,17 @@
+.client {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  background: white;
+  border-radius: 3px;
+  font-size: 14px;
+  text-transform: uppercase;
+  &.selected {
+    filter: drop-shadow(0px 0px 6px #9fd4f3);
+    border: 1px solid #9dccd2;
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: .3px;
+  }
+}

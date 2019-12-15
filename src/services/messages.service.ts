@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AlertController, ToastController, LoadingController } from '@ionic/angular';
+import * as _ from 'lodash';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,7 @@ export class MessagesService {
     this.loading = null;
   }
 
-  showConfirm(opts: any): Promise<any> {
+  public showConfirm(opts: any): Promise<any> {
     return new Promise((resolve, reject) => {
       this.alertCtrl.create({
         header: opts.title,
@@ -39,20 +40,46 @@ export class MessagesService {
     });
   }
 
-  async showToast(opts) {
+  public showInputConfirm(opts: any): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.alertCtrl.create({
+        header: opts.title,
+        subHeader: opts.subtitle,
+        message: opts.msg,
+        inputs: opts.inputs,
+        buttons: [
+          {
+            text: opts.cancelText || 'Cancelar',
+            role: 'cancel',
+            handler: () => { resolve(false) }
+          },
+          {
+            text: 'Ok',
+            handler: (data) => { console.log(data); resolve(_.values(data)) }
+          }
+        ],
+      }).then(alert => alert.present().then(() => {
+        const firstInput: any = document.querySelector('ion-alert input');
+        firstInput.focus();
+        return;
+      }));
+    });
+  }
+
+  public async showToast(opts) {
     const toast = await this.toastCtrl.create({
       message: opts.msg,
-      duration: opts.duration || 2000
+      duration: opts.duration || 3000
     });
     toast.present();
   }
 
-  async showLoading(opts) {
+  public async showLoading(opts) {
     this.loading = await this.loadingCtrl.create({ message: opts.msg });
     this.loading.present();
   }
 
-  dismissLoading() {
+  public dismissLoading() {
     try {
       this.loading.dismiss();
       this.loading = null;

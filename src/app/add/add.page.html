@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
@@ -10,100 +10,29 @@
 </ion-header>
 
 <ion-content padding>
-  <form [formGroup]="clientForm">
-    <ion-radio-group formControlName="type">
-      <ion-row>
-        <ion-col>
-          <ion-card>
-            <ion-item>
-              <ion-label>Particular</ion-label>
-              <ion-radio slot="start" value="client" checked></ion-radio>
-            </ion-item>
-          </ion-card>
-        </ion-col>
+  <div class="selector">
+    <div class="item" [ngClass]="{'selected': isClient}" (click)="changeType(true)">
+      <ion-avatar>
+        <img src="assets/images/person.png">
+      </ion-avatar>
+    </div>
+    <div class="item" [ngClass]="{'selected': !isClient}" (click)="changeType(false)">
+      <ion-avatar>
+        <img src="assets/images/building.png">
+      </ion-avatar>
+    </div>
+  </div>
 
-        <ion-col>
-          <ion-card>
-            <ion-item>
-              <ion-label>Consorcio</ion-label>
-              <ion-radio slot="start" value="consortium"></ion-radio>
-            </ion-item>
-          </ion-card>
-        </ion-col>
-      </ion-row>
-    </ion-radio-group>
+  <app-client-form *ngIf="isClient"></app-client-form>
+  
+  <app-consortium-form *ngIf="!isClient"></app-consortium-form>
 
-    <ion-radio-group formControlName="owner">
-      <ion-row>
-        <ion-col>
-          <ion-card>
-            <ion-item>
-              <ion-label>Propietario</ion-label>
-              <ion-radio slot="start" [value]="true" checked></ion-radio>
-            </ion-item>
-          </ion-card>
-        </ion-col>
-          
-        <ion-col>
-          <ion-card>
-            <ion-item>
-              <ion-label>Inquilino</ion-label>
-              <ion-radio slot="start" [value]="false"></ion-radio>
-            </ion-item>
-          </ion-card>
-        </ion-col>
-      </ion-row>
-    </ion-radio-group>
-
-    <ion-row>
-      <ion-col>
-        <ion-item>
-          <ion-label position="stacked">Nombre</ion-label>
-          <ion-input type="text" #name formControlName="name"></ion-input>
-        </ion-item>
-      </ion-col>
-      <ion-col>
-        <ion-item>
-          <ion-label position="stacked">Dirección</ion-label>
-          <ion-input type="text" formControlName="address"></ion-input>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-    
-    <ion-row>
-      <ion-col>
-        <ion-item>
-          <ion-icon name="calendar"></ion-icon>
-          <ion-label>Desde</ion-label>
-          <ion-datetime display-format="DD MMM, YYYY" [min]="currentYear - 5" [max]="currentYear + 5" formControlName="dateContractFrom"></ion-datetime>
-        </ion-item>
-      </ion-col>
-      <ion-col>
-        <ion-item>
-          <ion-icon name="calendar"></ion-icon>
-          <ion-label>Hasta</ion-label>
-          <ion-datetime display-format="DD MMM, YYYY" [min]="currentYear - 5" [max]="currentYear + 5" formControlName="dateContractTo"></ion-datetime>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-
-    <ion-row>
-      <ion-col>
-        <ion-item>
-          <ion-label position="stacked">Contrato</ion-label>
-          <ion-input type="text" formControlName="contractURL"></ion-input>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-  </form>
-
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed" (click)="addContract()">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button size="small">
-      <ion-icon name="document"></ion-icon>
+      <div class="upload-btn-wrapper">
+        <ion-icon name="document"></ion-icon>
+        <input type="file" name="myfile" (change)="handleFileInput($event.target.files)">
+      </div>
     </ion-fab-button>
   </ion-fab>
 </ion-content>
-
-<ion-footer>
-  <ion-button class="btn submit" expand="block" type="submit" [disabled]="clientForm.invalid" block (click)="addClient()">Agregar</ion-button>
-</ion-footer>

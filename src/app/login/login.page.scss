@@ -4,3 +4,12 @@ ion-button {
 .label-stacked {
   margin-bottom: 10px;
 }
+ion-card {
+  .card {
+    display: flex;
+    align-items: center;
+  }
+  background: white;
+  padding: 10px;
+  margin: 15px;
+}

@@ -26,12 +26,38 @@ ion-footer {
   width: 100%;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  &.pt1 {
+    margin-top: 1rem;
+  }
   .property {
     color: var(--ion-color-primary);
     font-size: 18px;
     font-weight: 600;
+    font-family: var(--roboto-slab);
   }
   .description {
     font-size: 16px;
+    text-align: right;
+    padding: 5px 0;
+    color: var(--ion-color-medium);
   }
+  .services, .extras {
+    display: flex;
+    justify-content: space-between;
+    .details {
+      margin-right: 3rem;
+    }
+  }
+}
+.date {
+  padding-right: .5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 195px;
+}
+.padding-bottom {
+  padding: 35px 0;
+  width: 100%;
 }

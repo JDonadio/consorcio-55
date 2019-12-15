@@ -1,12 +1,12 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-button (click)="close()" class="close-button">
         <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
-
-    <ion-title text-center>
+    
+    <ion-title text-center *ngIf="data">
       <div class="header-ttl">
         <div class="img">
           <ion-icon name="business" *ngIf="data.type == 'consortium'" class="consortium"></ion-icon>
@@ -18,51 +18,262 @@
       </div>
     </ion-title>
     
-    <ion-buttons slot="primary">
-      <ion-button></ion-button>
+    <ion-buttons slot="end" *ngIf="editMode">
+      <ion-button (click)="ngOnInit()" class="close-button">
+        <ion-icon slot="icon-only" name="refresh"></ion-icon>
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-list *ngIf="!editMode">
-    <ion-item>
-      <div class="info">
-        <div class="property">Nombre:</div>
-        <div class="description">{{data.name | capitalize}}</div>
-      </div>
-    </ion-item>
-    <ion-item>
-      <div class="info">
-        <div class="property">Tipo:</div>
-        <div class="description">{{data.type == 'client' ? 'Cliente' : 'Consorcio'}}</div>
-      </div>
-    </ion-item>
-    <ion-item>
-      <div class="info">
-        <div class="property">Dirección:</div>
-        <div class="description">{{data.address | capitalize}}</div>
-      </div>
-    </ion-item>
-    <ion-item>
-      <div class="info">
-        <div class="property">Vigencia:</div>
-        <div class="description">{{data.dateContractFrom | date}} - {{data.dateContractTo | date}}</div>
-      </div>
-    </ion-item>
-  </ion-list>
+<ion-content *ngIf="data">
+  <!-- Personal information -->
+  <ion-card *ngIf="!editMode">
+    <ion-list>
+      <ion-list-header>
+        <ion-label>Datos personales</ion-label>
+      </ion-list-header>
+      <ion-item>
+        <div class="info">
+          <div class="property">Nombre:</div>
+          <div class="description">{{data.name | capitalize}}</div>
+        </div>
+      </ion-item>
+      <ion-item>
+        <div class="info">
+          <div class="property">Tipo:</div>
+          <div class="description">{{data.type == 'client' ? (data.owner ? 'Cliente - Propietario' : 'Cliente - Inquilino') : 'Consorcio'}}</div>
+        </div>
+      </ion-item>
+      <ion-item>
+        <div class="info">
+          <div class="property">Dirección:</div>
+          <div class="description">{{data.address | capitalize}}</div>
+        </div>
+      </ion-item>
+      <ion-item>
+        <div class="info">
+          <div class="property">Contrato:</div>
+          <div class="description">{{data.dateContractFrom | date}} - {{data.dateContractTo | date}}</div>
+        </div>
+      </ion-item>
+    </ion-list>
+  </ion-card>
 
+  <!-- Payment details for Clients -->
+  <ion-card *ngIf="!editMode && data.type == 'client'">
+    <ion-list>
+      <ion-list-header>
+        <ion-label>Pagos</ion-label>
+        <div class="date">
+          <ion-button (click)="getPreviousMonthInformation()">&lt;</ion-button>
+          {{selectedDateStr | capitalize}}
+          <ion-button (click)="getNextMonthInformation()">&gt;</ion-button>
+        </div>
+      </ion-list-header>
+  
+      <ion-item (click)="addPayment('Alquiler', 'rent')">
+        <div class="info">
+          <div class="property">Alquiler:</div>
+          <div class="description">{{(data.payments && data.payments.rent | currency:'ARS':'symbol-narrow':'1.2-2') || 'No hay pagos realizados'}}</div>
+        </div>
+      </ion-item>
+      <ion-item (click)="addPayment('Expensas', 'expenses')">
+        <div class="info">
+          <div class="property">Expensas:</div>
+          <div class="description">{{(data.payments && data.payments.expenses | currency:'ARS':'symbol':'1.2-2') || 'No hay pagos realizados'}}</div>
+        </div>
+      </ion-item>
+      <ion-item (click)="addPayment('Cochera', 'garage')">
+        <div class="info">
+          <div class="property">Cochera:</div>
+          <div class="description">{{(data.payments && data.payments.garage | currency:'ARS':'symbol':'1.2-2') || 'No hay pagos realizados'}}</div>
+        </div>
+      </ion-item>
+      <ion-item (click)="addPayment('Luz', 'electricity')">
+        <div class="info">
+          <div class="property">Luz:</div>
+          <div class="description">{{(data.payments && data.payments.electricity | currency:'ARS':'symbol':'1.2-2') || 'No hay pagos realizados'}}</div>
+        </div>
+      </ion-item>
+      <ion-item (click)="addPayment('Gas', 'gas')">
+        <div class="info">
+          <div class="property">Gas:</div>
+          <div class="description">{{(data.payments && data.payments.gas | currency:'ARS':'symbol':'1.2-2') || 'No hay pagos realizados'}}</div>
+        </div>
+      </ion-item>
+      <ion-item (click)="addPayment('CISI', 'cisi')">
+        <div class="info">
+          <div class="property">CISI:</div>
+          <div class="description">{{(data.payments && data.payments.cisi | currency:'ARS':'symbol':'1.2-2') || 'No hay pagos realizados'}}</div>
+        </div>
+      </ion-item>
+      <ion-item (click)="addPayment('Extras', 'extras')">
+        <div class="info">
+          <div class="property">Extras:</div>
+          <div *ngIf="data.payments && data.payments.extras">
+            <div class="extras" *ngFor="let extra of data.payments.extras">
+              <div class="description details">{{(extra.details | capitalize) || 'No hay detalles'}}</div>
+              <div class="description">{{(extra.amount | currency:'ARS':'symbol':'1.2-2') || 'No hay pagos realizados'}}</div>
+            </div>
+          </div>
+          <div *ngIf="!data.payments || !data.payments.extras">
+            <div class="description">No hay pagos realizados</div>
+          </div>
+        </div>
+        </ion-item>
+    </ion-list>
+  </ion-card>
+  <ion-card *ngIf="data.payments && data.payments.extras">
+    <ion-item>
+      <div class="info">
+        <div class="property">Balance</div>
+        <div class="description">{{data.balance | currency:'ARS':'symbol':'1.2-2'}}</div>
+      </div>
+    </ion-item>
+  </ion-card>
+
+  <!-- Payment details for Consortiums -->
+  <ion-card *ngIf="!editMode && data.type == 'consortium'">
+    <ion-list>
+      <ion-list-header>
+        <ion-label>Pagos</ion-label>
+        <div class="date">
+          <ion-button (click)="getPreviousMonthInformation()">&lt;</ion-button>
+          {{selectedDateStr | capitalize}}
+          <ion-button (click)="getNextMonthInformation()">&gt;</ion-button>
+        </div>
+      </ion-list-header>
+    
+      <ion-item (click)="addPayment('Servicios', 'services')">
+        <div class="info pt1">
+          <div class="property">Servicios:</div>
+          <div *ngIf="data.payments && data.payments.services">
+            <div class="services" *ngFor="let service of data.payments.services">
+              <div class="description details">{{(service.details | capitalize) || 'No hay detalles'}}</div>
+              <div class="description">{{(service.amount | currency:'ARS':'symbol':'1.2-2') || 'No hay pagos realizados'}}</div>
+            </div>
+          </div>
+          <div *ngIf="!data.payments || !data.payments.services">
+            <div class="description">No hay pagos realizados</div>
+          </div>
+        </div>
+      </ion-item>
+    </ion-list>
+  </ion-card>
+  <ion-card *ngIf="data.payments && data.payments.services">
+    <ion-item>
+      <div class="info">
+        <div class="property">Balance</div>
+        <div class="description">{{data.balance | currency:'ARS':'symbol':'1.2-2'}}</div>
+      </div>
+    </ion-item>
+  </ion-card>
+
+  <!-- Edit mode -->
+  <ion-card *ngIf="editMode">
+    <form [formGroup]="clientForm">
+      <ion-radio-group formControlName="type">
+        <ion-row>
+          <ion-col *ngIf="type == 'client'">
+            <ion-card>
+              <ion-item>
+                <ion-label>Particular</ion-label>
+                <ion-radio slot="start" value="client" checked></ion-radio>
+              </ion-item>
+            </ion-card>
+          </ion-col>
+    
+          <ion-col *ngIf="type == 'consortium'">
+            <ion-card>
+              <ion-item>
+                <ion-label>Consorcio</ion-label>
+                <ion-radio slot="start" value="consortium"></ion-radio>
+              </ion-item>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-radio-group>
+    
+      <ion-radio-group formControlName="owner">
+        <ion-row>
+          <ion-col>
+            <ion-card>
+              <ion-item>
+                <ion-label>Propietario</ion-label>
+                <ion-radio slot="start" [value]="true" checked></ion-radio>
+              </ion-item>
+            </ion-card>
+          </ion-col>
+    
+          <ion-col>
+            <ion-card>
+              <ion-item>
+                <ion-label>Inquilino</ion-label>
+                <ion-radio slot="start" [value]="false"></ion-radio>
+              </ion-item>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-radio-group>
+    
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="stacked">Nombre</ion-label>
+            <ion-input type="text" #name formControlName="name"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col>
+          <ion-item>
+            <ion-label position="stacked">Dirección</ion-label>
+            <ion-input type="text" formControlName="address"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-icon name="calendar"></ion-icon>
+            <ion-label>Desde</ion-label>
+            <ion-datetime display-format="DD MMM, YYYY" [min]="currentYear - 5" [max]="currentYear + 5"
+              formControlName="dateContractFrom"></ion-datetime>
+          </ion-item>
+        </ion-col>
+        <ion-col>
+          <ion-item>
+            <ion-icon name="calendar"></ion-icon>
+            <ion-label>Hasta</ion-label>
+            <ion-datetime display-format="DD MMM, YYYY" [min]="currentYear - 5" [max]="currentYear + 5"
+              formControlName="dateContractTo"></ion-datetime>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="stacked">Contrato</ion-label>
+            <ion-input type="text" formControlName="contractURL"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </form>
+  </ion-card>
+
+  <!-- Fab buttons -->
   <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="!editMode">
     <ion-fab-button size="small">
       <ion-icon name="more"></ion-icon>
     </ion-fab-button>
-
+  
     <ion-fab-list side="start">
       <ion-fab-button (click)="askForRemove()">
         <ion-icon name="trash" color="danger"></ion-icon>
       </ion-fab-button>
     </ion-fab-list>
-
+  
     <ion-fab-list side="top">
       <ion-fab-button (click)="editMode = !editMode">
         <ion-icon name="create" color="primary"></ion-icon>
@@ -70,97 +281,11 @@
     </ion-fab-list>
   </ion-fab>
 
-  <form [formGroup]="clientForm" *ngIf="editMode">
-    <ion-radio-group formControlName="type">
-      <ion-row>
-        <ion-col>
-          <ion-card>
-            <ion-item>
-              <ion-label>Particular</ion-label>
-              <ion-radio slot="start" value="client" checked></ion-radio>
-            </ion-item>
-          </ion-card>
-        </ion-col>
-  
-        <ion-col>
-          <ion-card>
-            <ion-item>
-              <ion-label>Consorcio</ion-label>
-              <ion-radio slot="start" value="consortium"></ion-radio>
-            </ion-item>
-          </ion-card>
-        </ion-col>
-      </ion-row>
-    </ion-radio-group>
-  
-    <ion-radio-group formControlName="owner">
-      <ion-row>
-        <ion-col>
-          <ion-card>
-            <ion-item>
-              <ion-label>Propietario</ion-label>
-              <ion-radio slot="start" [value]="true" checked></ion-radio>
-            </ion-item>
-          </ion-card>
-        </ion-col>
-  
-        <ion-col>
-          <ion-card>
-            <ion-item>
-              <ion-label>Inquilino</ion-label>
-              <ion-radio slot="start" [value]="false"></ion-radio>
-            </ion-item>
-          </ion-card>
-        </ion-col>
-      </ion-row>
-    </ion-radio-group>
-  
-    <ion-row>
-      <ion-col>
-        <ion-item>
-          <ion-label position="stacked">Nombre</ion-label>
-          <ion-input type="text" #name formControlName="name"></ion-input>
-        </ion-item>
-      </ion-col>
-      <ion-col>
-        <ion-item>
-          <ion-label position="stacked">Dirección</ion-label>
-          <ion-input type="text" formControlName="address"></ion-input>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-  
-    <ion-row>
-      <ion-col>
-        <ion-item>
-          <ion-icon name="calendar"></ion-icon>
-          <ion-label>Desde</ion-label>
-          <ion-datetime display-format="DD MMM, YYYY" [min]="currentYear - 5" [max]="currentYear + 5"
-            formControlName="dateContractFrom"></ion-datetime>
-        </ion-item>
-      </ion-col>
-      <ion-col>
-        <ion-item>
-          <ion-icon name="calendar"></ion-icon>
-          <ion-label>Hasta</ion-label>
-          <ion-datetime display-format="DD MMM, YYYY" [min]="currentYear - 5" [max]="currentYear + 5"
-            formControlName="dateContractTo"></ion-datetime>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-  
-    <ion-row>
-      <ion-col>
-        <ion-item>
-          <ion-label position="stacked">Contrato</ion-label>
-          <ion-input type="text" formControlName="contractURL"></ion-input>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-  </form>
+  <div class="padding-bottom"></div>
 </ion-content>
 
-<ion-footer *ngIf="editMode">
+<ion-footer>
   <ion-button class="btn submit" expand="block" type="submit" [disabled]="clientForm.invalid" block
-    (click)="askForEdit()">Editar</ion-button>
+    (click)="askForEdit()" *ngIf="editMode">Editar</ion-button>
+  <ion-button class="btn submit" expand="block" type="submit" block (click)="openHistory()" *ngIf="!editMode">Ver historial</ion-button>
 </ion-footer>

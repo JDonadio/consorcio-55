@@ -10,16 +10,52 @@
 @import '~@ionic/angular/css/text-transformation.css';
 @import '~@ionic/angular/css/flex-utils.css';
 
+ion-label {
+  font-size: 20px !important;
+}
+ion-input {
+  margin-bottom: 5px;
+}
 ion-item {
   cursor: pointer;
-}
-ion-icon {
-  color: var(--ion-color-primary);
 }
 ion-fab-button {
   ion-icon {
     color: #fff;
   }
+}
+ion-content {
+  --background: var(--bg-color);
+}
+ion-footer {
+  background: var(--bg-color);
+}
+.blue {
+  --background: var(--ion-color-primary);
+  background: var(--ion-color-primary);
+  ion-item {
+    --background: var(--ion-color-primary);
+  }
+  ion-icon {
+    color: white;
+  }
+  ion-label {
+    --color: white !important;
+    font-weight: 600;
+  }
+}
+.header-md {
+  &::after {
+    height: 0px;
+  }
+}
+.footer-md {
+  &::before {
+    height: 0px;
+  }
+}
+.searchbar-input.sc-ion-searchbar-ios {
+  border-radius: 4px;
 }
 .consortium {
   color: var(--ion-color-secondary);
@@ -35,5 +71,11 @@ ion-fab-button {
     border-radius: 50%;
     font-size: 35px;
     padding: 5px;
+  }
+}
+@media only screen and (min-height: 768px) and (min-width: 768px) {
+  .sc-ion-modal-md-h {
+    --width: 75%;
+    --height: 90%;
   }
 }
