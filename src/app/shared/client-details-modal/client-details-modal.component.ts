@@ -42,7 +42,7 @@ export class ClientDetailsModalComponent implements OnInit {
       this.data = _.cloneDeep(client);
       this.processPayments();
       this.setClientForm(client);
-// console.log('this.data:', this.data)
+console.log('this.data:', this.data)
     });
   }
   
@@ -132,7 +132,7 @@ export class ClientDetailsModalComponent implements OnInit {
 
   public async askForEdit() {
     let resp = await this.messagesService.showConfirm(
-      { title: 'Eliminar cliente', msg: `¿Estás seguro de editar a ${this.data.name.toUpperCase()}?` }
+      { title: 'Editar cliente', msg: `¿Estás seguro de editar a ${this.data.name.toUpperCase()}?` }
     );
 
     if (!resp) return;

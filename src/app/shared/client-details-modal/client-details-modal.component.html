@@ -42,7 +42,7 @@
       <ion-item>
         <div class="info">
           <div class="property">Tipo:</div>
-          <div class="description">{{data.type == 'client' ? (data.owner ? 'Cliente - Propietario' : 'Cliente - Inquilino') : 'Consorcio'}}</div>
+          <div class="description">{{data.type == 'client' ? (data.isOwner ? 'Cliente - Propietario' : 'Cliente - Inquilino') : 'Consorcio'}}</div>
         </div>
       </ion-item>
       <ion-item>
@@ -51,12 +51,12 @@
           <div class="description">{{data.address | capitalize}}</div>
         </div>
       </ion-item>
-      <ion-item>
+      <!-- <ion-item>
         <div class="info">
           <div class="property">Contrato:</div>
           <div class="description">{{data.dateContractFrom | date}} - {{data.dateContractTo | date}}</div>
         </div>
-      </ion-item>
+      </ion-item> -->
     </ion-list>
   </ion-card>
 
@@ -75,39 +75,51 @@
       <ion-item (click)="addPayment('Alquiler', 'rent')">
         <div class="info">
           <div class="property">Alquiler:</div>
-          <div class="description">{{(data.payments && data.payments.rent | currency:'ARS':'symbol-narrow':'1.2-2') || 'No hay pagos realizados'}}</div>
+          <div class="description">{{(data.payments && data.payments.rent | currency:'ARS':'symbol-narrow':'1.2-2') || 
+            'No hay pagos realizados'}}</div>
         </div>
       </ion-item>
+
       <ion-item (click)="addPayment('Expensas', 'expenses')">
         <div class="info">
           <div class="property">Expensas:</div>
-          <div class="description">{{(data.payments && data.payments.expenses | currency:'ARS':'symbol':'1.2-2') || 'No hay pagos realizados'}}</div>
+          <div class="description">{{(data.payments && data.payments.expenses | currency:'ARS':'symbol':'1.2-2') || 
+            'No hay pagos realizados'}}</div>
         </div>
       </ion-item>
+
       <ion-item (click)="addPayment('Cochera', 'garage')">
         <div class="info">
           <div class="property">Cochera:</div>
-          <div class="description">{{(data.payments && data.payments.garage | currency:'ARS':'symbol':'1.2-2') || 'No hay pagos realizados'}}</div>
+          <div class="description">{{(data.payments && data.payments.garage | currency:'ARS':'symbol':'1.2-2') || 
+            'No hay pagos realizados'}}</div>
         </div>
       </ion-item>
+
       <ion-item (click)="addPayment('Luz', 'electricity')">
         <div class="info">
           <div class="property">Luz:</div>
-          <div class="description">{{(data.payments && data.payments.electricity | currency:'ARS':'symbol':'1.2-2') || 'No hay pagos realizados'}}</div>
+          <div class="description">{{(data.payments && data.payments.electricity | currency:'ARS':'symbol':'1.2-2') || 
+            'No hay pagos realizados'}}</div>
         </div>
       </ion-item>
+
       <ion-item (click)="addPayment('Gas', 'gas')">
         <div class="info">
           <div class="property">Gas:</div>
-          <div class="description">{{(data.payments && data.payments.gas | currency:'ARS':'symbol':'1.2-2') || 'No hay pagos realizados'}}</div>
+          <div class="description">{{(data.payments && data.payments.gas | currency:'ARS':'symbol':'1.2-2') || 
+            'No hay pagos realizados'}}</div>
         </div>
       </ion-item>
+
       <ion-item (click)="addPayment('CISI', 'cisi')">
         <div class="info">
           <div class="property">CISI:</div>
-          <div class="description">{{(data.payments && data.payments.cisi | currency:'ARS':'symbol':'1.2-2') || 'No hay pagos realizados'}}</div>
+          <div class="description">{{(data.payments && data.payments.cisi | currency:'ARS':'symbol':'1.2-2') || 
+            'No hay pagos realizados'}}</div>
         </div>
       </ion-item>
+
       <ion-item (click)="addPayment('Extras', 'extras')">
         <div class="info">
           <div class="property">Extras:</div>
@@ -121,23 +133,15 @@
             <div class="description">No hay pagos realizados</div>
           </div>
         </div>
-        </ion-item>
+      </ion-item>
     </ion-list>
-  </ion-card>
-  <ion-card *ngIf="data.payments && data.payments.extras">
-    <ion-item>
-      <div class="info">
-        <div class="property">Balance</div>
-        <div class="description">{{data.balance | currency:'ARS':'symbol':'1.2-2'}}</div>
-      </div>
-    </ion-item>
   </ion-card>
 
   <!-- Payment details for Consortiums -->
   <ion-card *ngIf="!editMode && data.type == 'consortium'">
     <ion-list>
       <ion-list-header>
-        <ion-label>Pagos</ion-label>
+        <ion-label>Servicios</ion-label>
         <div class="date">
           <ion-button (click)="getPreviousMonthInformation()">&lt;</ion-button>
           {{selectedDateStr | capitalize}}
@@ -145,23 +149,56 @@
         </div>
       </ion-list-header>
     
-      <ion-item (click)="addPayment('Servicios', 'services')">
-        <div class="info pt1">
-          <div class="property">Servicios:</div>
-          <div *ngIf="data.payments && data.payments.services">
-            <div class="services" *ngFor="let service of data.payments.services">
-              <div class="description details">{{(service.details | capitalize) || 'No hay detalles'}}</div>
-              <div class="description">{{(service.amount | currency:'ARS':'symbol':'1.2-2') || 'No hay pagos realizados'}}</div>
+      <ion-item (click)="addPayment('Cochera', 'garage')">
+        <div class="info">
+          <div class="property">Cochera:</div>
+          <div class="description">{{(data.payments && data.payments.garage | currency:'ARS':'symbol':'1.2-2') || 
+            'No hay pagos realizados'}}</div>
+        </div>
+      </ion-item>
+      
+      <ion-item (click)="addPayment('Luz', 'electricity')">
+        <div class="info">
+          <div class="property">Luz:</div>
+          <div class="description">{{(data.payments && data.payments.electricity | currency:'ARS':'symbol':'1.2-2') || 
+            'No hay pagos realizados'}}</div>
+        </div>
+      </ion-item>
+      
+      <ion-item (click)="addPayment('Gas', 'gas')">
+        <div class="info">
+          <div class="property">Gas:</div>
+          <div class="description">{{(data.payments && data.payments.gas | currency:'ARS':'symbol':'1.2-2') || 
+            'No hay pagos realizados'}}</div>
+        </div>
+      </ion-item>
+      
+      <ion-item (click)="addPayment('CISI', 'cisi')">
+        <div class="info">
+          <div class="property">CISI:</div>
+          <div class="description">{{(data.payments && data.payments.cisi | currency:'ARS':'symbol':'1.2-2') || 
+            'No hay pagos realizados'}}</div>
+        </div>
+      </ion-item>
+
+      <ion-item (click)="addPayment('Extras', 'extras')">
+        <div class="info">
+          <div class="property">Extras:</div>
+          <div *ngIf="data.payments && data.payments.extras">
+            <div class="extras" *ngFor="let extra of data.payments.extras">
+              <div class="description details">{{(extra.details | capitalize) || 'No hay detalles'}}</div>
+              <div class="description">{{(extra.amount | currency:'ARS':'symbol':'1.2-2') || 'No hay pagos realizados'}}</div>
             </div>
           </div>
-          <div *ngIf="!data.payments || !data.payments.services">
+          <div *ngIf="!data.payments || !data.payments.extras">
             <div class="description">No hay pagos realizados</div>
           </div>
         </div>
       </ion-item>
     </ion-list>
   </ion-card>
-  <ion-card *ngIf="data.payments && data.payments.services">
+
+  <ion-card>
     <ion-item>
       <div class="info">
         <div class="property">Balance</div>
