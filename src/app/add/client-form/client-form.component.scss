@@ -15,3 +15,20 @@
     letter-spacing: .3px;
   }
 }
+.upload-btn-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  ion-icon {
+    font-size: 25px;
+  }
+}
+.upload-btn-wrapper input[type=file] {
+  font-size: 100px;
+  position: absolute;
+  left: -10px;
+  top: -8px;
+  width: 35px;
+  opacity: 0;
+  height: 35px;
+}

@@ -26,13 +26,4 @@
   <app-client-form *ngIf="isClient"></app-client-form>
   
   <app-consortium-form *ngIf="!isClient"></app-consortium-form>
-
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button size="small">
-      <div class="upload-btn-wrapper">
-        <ion-icon name="document"></ion-icon>
-        <input type="file" name="myfile" (change)="handleFileInput($event.target.files)">
-      </div>
-    </ion-fab-button>
-  </ion-fab>
 </ion-content>
