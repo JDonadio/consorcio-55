@@ -1,9 +1,111 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>Historial</ion-title>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Historial {{now | date:'yyyy'}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <!-- <canvas #balanceCanvas></canvas> -->
+  
+  <ion-slides pager="true" [options]="slideOpts">
+    <ion-slide>
+      <div class="slide-content">
+        <div class="current-year">{{selectedDateStr | capitalize}}</div>
+      </div>
+    </ion-slide>
+  </ion-slides>
 
+  <div class="payments" *ngIf="client && client.payments">
+    <ion-card>
+      <ion-card-header>{{'Gastos (mensual)' | uppercase}}</ion-card-header>
+      <ion-card-content>
+        <div class="balance-by-month" *ngFor="let m of byMonths">
+          <div class="month">{{m.name | capitalize}}</div>
+          <div class="no-payments" *ngIf="m.balance == 0">No se realizaron pagos</div>
+          <div class="payments" *ngIf="m.balance > 0">
+            <div class="details">
+              <div>Gastos comunes</div>
+              <div>{{m.commons | currency:'ARS':'symbol-narrow':'1.2-2'}}</div>
+            </div>
+            <div class="details">
+              <div>Gastos extras</div>
+              <div>{{m.extras | currency:'ARS':'symbol-narrow':'1.2-2'}}</div>
+            </div>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>{{'Gastos comunes (anual)' | uppercase}}</ion-card-header>
+      <ion-card-content>
+        <div class="balance-by-month" *ngFor="let common of totalCommonsArray">
+          <div class="no-payments" *ngIf="common.amount == 0">No se realizaron pagos</div>
+          <div class="payments" *ngIf="common.amount > 0">
+            <div class="details">
+              <div>{{common.name | capitalize}}</div>
+              <div>{{common.amount | currency:'ARS':'symbol-narrow':'1.2-2'}}</div>
+            </div>
+          </div>
+        </div>
+      </ion-card-content>
+      <ion-card-content class="balance-by-month nm">
+        <div class="payments">
+          <div class="details">
+            <div class="month">{{'Sub-Total' | capitalize}}</div>
+            <div>{{totalCommonsAmount | currency:'ARS':'symbol-narrow':'1.2-2'}}</div>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>{{'Gastos extras (anual)' | uppercase}}</ion-card-header>
+      <ion-card-content>
+        <div class="balance-by-month" *ngFor="let extra of totalExtrasArray">
+          <div class="no-payments" *ngIf="extra.amount == 0">No se realizaron pagos</div>
+          <div class="payments" *ngIf="extra.amount > 0">
+            <div class="details">
+              <div>{{extra.name | capitalize}}</div>
+              <div>{{extra.amount | currency:'ARS':'symbol-narrow':'1.2-2'}}</div>
+            </div>
+          </div>
+        </div>
+      </ion-card-content>
+      <ion-card-content class="balance-by-month nm">
+        <div class="payments">
+          <div class="details">
+            <div class="month">{{'Sub-Total' | capitalize}}</div>
+            <div>{{totalExtrasAmount | currency:'ARS':'symbol-narrow':'1.2-2'}}</div>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <ion-card *ngIf="client && !client.payments">
+    <ion-card-content class="balance-by-month">
+      <div class="payments">
+        <div class="details">
+          <div class="month">No hay balance disponible</div>
+        </div>
+      </div>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
+
+<ion-footer *ngIf="client && client.payments">
+  <ion-card>
+    <ion-card-content class="balance-by-month">
+      <div class="payments">
+        <div class="details">
+          <div class="month">{{'Total' | capitalize}} {{now | date:'yyyy'}}</div>
+          <div>{{superTotal | currency:'ARS':'symbol-narrow':'1.2-2'}}</div>
+        </div>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-footer>

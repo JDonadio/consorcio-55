@@ -1,0 +1,36 @@
+.slide-content {
+  height: 40vh;
+  min-height: 300px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background: var(--ion-color-primary);
+}
+.balance-by-month {
+  margin: 10px auto 25px;
+  .month {
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .no-payments {
+    text-align: right;
+  }
+  .payments {
+    margin-top: 1rem;
+    .details {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+  &.nm {
+    margin: 0 !important;
+  }
+}
+ion-card {
+  background: white;
+  ion-card-header {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--ion-color-primary);
+  }
+}
