@@ -31,10 +31,11 @@ export class HistoryPage implements OnInit {
   public now: Date;
   public selectedDate: Date;
   public selectedDateStr: string;
-  public years: any;
   public totalCommons: any;
+  public totalCommonsAmount: number;
   public totalCommonsArray: any;
   public totalExtras: any;
+  public totalExtrasAmount: number;
   public totalExtrasArray: any;
   public byMonths: any;
   public months: any;
@@ -50,6 +51,8 @@ export class HistoryPage implements OnInit {
     this.client = null;
     this.totalCommons = {};
     this.totalExtras = {};
+    this.totalCommonsAmount = 0;
+    this.totalExtrasAmount = 0;
     this.byMonths = [];
     this.totalCommonsArray = [];
     this.totalExtrasArray = [];
@@ -133,12 +136,16 @@ export class HistoryPage implements OnInit {
     this.byMonths = _.orderBy(this.byMonths, ['key'], ['desc']);
     _.each(_.keys(this.totalCommons), tck => this.totalCommonsArray.push({ name: tck, amount: this.totalCommons[tck] }));
     _.each(_.keys(this.totalExtras), tek => this.totalExtrasArray.push({ name: tek, amount: this.totalExtras[tek] }));
+    this.totalCommonsAmount = _.sumBy(Array.from(_.values(_.map(this.totalCommonsArray, 'amount')), v => Number(v)));
+    this.totalExtrasAmount = _.sumBy(Array.from(_.values(_.map(this.totalExtrasArray, 'amount')), v => Number(v)));
     console.log('this.totalCommonsArray:', this.totalCommonsArray)
     console.log('this.totalExtrasArray:', this.totalExtrasArray)
+    console.log('this.totalCommonsAmount:', this.totalCommonsAmount)
+    console.log('this.totalExtrasAmount:', this.totalExtrasAmount)
     console.log('this.byMonths:', this.byMonths)
     console.log('this.superTotal:', this.superTotal)
 
-    this.drawChart();
+    // this.drawChart();
   }
 
   private drawChart() {

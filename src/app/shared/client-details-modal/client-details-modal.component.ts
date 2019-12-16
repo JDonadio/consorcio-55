@@ -168,9 +168,9 @@ export class ClientDetailsModalComponent implements OnInit {
   }
 
   public openHistory() {
-    this.close();
     this.sharingService.setClient(this.client);
     this.router.navigate(['history']);
+    this.close();
   }
 
   private processPayments() {
