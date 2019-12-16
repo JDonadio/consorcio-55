@@ -174,7 +174,9 @@ export class ClientDetailsModalComponent implements OnInit {
   }
 
   private processPayments() {
-    let payments = this.data.payments && this.data.payments[this.selectedDate.getFullYear()] && this.data.payments[this.selectedDate.getFullYear()][this.monthCounter + 1];
+    let year = this.selectedDate.getFullYear();
+    let month = (this.selectedDate.getMonth() + 1).toString().padStart(2, '0');
+    let payments = this.client.payments && this.client.payments[year] && this.client.payments[year][month];
     this.data.payments = payments;
     let commons = _.cloneDeep(payments) || [];
     delete commons.extras;
