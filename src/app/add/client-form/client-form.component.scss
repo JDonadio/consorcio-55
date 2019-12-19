@@ -1,3 +1,15 @@
+ion-item {
+  ion-label {
+    color: var(--ion-color-primary);
+  }
+  ion-icon {
+    color: #3e67dc;
+    margin-right: .3rem;
+  }
+}
+ion-footer {
+  margin-top: 50px;
+}
 .client {
   display: flex;
   justify-content: center;

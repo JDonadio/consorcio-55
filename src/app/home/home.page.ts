@@ -63,7 +63,7 @@ export class HomePage implements OnInit {
       {
         name: 'client',
         type: 'radio',
-        label: 'Particular',
+        label: 'Clientes',
         value: 'client',
         checked: this.activeFilter == 'client'
       },

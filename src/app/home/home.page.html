@@ -13,41 +13,22 @@
     </ion-buttons>
   </ion-toolbar>
 
-  <ion-searchbar color="secondary" mode="ios" debounce="300" placeholder="Buscar..." [(ngModel)]="searchText" (ionChange)="searchClient()"></ion-searchbar>
+  <ion-searchbar color="secondary" mode="ios" debounce="300" placeholder="Buscar..." 
+    [(ngModel)]="searchText" (ionChange)="searchClient()">
+  </ion-searchbar>
 </ion-header>
 
 <ion-content>
-  <ion-grid>
-    <ion-row>
-      <ion-col *ngFor="let c of filteredClients">
-        <ion-card (click)="openModal(c)">
-          <ion-item>
-            <div class="img">
-              <ion-icon name="business" *ngIf="c.type == 'consortium'" class="consortium"></ion-icon>
-              <ion-icon name="person" *ngIf="c.type != 'consortium'" class="person"></ion-icon>
-            </div>
-            <div class="content">
-              <ion-label>{{c.name | capitalize}}</ion-label>
-              <div class="address">{{c.address | capitalize}}</div>
-            </div>
-          </ion-item>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-
-  <!-- <ion-virtual-scroll [items]="filteredClients" approxItemHeight="90px">
-    <ion-card *virtualItem="let client">
-      <div class="card" (click)="openModal(client)">
-        <div class="img">
-          <ion-icon name="business" *ngIf="client.type == 'consortium'" class="consortium"></ion-icon>
-          <ion-icon name="person" *ngIf="client.type != 'consortium'" class="person"></ion-icon>
-        </div>
-        <div class="content">
-          <ion-label>{{client.name | capitalize}}</ion-label>
-          <div>{{client.address | capitalize}}</div>
-        </div>
+  <ion-virtual-scroll [items]="filteredClients" approxItemHeight="90px">
+    <ion-item *virtualItem="let client" (click)="openModal(client)">
+      <div class="img">
+        <ion-icon name="business" *ngIf="client.type == 'consortium'" class="consortium"></ion-icon>
+        <ion-icon name="person" *ngIf="client.type != 'consortium'" class="person"></ion-icon>
       </div>
-    </ion-card>
-  </ion-virtual-scroll> -->
+      <div class="content">
+        <ion-label>{{client.name | capitalize}}</ion-label>
+        <div>{{client.address | capitalize}}</div>
+      </div>
+    </ion-item>
+  </ion-virtual-scroll>
 </ion-content>
