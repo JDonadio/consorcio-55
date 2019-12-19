@@ -17,7 +17,7 @@
 </ion-header>
 
 <ion-content>
-  <!-- <ion-grid>
+  <ion-grid>
     <ion-row>
       <ion-col *ngFor="let c of filteredClients">
         <ion-card (click)="openModal(c)">
@@ -34,9 +34,9 @@
         </ion-card>
       </ion-col>
     </ion-row>
-  </ion-grid> -->
+  </ion-grid>
 
-  <ion-virtual-scroll [items]="filteredClients" approxItemHeight="90px">
+  <!-- <ion-virtual-scroll [items]="filteredClients" approxItemHeight="90px">
     <ion-card *virtualItem="let client">
       <div class="card" (click)="openModal(client)">
         <div class="img">
@@ -49,5 +49,5 @@
         </div>
       </div>
     </ion-card>
-  </ion-virtual-scroll>
+  </ion-virtual-scroll> -->
 </ion-content>

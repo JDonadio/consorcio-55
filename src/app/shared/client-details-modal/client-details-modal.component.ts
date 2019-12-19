@@ -41,6 +41,7 @@ export class ClientDetailsModalComponent implements OnInit {
     this.sub = this.db.object('clients/' + this.navParams.data.key).valueChanges().subscribe((client: any) => {
       if (_.isEmpty(client)) return;
       this.client = _.cloneDeep(client);
+      console.log('this.client:', this.client)
       this.data = _.cloneDeep(client);
       this.processPayments();
       this.setClientForm(client);
@@ -171,6 +172,10 @@ export class ClientDetailsModalComponent implements OnInit {
     this.sharingService.setClient(this.client);
     this.router.navigate(['history']);
     this.close();
+  }
+
+  public async openContract() {
+    console.log('asd')
   }
 
   private processPayments() {

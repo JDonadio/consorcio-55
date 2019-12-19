@@ -14,6 +14,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AngularFireModule } from "@angular/fire";
 import { AngularFireAuthModule } from "@angular/fire/auth";
 import { AngularFireDatabase } from '@angular/fire/database';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireStorageModule } from '@angular/fire/storage';
 
 import localeEsAr from '@angular/common/locales/es-AR';
 import { TokenInterceptor } from 'src/services/token-interceptor';
@@ -23,7 +25,7 @@ const firebaseConfig = {
   authDomain: "consorcio-55.firebaseapp.com",
   databaseURL: "https://consorcio-55.firebaseio.com",
   projectId: "consorcio-55",
-  storageBucket: "",
+  storageBucket: "consorcio-55.appspot.com",
   messagingSenderId: "262848398815",
   appId: "1:262848398815:web:cba6e0c52ea52967"
 };
@@ -39,6 +41,8 @@ registerLocaleData(localeEsAr, 'es-Ar');
     AppRoutingModule,
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireAuthModule,
+    AngularFirestoreModule,
+    AngularFireStorageModule,
     HttpClientModule,
   ],
   providers: [

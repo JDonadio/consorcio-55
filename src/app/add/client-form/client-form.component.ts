@@ -2,6 +2,7 @@ import { Component, OnInit, NgZone, ViewChild } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { FirebaseService } from 'src/services/firebase.service';
+import { FirestoreService } from 'src/services/firestore.service';
 import { MessagesService } from 'src/services/messages.service';
 import * as _ from 'lodash';
 
@@ -21,6 +22,7 @@ export class ClientFormComponent implements OnInit {
   public isOwner: boolean;
   private selectedConsortiums: any;
   private selectedOwner: any;
+  private file: File;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -28,6 +30,7 @@ export class ClientFormComponent implements OnInit {
     private firebaseService: FirebaseService,
     private messagesService: MessagesService,
     private zone: NgZone,
+    private firestoreService: FirestoreService,
   ) {
     this.clientForm = this.formBuilder.group({
       isOwner: [true],
@@ -39,7 +42,7 @@ export class ClientFormComponent implements OnInit {
       dateContractTo: [''],
       owner: [''],
       consortiums: ['', Validators.required],
-      contractURL: ['No hay contratos seleccionados'],
+      contractURL: ['', Validators.required],
     });
     this.clients = [];
     this.consortiums = [];
@@ -49,6 +52,7 @@ export class ClientFormComponent implements OnInit {
     this.selectedOwner = [];
     this.isOwner = true;
     this.currentYear = new Date().getFullYear();
+    this.file = null;
   }
 
   ngOnInit() {
@@ -59,6 +63,8 @@ export class ClientFormComponent implements OnInit {
           if (data.val().type == 'client') this.clients.push({ key: data.key, ...data.val() });
           else this.consortiums.push({ key: data.key, ...data.val() });
         });
+        this.clients = _.uniqBy(this.clients, 'key');
+        this.consortiums = _.uniqBy(this.consortiums, 'key');
         console.log('clients:', this.clients)
         console.log('consortiums:', this.consortiums)
         this.owners = _.filter(this.clients, c => c.isOwner);
@@ -76,22 +82,40 @@ export class ClientFormComponent implements OnInit {
       this.clientForm.get('dateContractFrom').updateValueAndValidity();
       this.clientForm.get('dateContractTo').setValidators(null);
       this.clientForm.get('dateContractTo').updateValueAndValidity();
+      this.clientForm.get('contractURL').setValidators(null);
+      this.clientForm.get('contractURL').updateValueAndValidity();
       this.clientForm.get('owner').setValidators(null);
       this.clientForm.get('owner').updateValueAndValidity();
     } else {
       this.clientForm.get('dateContractFrom').setValidators([Validators.required]);
       this.clientForm.get('dateContractFrom').updateValueAndValidity();
       this.clientForm.get('dateContractTo').setValidators([Validators.required]);
+      this.clientForm.get('contractURL').updateValueAndValidity();
+      this.clientForm.get('contractURL').setValidators([Validators.required]);
       this.clientForm.get('dateContractTo').updateValueAndValidity();
       this.clientForm.get('owner').setValidators([Validators.required]);
       this.clientForm.get('owner').updateValueAndValidity();
     }
   }
 
-  public addClient() {
+  public selectedFile(files: FileList) {
+    this.file = files[0];
+    this.clientForm.patchValue({ contractURL: this.file.name });
+    console.log('this.file:', this.file);
+  }
+  
+  public async addClient() {
+    this.messagesService.showLoading({ msg: 'Agregando cliente...' });
+
+    let name = this.clientForm.get('name').value;
+    let lastName = this.clientForm.get('lastName').value;
+    let consortium = this.selectedConsortiums.join('-');
+    let folderName = `${lastName}-${name}`;
+    let downloadURL = await this.firestoreService.uploadFile(consortium, folderName, this.file);
+
     let opts = {
-      name: this.clientForm.get('name').value,
-      lastName: this.clientForm.get('lastName').value,
+      name,
+      lastName,
       type: 'client',
       isOwner: this.isOwner,
       address: this.clientForm.get('address').value,
@@ -99,18 +123,30 @@ export class ClientFormComponent implements OnInit {
       dateContractTo: this.clientForm.get('dateContractTo').value,
       owner: this.selectedOwner ? this.selectedOwner : null,
       consortiums: this.selectedConsortiums[0] ? this.selectedConsortiums : null,
-      contractURL: this.clientForm.get('contractURL').value,
+      contractURL: downloadURL,
     }
-    this.messagesService.showLoading({ msg: 'Agregando cliente...' });
     this.firebaseService.createObject('clients', opts)
       .then(() => {
         this.onSuccess({ msg: `Cliente ${opts.name} agregado correctamente!` });
-        this.clientForm.patchValue({ name: '' });
+        this.resetForm();
         setTimeout(() => { this.name.setFocus() }, 1000);
       })
       .catch(err => {
         this.onError({ msg: 'Ha ocurrido un error. ', err });
       });
+  }
+
+  private resetForm() {
+    this.clientForm.patchValue({ name: '' });
+    this.clientForm.patchValue({ lastName: '' });
+    this.clientForm.patchValue({ address: '' });
+    this.clientForm.patchValue({ type: 'client' });
+    this.clientForm.patchValue({ dateContractFrom: '' });
+    this.clientForm.patchValue({ dateContractTo: '' });
+    this.clientForm.patchValue({ owner: '' });
+    this.clientForm.patchValue({ consortiums: '' });
+    this.clientForm.patchValue({ contractURL: '' });
+    this.changeOwnership(this.isOwner);
   }
 
   private onSuccess(opts: any) {

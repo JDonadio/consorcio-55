@@ -36,7 +36,7 @@
       <ion-item>
         <div class="info">
           <div class="property">Nombre:</div>
-          <div class="description">{{data.name | capitalize}}</div>
+          <div class="description">{{data.lastName | capitalize}} {{data.name | capitalize}}</div>
         </div>
       </ion-item>
       <ion-item>
@@ -51,12 +51,14 @@
           <div class="description">{{data.address | capitalize}}</div>
         </div>
       </ion-item>
-      <!-- <ion-item>
+      <ion-item *ngIf="data.type == 'client' && !isOwner">
         <div class="info">
           <div class="property">Contrato:</div>
           <div class="description">{{data.dateContractFrom | date}} - {{data.dateContractTo | date}}</div>
         </div>
-      </ion-item> -->
+        <!-- <div class="button-contract" (click)="getFiles()">Ver archivos</div> -->
+        <div class="button-contract" (click)="openContract()">Ver contrato</div>
+      </ion-item>
     </ion-list>
   </ion-card>
 
