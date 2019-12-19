@@ -2,8 +2,8 @@ import { Component, OnInit, NgZone, ViewChild } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { FirebaseService } from 'src/services/firebase.service';
+import { FirestoreService } from 'src/services/firestore.service';
 import { MessagesService } from 'src/services/messages.service';
-import { DropboxService } from 'src/services/dropbox.service';
 import * as _ from 'lodash';
 
 @Component({
@@ -30,7 +30,7 @@ export class ClientFormComponent implements OnInit {
     private firebaseService: FirebaseService,
     private messagesService: MessagesService,
     private zone: NgZone,
-    private dropboxService: DropboxService,
+    private firestoreService: FirestoreService,
   ) {
     this.clientForm = this.formBuilder.group({
       isOwner: [true],
@@ -63,6 +63,8 @@ export class ClientFormComponent implements OnInit {
           if (data.val().type == 'client') this.clients.push({ key: data.key, ...data.val() });
           else this.consortiums.push({ key: data.key, ...data.val() });
         });
+        this.clients = _.uniqBy(this.clients, 'key');
+        this.consortiums = _.uniqBy(this.consortiums, 'key');
         console.log('clients:', this.clients)
         console.log('consortiums:', this.consortiums)
         this.owners = _.filter(this.clients, c => c.isOwner);
@@ -101,33 +103,15 @@ export class ClientFormComponent implements OnInit {
     this.clientForm.patchValue({ contractURL: this.file.name });
     console.log('this.file:', this.file);
   }
-
-  private uploadFile(folderName): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      this.dropboxService.uploadFile(this.file, folderName).subscribe(
-        success => {
-          console.log('File uploaded !!!');
-          resolve(true);
-        },
-        error => {
-          console.log('Error at file upload', error);
-          resolve(false);
-        }
-      );
-    });
-  }
   
   public async addClient() {
     this.messagesService.showLoading({ msg: 'Agregando cliente...' });
 
     let name = this.clientForm.get('name').value;
     let lastName = this.clientForm.get('lastName').value;
+    let consortium = this.selectedConsortiums.join('-');
     let folderName = `${lastName}-${name}`;
-    let result = await this.uploadFile(folderName);
-    console.log('result:', result);
-
-    let composedContractUrl = `https://www.dropbox.com/home/chiclana/${folderName}?preview=${this.file.name}`;
-    console.log('composedContractUrl:', composedContractUrl);
+    let downloadURL = await this.firestoreService.uploadFile(consortium, folderName, this.file);
 
     let opts = {
       name,
@@ -139,17 +123,30 @@ export class ClientFormComponent implements OnInit {
       dateContractTo: this.clientForm.get('dateContractTo').value,
       owner: this.selectedOwner ? this.selectedOwner : null,
       consortiums: this.selectedConsortiums[0] ? this.selectedConsortiums : null,
-      contractURL: this.clientForm.get('contractURL').value, // has to be different
+      contractURL: downloadURL,
     }
     this.firebaseService.createObject('clients', opts)
       .then(() => {
         this.onSuccess({ msg: `Cliente ${opts.name} agregado correctamente!` });
-        this.clientForm.patchValue({ name: '' });
+        this.resetForm();
         setTimeout(() => { this.name.setFocus() }, 1000);
       })
       .catch(err => {
         this.onError({ msg: 'Ha ocurrido un error. ', err });
       });
+  }
+
+  private resetForm() {
+    this.clientForm.patchValue({ name: '' });
+    this.clientForm.patchValue({ lastName: '' });
+    this.clientForm.patchValue({ address: '' });
+    this.clientForm.patchValue({ type: 'client' });
+    this.clientForm.patchValue({ dateContractFrom: '' });
+    this.clientForm.patchValue({ dateContractTo: '' });
+    this.clientForm.patchValue({ owner: '' });
+    this.clientForm.patchValue({ consortiums: '' });
+    this.clientForm.patchValue({ contractURL: '' });
+    this.changeOwnership(this.isOwner);
   }
 
   private onSuccess(opts: any) {

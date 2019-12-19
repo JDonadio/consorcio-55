@@ -9,7 +9,7 @@ export class TokenInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     req = req.clone({
       setHeaders: {
-        'Authorization': 'Bearer Q6sjVJRXkeAAAAAAAAAFYuO18T-fRiX0YsTexZgm7BCREwifBSk70fd1eCzZRgkI'
+        'Authorization': 'Bearer Q6sjVJRXkeAAAAAAAAAFbts9U3jASQCVqXM5035HjTVWGRZOtFvw7tc7t4UK811l'
       },
     });
 
