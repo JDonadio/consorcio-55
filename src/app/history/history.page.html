@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>Historial {{now | date:'yyyy'}}</ion-title>
+    <ion-title>Historial {{yearCounter}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -28,11 +28,11 @@
           <div class="payments" *ngIf="m.balance > 0">
             <div class="details">
               <div>Gastos comunes</div>
-              <div>{{m.commons | currency:'ARS':'symbol-narrow':'1.2-2'}}</div>
+              <div>{{m.commons | pesos}}</div>
             </div>
             <div class="details">
               <div>Gastos extras</div>
-              <div>{{m.extras | currency:'ARS':'symbol-narrow':'1.2-2'}}</div>
+              <div>{{m.extras | pesos}}</div>
             </div>
           </div>
         </div>
@@ -47,7 +47,7 @@
           <div class="payments" *ngIf="common.amount > 0">
             <div class="details">
               <div>{{common.name | capitalize}}</div>
-              <div>{{common.amount | currency:'ARS':'symbol-narrow':'1.2-2'}}</div>
+              <div>{{common.amount | pesos}}</div>
             </div>
           </div>
         </div>
@@ -56,7 +56,7 @@
         <div class="payments">
           <div class="details">
             <div class="month">{{'Sub-Total' | capitalize}}</div>
-            <div>{{totalCommonsAmount | currency:'ARS':'symbol-narrow':'1.2-2'}}</div>
+            <div>{{totalCommonsAmount | pesos}}</div>
           </div>
         </div>
       </ion-card-content>
@@ -70,7 +70,7 @@
           <div class="payments" *ngIf="extra.amount > 0">
             <div class="details">
               <div>{{extra.name | capitalize}}</div>
-              <div>{{extra.amount | currency:'ARS':'symbol-narrow':'1.2-2'}}</div>
+              <div>{{extra.amount | pesos}}</div>
             </div>
           </div>
         </div>
@@ -79,7 +79,7 @@
         <div class="payments">
           <div class="details">
             <div class="month">{{'Sub-Total' | capitalize}}</div>
-            <div>{{totalExtrasAmount | currency:'ARS':'symbol-narrow':'1.2-2'}}</div>
+            <div>{{totalExtrasAmount | pesos}}</div>
           </div>
         </div>
       </ion-card-content>
@@ -98,14 +98,12 @@
 </ion-content>
 
 <ion-footer *ngIf="client && client.payments">
-  <ion-card>
-    <ion-card-content class="balance-by-month">
-      <div class="payments">
-        <div class="details">
-          <div class="month">{{'Total' | capitalize}} {{now | date:'yyyy'}}</div>
-          <div>{{superTotal | currency:'ARS':'symbol-narrow':'1.2-2'}}</div>
-        </div>
-      </div>
-    </ion-card-content>
+  <ion-card class="footer">
+    <ion-button fill="outline" (click)="getPreviousYearInformation()">&lt;</ion-button>
+    <div class="super-total">
+      <div class="detail">{{'Total' | capitalize}} {{yearCounter}}</div>
+      <div>{{superTotal | pesos}}</div>
+    </div>
+    <ion-button fill="outline" (click)="getNextYearInformation()">&gt;</ion-button>
   </ion-card>
 </ion-footer>

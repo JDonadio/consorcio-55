@@ -35,176 +35,69 @@
       </ion-list-header>
       <ion-item>
         <div class="info">
-          <div class="property">Nombre:</div>
+          <div class="property">{{'Nombre' | uppercase}}</div>
           <div class="description">{{data.lastName | capitalize}} {{data.name | capitalize}}</div>
         </div>
       </ion-item>
       <ion-item>
         <div class="info">
-          <div class="property">Tipo:</div>
+          <div class="property">{{'Tipo' | uppercase}}</div>
           <div class="description">{{data.type == 'client' ? (data.isOwner ? 'Cliente - Propietario' : 'Cliente - Inquilino') : 'Consorcio'}}</div>
         </div>
       </ion-item>
       <ion-item>
         <div class="info">
-          <div class="property">Dirección:</div>
+          <div class="property">{{'Dirección' | uppercase}}</div>
           <div class="description">{{data.address | capitalize}}</div>
         </div>
       </ion-item>
       <ion-item *ngIf="data.type == 'client' && !isOwner">
         <div class="info">
-          <div class="property">Contrato:</div>
+          <div class="property">{{'Contrato' | uppercase}}</div>
           <div class="description">{{data.dateContractFrom | date}} - {{data.dateContractTo | date}}</div>
         </div>
-        <!-- <div class="button-contract" (click)="getFiles()">Ver archivos</div> -->
-        <div class="button-contract" (click)="openContract()">Ver contrato</div>
+        <ion-button fill="outline" class="button-contract" (click)="openContract()">Ver</ion-button>
       </ion-item>
     </ion-list>
   </ion-card>
 
-  <!-- Payment details for Clients -->
-  <ion-card *ngIf="!editMode && data.type == 'client'">
-    <ion-list>
-      <ion-list-header>
-        <ion-label>Pagos</ion-label>
-        <div class="date">
-          <ion-button (click)="getPreviousMonthInformation()">&lt;</ion-button>
-          {{selectedDateStr | capitalize}}
-          <ion-button (click)="getNextMonthInformation()">&gt;</ion-button>
-        </div>
-      </ion-list-header>
-  
-      <ion-item (click)="addPayment('Alquiler', 'rent')">
-        <div class="info">
-          <div class="property">Alquiler:</div>
-          <div class="description">{{(data.payments && data.payments.rent | currency:'ARS':'symbol-narrow':'1.2-2') || 
-            'No hay pagos realizados'}}</div>
-        </div>
-      </ion-item>
-
-      <ion-item (click)="addPayment('Expensas', 'expenses')">
-        <div class="info">
-          <div class="property">Expensas:</div>
-          <div class="description">{{(data.payments && data.payments.expenses | currency:'ARS':'symbol':'1.2-2') || 
-            'No hay pagos realizados'}}</div>
-        </div>
-      </ion-item>
-
-      <ion-item (click)="addPayment('Cochera', 'garage')">
-        <div class="info">
-          <div class="property">Cochera:</div>
-          <div class="description">{{(data.payments && data.payments.garage | currency:'ARS':'symbol':'1.2-2') || 
-            'No hay pagos realizados'}}</div>
-        </div>
-      </ion-item>
-
-      <ion-item (click)="addPayment('Luz', 'electricity')">
-        <div class="info">
-          <div class="property">Luz:</div>
-          <div class="description">{{(data.payments && data.payments.electricity | currency:'ARS':'symbol':'1.2-2') || 
-            'No hay pagos realizados'}}</div>
-        </div>
-      </ion-item>
-
-      <ion-item (click)="addPayment('Gas', 'gas')">
-        <div class="info">
-          <div class="property">Gas:</div>
-          <div class="description">{{(data.payments && data.payments.gas | currency:'ARS':'symbol':'1.2-2') || 
-            'No hay pagos realizados'}}</div>
-        </div>
-      </ion-item>
-
-      <ion-item (click)="addPayment('CISI', 'cisi')">
-        <div class="info">
-          <div class="property">CISI:</div>
-          <div class="description">{{(data.payments && data.payments.cisi | currency:'ARS':'symbol':'1.2-2') || 
-            'No hay pagos realizados'}}</div>
-        </div>
-      </ion-item>
-
-      <ion-item (click)="addPayment('Extras', 'extras')">
-        <div class="info">
-          <div class="property">Extras:</div>
-          <div *ngIf="data.payments && data.payments.extras">
-            <div class="extras" *ngFor="let extra of data.payments.extras">
-              <div class="description details">{{(extra.details | capitalize) || 'No hay detalles'}}</div>
-              <div class="description">{{(extra.amount | currency:'ARS':'symbol':'1.2-2') || 'No hay pagos realizados'}}</div>
-            </div>
-          </div>
-          <div *ngIf="!data.payments || !data.payments.extras">
-            <div class="description">No hay pagos realizados</div>
-          </div>
-        </div>
-      </ion-item>
-    </ion-list>
-  </ion-card>
-
-  <!-- Payment details for Consortiums -->
-  <ion-card *ngIf="!editMode && data.type == 'consortium'">
+  <!-- Payment details -->
+  <ion-card *ngIf="!editMode">
     <ion-list>
       <ion-list-header>
         <ion-label>Servicios</ion-label>
-        <div class="date">
-          <ion-button (click)="getPreviousMonthInformation()">&lt;</ion-button>
-          {{selectedDateStr | capitalize}}
-          <ion-button (click)="getNextMonthInformation()">&gt;</ion-button>
-        </div>
+        <div class="date">{{selectedDateStr | capitalize}}</div>
       </ion-list-header>
-    
-      <ion-item (click)="addPayment('Cochera', 'garage')">
+  
+      <ion-item (click)="addPayment(s.name)" *ngFor="let s of services">
         <div class="info">
-          <div class="property">Cochera:</div>
-          <div class="description">{{(data.payments && data.payments.garage | currency:'ARS':'symbol':'1.2-2') || 
-            'No hay pagos realizados'}}</div>
-        </div>
-      </ion-item>
-      
-      <ion-item (click)="addPayment('Luz', 'electricity')">
-        <div class="info">
-          <div class="property">Luz:</div>
-          <div class="description">{{(data.payments && data.payments.electricity | currency:'ARS':'symbol':'1.2-2') || 
-            'No hay pagos realizados'}}</div>
-        </div>
-      </ion-item>
-      
-      <ion-item (click)="addPayment('Gas', 'gas')">
-        <div class="info">
-          <div class="property">Gas:</div>
-          <div class="description">{{(data.payments && data.payments.gas | currency:'ARS':'symbol':'1.2-2') || 
-            'No hay pagos realizados'}}</div>
-        </div>
-      </ion-item>
-      
-      <ion-item (click)="addPayment('CISI', 'cisi')">
-        <div class="info">
-          <div class="property">CISI:</div>
-          <div class="description">{{(data.payments && data.payments.cisi | currency:'ARS':'symbol':'1.2-2') || 
-            'No hay pagos realizados'}}</div>
+          <div class="property">{{s.name | capitalize}}</div>
+          <div class="description">{{(data.payments && data.payments[s.name] | pesos) || 'No hay pagos realizados'}}</div>
         </div>
       </ion-item>
 
-      <ion-item (click)="addPayment('Extras', 'extras')">
+      <ion-item (click)="addPayment('extras')">
         <div class="info">
-          <div class="property">Extras:</div>
+          <div class="property">Extras</div>
           <div *ngIf="data.payments && data.payments.extras">
             <div class="extras" *ngFor="let extra of data.payments.extras">
               <div class="description details">{{(extra.details | capitalize) || 'No hay detalles'}}</div>
-              <div class="description">{{(extra.amount | currency:'ARS':'symbol':'1.2-2') || 'No hay pagos realizados'}}</div>
+              <div class="description">{{(extra.amount | pesos) || 'No hay pagos realizados'}}</div>
             </div>
           </div>
           <div *ngIf="!data.payments || !data.payments.extras">
-            <div class="description">No hay pagos realizados</div>
+            <div class="description">{{0 | pesos}}</div>
           </div>
         </div>
       </ion-item>
     </ion-list>
   </ion-card>
 
-  <ion-card>
+  <ion-card *ngIf="!editMode">
     <ion-item>
       <div class="info">
         <div class="property">Balance</div>
-        <div class="description">{{data.balance | currency:'ARS':'symbol':'1.2-2'}}</div>
+        <div class="description">{{data.balance | pesos}}</div>
       </div>
     </ion-item>
   </ion-card>
@@ -302,7 +195,7 @@
   </ion-card>
 
   <!-- Fab buttons -->
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="!editMode">
+  <!-- <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="!editMode">
     <ion-fab-button size="small">
       <ion-icon name="more"></ion-icon>
     </ion-fab-button>
@@ -318,13 +211,16 @@
         <ion-icon name="create" color="primary"></ion-icon>
       </ion-fab-button>
     </ion-fab-list>
-  </ion-fab>
+  </ion-fab> -->
 
   <div class="padding-bottom"></div>
 </ion-content>
 
 <ion-footer>
-  <ion-button class="btn submit" expand="block" type="submit" [disabled]="clientForm.invalid" block
-    (click)="askForEdit()" *ngIf="editMode">Editar</ion-button>
-  <ion-button class="btn submit" expand="block" type="submit" block (click)="openHistory()" *ngIf="!editMode">Ver historial</ion-button>
+  <ion-card class="footer" *ngIf="!editMode">
+    <ion-button fill="outline" (click)="getPreviousMonthInformation()">&lt;</ion-button>
+    <ion-button fill="outline" expand="block" type="submit" (click)="openHistory()">Ver historial</ion-button>
+    <ion-button fill="outline" (click)="getNextMonthInformation()">&gt;</ion-button>
+  </ion-card>
+  <ion-button *ngIf="editMode" expand="block" type="submit" [disabled]="clientForm.invalid" (click)="askForEdit()">Editar</ion-button>
 </ion-footer>

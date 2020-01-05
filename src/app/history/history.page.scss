@@ -25,6 +25,9 @@
   &.nm {
     margin: 0 !important;
   }
+  &.cm {
+    margin: 0 0 5px;
+  }
 }
 ion-card {
   background: white;
@@ -32,5 +35,18 @@ ion-card {
     font-size: 22px;
     font-weight: 600;
     color: var(--ion-color-primary);
+  }
+  &.footer {
+    padding: .8rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .super-total {
+      text-align: center;
+      .detail {
+        font-size: 20px;
+        font-weight: 600;
+      }
+    }
   }
 }

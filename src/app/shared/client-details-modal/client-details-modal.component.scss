@@ -7,6 +7,21 @@ ion-footer {
     height: 3rem;
   }
 }
+ion-list {
+  .item:last-child {
+    --border-style: none;
+  }
+}
+ion-card {
+  background: white;
+  &.footer {
+    padding: .8rem;
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
 .close-button {
   ion-icon {
     font-size: 22px;
@@ -14,13 +29,15 @@ ion-footer {
 }
 .header-ttl {
   display: flex;
-  justify-content: center;
   align-items: center;
   margin: 1rem 0 .8rem;
   .ttl {
     overflow: hidden;
     text-overflow: ellipsis;
   }
+}
+.button-contract {
+  margin-left: 15px;
 }
 .info {
   width: 100%;
@@ -51,11 +68,9 @@ ion-footer {
   }
 }
 .date {
-  padding-right: .5rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-width: 195px;
+  padding-right: 15px;
+  color: var(--ion-color-primary);
+  font-weight: 600;
 }
 .padding-bottom {
   padding: 35px 0;

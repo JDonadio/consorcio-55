@@ -3,6 +3,7 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';  
 import { CapitalizePipe } from '../pipes/capitalize/capitalize.pipe';
+import { PesosPipe } from '../pipes/currency/pesos.pipe';
 import { ClientDetailsModalComponent } from './client-details-modal/client-details-modal.component';
 
 @NgModule({
@@ -15,10 +16,12 @@ import { ClientDetailsModalComponent } from './client-details-modal/client-detai
   ],
   declarations: [
     CapitalizePipe,
+    PesosPipe,
     ClientDetailsModalComponent,
   ],
   exports: [
     CapitalizePipe,
+    PesosPipe,
   ],
   entryComponents: [
     ClientDetailsModalComponent

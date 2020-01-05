@@ -6,8 +6,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { AddPage } from './add.page';
-import { ClientFormComponent } from './client-form/client-form.component';
-import { ConsortiumFormComponent } from './consortium-form/consortium-form.component';
+import { ClientFormComponent } from '../shared/client-form/client-form.component';
+import { ConsortiumFormComponent } from '../shared/consortium-form/consortium-form.component';
 
 const routes: Routes = [
   {

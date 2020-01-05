@@ -27,7 +27,7 @@ export class HistoryPage implements OnInit {
   @ViewChild('balanceCanvas') balanceCanvas: ElementRef;
 
   public client: any;
-  public monthCounter: number;
+  public yearCounter: number;
   public now: Date;
   public selectedDate: Date;
   public selectedDateStr: string;
@@ -47,7 +47,7 @@ export class HistoryPage implements OnInit {
     private sharingService: SharingService,
   ) {
     this.now = new Date();
-    this.monthCounter = this.now.getMonth();
+    this.yearCounter = this.now.getFullYear();
     this.client = null;
     this.totalCommons = {};
     this.totalExtras = {};
@@ -73,24 +73,32 @@ export class HistoryPage implements OnInit {
   }
 
   ionViewWillLeave() {
-    console.log('Leaving the view')
     this.sub.unsubscribe();
   }
 
-  public getPreviousMonthInformation() {
-    this.monthCounter--;
-    this.selectedDate.setMonth(this.monthCounter);
-    if (this.monthCounter == -1) this.monthCounter = 11;
-    this.selectedDateStr = this.selectedDate.toLocaleDateString('es-AR', { year: 'numeric', month: 'short' });
+  public getPreviousYearInformation() {
+    this.yearCounter--;
+    this.selectedDate.setFullYear(this.yearCounter);
+    this.resetValues();
     this.processPayments();
   }
 
-  public getNextMonthInformation() {
-    this.monthCounter++;
-    this.selectedDate.setMonth(this.monthCounter);
-    if (this.monthCounter == 12) this.monthCounter = 0;
-    this.selectedDateStr = this.selectedDate.toLocaleDateString('es-AR', { year: 'numeric', month: 'short' });
+  public getNextYearInformation() {
+    this.yearCounter++;
+    this.selectedDate.setFullYear(this.yearCounter);
+    this.resetValues();
     this.processPayments();
+  }
+
+  private resetValues() {
+    this.totalCommons = {};
+    this.totalExtras = {};
+    this.totalCommonsAmount = 0;
+    this.totalExtrasAmount = 0;
+    this.byMonths = [];
+    this.totalCommonsArray = [];
+    this.totalExtrasArray = [];
+    this.superTotal = 0;
   }
 
   private processPayments() {

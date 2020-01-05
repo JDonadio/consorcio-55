@@ -8,6 +8,16 @@ import { AngularFireDatabase } from 'angularfire2/database';
 import { SharingService } from 'src/services/sharing.service';
 import * as _ from 'lodash';
 
+const SERVICES = [
+  { name: 'Alquiler', type: ''},
+  { name: 'Expensas', type: ''},
+  { name: 'Cochera', type: ''},
+  { name: 'Luz', type: ''},
+  { name: 'Gas', type: ''},
+  { name: 'Agua', type: ''},
+  { name: 'CISI', type: ''},
+];
+
 @Component({
   selector: 'app-client-details-modal',
   templateUrl: './client-details-modal.component.html',
@@ -15,6 +25,7 @@ import * as _ from 'lodash';
 })
 export class ClientDetailsModalComponent implements OnInit {
 
+  public services: any;
   public client: any;
   public data: any;
   public clientForm: FormGroup;
@@ -36,9 +47,10 @@ export class ClientDetailsModalComponent implements OnInit {
     private db: AngularFireDatabase,
     private sharingService: SharingService,
   ) {
+    this.services = SERVICES;
     this.currentYear = new Date().getFullYear();
     this.now = new Date();
-    this.sub = this.db.object('clients/' + this.navParams.data.key).valueChanges().subscribe((client: any) => {
+    this.sub = this.db.object('clients/' + this.navParams.data.key).valueChanges().subscribe(client => {
       if (_.isEmpty(client)) return;
       this.client = _.cloneDeep(client);
       console.log('this.client:', this.client)
@@ -88,24 +100,24 @@ export class ClientDetailsModalComponent implements OnInit {
     this.processPayments();
   }
 
-  public async addPayment(service: string, serviceKey: string) {
+  public async addPayment(service: string) {
     let obj: any = {
       title: service,
       inputs: [{ name: service, type: 'number', min: 0, placeholder: '$' }]
     };
 
-    if (serviceKey == 'extras' || serviceKey == 'services') obj.inputs.push({ name: 'detail', type: 'text', placeholder: 'Detalle' });
+    if (service == 'extras') obj.inputs.push({ name: 'detail', type: 'text', placeholder: 'Detalle' });
     let resp = await this.messagesService.showInputConfirm(obj);
     if (_.isEmpty(resp[0])) return;
     
     let opts: any = {};
-    if (serviceKey == 'extras' || serviceKey == 'services') {
+    if (service == 'extras') {
       if (_.isEmpty(resp[1])) return;
 
-      let amounts = this.data.payments && this.data.payments[serviceKey] || [];
+      let amounts = this.data.payments && this.data.payments[service] || [];
       amounts.push({ amount: resp[0], details: resp[1] });
-      opts[serviceKey] = amounts;
-    } else opts[serviceKey] = resp[0];
+      opts[service] = amounts;
+    } else opts[service] = resp[0];
 
     let year = this.selectedDate.getFullYear();
     let month = (this.selectedDate.getMonth() + 1).toString().padStart(2, '0');
@@ -175,7 +187,8 @@ export class ClientDetailsModalComponent implements OnInit {
   }
 
   public async openContract() {
-    console.log('asd')
+    if (_.isEmpty(this.client.contractURL)) return;
+    window.open(this.client.contractURL);
   }
 
   private processPayments() {
