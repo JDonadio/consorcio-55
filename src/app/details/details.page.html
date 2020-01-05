@@ -1,11 +1,9 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-button (click)="close()" class="close-button">
-        <ion-icon slot="icon-only" name="close"></ion-icon>
-      </ion-button>
+      <ion-back-button></ion-back-button>
     </ion-buttons>
-    
+
     <ion-title text-center *ngIf="data">
       <div class="header-ttl">
         <div class="img">
@@ -17,7 +15,7 @@
         </div>
       </div>
     </ion-title>
-    
+
     <ion-buttons slot="end" *ngIf="editMode">
       <ion-button (click)="ngOnInit()" class="close-button">
         <ion-icon slot="icon-only" name="refresh"></ion-icon>
@@ -42,7 +40,9 @@
       <ion-item>
         <div class="info">
           <div class="property">{{'Tipo' | uppercase}}</div>
-          <div class="description">{{data.type == 'client' ? (data.isOwner ? 'Cliente - Propietario' : 'Cliente - Inquilino') : 'Consorcio'}}</div>
+          <div class="description">
+            {{data.type == 'client' ? (data.isOwner ? 'Cliente - Propietario' : 'Cliente - Inquilino') : 'Consorcio'}}
+          </div>
         </div>
       </ion-item>
       <ion-item>
@@ -68,11 +68,12 @@
         <ion-label>Servicios</ion-label>
         <div class="date">{{selectedDateStr | capitalize}}</div>
       </ion-list-header>
-  
+
       <ion-item (click)="addPayment(s.name)" *ngFor="let s of services">
         <div class="info">
           <div class="property">{{s.name | capitalize}}</div>
-          <div class="description">{{(data.payments && data.payments[s.name] | pesos) || 'No hay pagos realizados'}}</div>
+          <div class="description">{{(data.payments && data.payments[s.name] | pesos) || 'No hay pagos realizados'}}
+          </div>
         </div>
       </ion-item>
 
@@ -115,7 +116,7 @@
               </ion-item>
             </ion-card>
           </ion-col>
-    
+
           <ion-col *ngIf="type == 'consortium'">
             <ion-card>
               <ion-item>
@@ -126,7 +127,7 @@
           </ion-col>
         </ion-row>
       </ion-radio-group>
-    
+
       <ion-radio-group formControlName="owner">
         <ion-row>
           <ion-col>
@@ -137,7 +138,7 @@
               </ion-item>
             </ion-card>
           </ion-col>
-    
+
           <ion-col>
             <ion-card>
               <ion-item>
@@ -148,7 +149,7 @@
           </ion-col>
         </ion-row>
       </ion-radio-group>
-    
+
       <ion-row>
         <ion-col>
           <ion-item>
@@ -163,7 +164,7 @@
           </ion-item>
         </ion-col>
       </ion-row>
-    
+
       <ion-row>
         <ion-col>
           <ion-item>
@@ -182,7 +183,7 @@
           </ion-item>
         </ion-col>
       </ion-row>
-    
+
       <ion-row>
         <ion-col>
           <ion-item>
@@ -222,5 +223,6 @@
     <ion-button fill="outline" expand="block" type="submit" (click)="openHistory()">Ver historial</ion-button>
     <ion-button fill="outline" (click)="getNextMonthInformation()">&gt;</ion-button>
   </ion-card>
-  <ion-button *ngIf="editMode" expand="block" type="submit" [disabled]="clientForm.invalid" (click)="askForEdit()">Editar</ion-button>
+  <ion-button *ngIf="editMode" expand="block" type="submit" [disabled]="clientForm.invalid" (click)="askForEdit()">
+    Editar</ion-button>
 </ion-footer>

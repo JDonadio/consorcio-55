@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController, NavParams } from '@ionic/angular';
 import { FirebaseService } from 'src/services/firebase.service';
 import { MessagesService } from 'src/services/messages.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -9,21 +8,21 @@ import { SharingService } from 'src/services/sharing.service';
 import * as _ from 'lodash';
 
 const SERVICES = [
-  { name: 'Alquiler', type: ''},
-  { name: 'Expensas', type: ''},
-  { name: 'Cochera', type: ''},
-  { name: 'Luz', type: ''},
-  { name: 'Gas', type: ''},
-  { name: 'Agua', type: ''},
-  { name: 'CISI', type: ''},
+  { name: 'Alquiler', type: '' },
+  { name: 'Expensas', type: '' },
+  { name: 'Cochera', type: '' },
+  { name: 'Luz', type: '' },
+  { name: 'Gas', type: '' },
+  { name: 'Agua', type: '' },
+  { name: 'CISI', type: '' },
 ];
 
 @Component({
-  selector: 'app-client-details-modal',
-  templateUrl: './client-details-modal.component.html',
-  styleUrls: ['./client-details-modal.component.scss'],
+  selector: 'app-details',
+  templateUrl: './details.page.html',
+  styleUrls: ['./details.page.scss'],
 })
-export class ClientDetailsModalComponent implements OnInit {
+export class DetailsPage implements OnInit {
 
   public services: any;
   public client: any;
@@ -36,10 +35,8 @@ export class ClientDetailsModalComponent implements OnInit {
   public selectedDate: Date;
   public selectedDateStr: string;
   private sub: any;
-  
+
   constructor(
-    private modalCtrl: ModalController,
-    private navParams: NavParams,
     private firebaseService: FirebaseService,
     private messagesService: MessagesService,
     private formBuilder: FormBuilder,
@@ -50,17 +47,18 @@ export class ClientDetailsModalComponent implements OnInit {
     this.services = SERVICES;
     this.currentYear = new Date().getFullYear();
     this.now = new Date();
-    this.sub = this.db.object('clients/' + this.navParams.data.key).valueChanges().subscribe(client => {
-      if (_.isEmpty(client)) return;
-      this.client = _.cloneDeep(client);
-      console.log('this.client:', this.client)
-      this.data = _.cloneDeep(client);
-      this.processPayments();
-      this.setClientForm(client);
-      this.sharingService.setClient(client);
+    this.sharingService.currentClient.subscribe(currentClient => {
+      this.sub = this.db.object('clients/' + currentClient.key).valueChanges().subscribe(client => {
+        console.log('this.client:', client)
+        if (_.isEmpty(client)) return;
+        this.client = _.cloneDeep(client);
+        this.data = _.cloneDeep(currentClient);
+        this.processPayments();
+        this.setClientForm(client);
+      });
     });
   }
-  
+
   ngOnInit() {
     this.editMode = false;
     this.monthCounter = this.now.getMonth();
@@ -109,7 +107,7 @@ export class ClientDetailsModalComponent implements OnInit {
     if (service == 'extras') obj.inputs.push({ name: 'detail', type: 'text', placeholder: 'Detalle' });
     let resp = await this.messagesService.showInputConfirm(obj);
     if (_.isEmpty(resp[0])) return;
-    
+
     let opts: any = {};
     if (service == 'extras') {
       if (_.isEmpty(resp[1])) return;
@@ -123,7 +121,7 @@ export class ClientDetailsModalComponent implements OnInit {
     let month = (this.selectedDate.getMonth() + 1).toString().padStart(2, '0');
 
     try {
-      await this.firebaseService.updateObject(`clients/${this.navParams.data.key}/payments/${year}/${month}`, opts);
+      await this.firebaseService.updateObject(`clients/${this.data.key}/payments/${year}/${month}`, opts);
       this.processPayments();
       this.messagesService.showToast({ msg: `El pago ha sido agregado correctamente!` });
     } catch (err) {
@@ -140,9 +138,9 @@ export class ClientDetailsModalComponent implements OnInit {
     if (!resp) return;
 
     try {
-      this.firebaseService.removeObject(`clients/${this.navParams.data.key}`);
+      this.firebaseService.removeObject(`clients/${this.data.key}`);
       this.messagesService.showToast({ msg: `El cliente ${this.data.name} ha sido eliminado correctamente!` });
-      this.modalCtrl.dismiss();
+      this.router.navigate(['history']);
     } catch (err) {
       console.log(err);
       this.messagesService.showToast({ msg: 'Ha ocurrido un error. No se pudo eliminar el cliente.' });
@@ -167,23 +165,17 @@ export class ClientDetailsModalComponent implements OnInit {
     }
 
     try {
-      this.firebaseService.updateObject(`clients/${this.navParams.data.key}`, opts);
+      this.firebaseService.updateObject(`clients/${this.data.key}`, opts);
       this.messagesService.showToast({ msg: `El cliente ${this.data.name} ha sido modificado correctamente!` });
-      this.modalCtrl.dismiss();
     } catch (err) {
       console.log(err);
       this.messagesService.showToast({ msg: 'Ha ocurrido un error. No se pudo modificar el cliente.' });
     }
   }
 
-  public close() {
-    this.modalCtrl.dismiss();
-  }
-
   public openHistory() {
     this.sharingService.setClient(this.client);
     this.router.navigate(['history']);
-    this.close();
   }
 
   public async openContract() {

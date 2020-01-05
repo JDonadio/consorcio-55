@@ -1,12 +1,6 @@
 ion-col {
   min-width: 300px;
 }
-ion-footer {
-  padding: .7rem;
-  ion-button {
-    height: 3rem;
-  }
-}
 ion-list {
   .item:last-child {
     --border-style: none;
@@ -16,7 +10,6 @@ ion-card {
   background: white;
   &.footer {
     padding: .8rem;
-    margin: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;

@@ -1,7 +1,7 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { SharingService } from 'src/services/sharing.service';
-import { AlertController, ModalController } from '@ionic/angular';
-import { ClientDetailsModalComponent } from '../shared/client-details-modal/client-details-modal.component';
+import { AlertController } from '@ionic/angular';
+import { Router } from '@angular/router';
 import * as _ from 'lodash';
 
 @Component({
@@ -20,7 +20,7 @@ export class HomePage implements OnInit {
     private zone: NgZone,
     private sharingService: SharingService,
     private alertCtrl: AlertController,
-    private modalCtrl: ModalController,
+    private router: Router,
   ) {
     this.searchText = '';
     this.activeFilter = null;
@@ -34,15 +34,12 @@ export class HomePage implements OnInit {
   
   ngOnInit() {}
 
-  async openModal(client: any) {
-    const modal = await this.modalCtrl.create({
-      component: ClientDetailsModalComponent,
-      componentProps: client
-    });
-    await modal.present();
+  public openClientDetails(client: any) {
+    this.sharingService.setClient(client);
+    this.router.navigate(['details']);
   }
 
-  searchClient() {
+  public searchClient() {
     if (this.searchText == '' || !this.searchText) {
       this.filteredClients = _.clone(this.clients);
       return;
@@ -58,7 +55,7 @@ export class HomePage implements OnInit {
     else this.filteredClients = [];
   }
 
-  async showFilter() {
+  public async showFilter() {
     let opts: any = [
       {
         name: 'client',
