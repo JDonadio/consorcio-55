@@ -32,6 +32,11 @@
 }
 ion-card {
   background: white;
+  ion-card-header {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--ion-color-primary);
+  }
   &.footer {
     padding: .8rem;
     display: flex;
