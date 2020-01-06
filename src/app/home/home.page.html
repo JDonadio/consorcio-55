@@ -27,7 +27,10 @@
       </div>
       <div class="content">
         <ion-label>{{client.name | capitalize}}</ion-label>
-        <div>{{client.address | capitalize}}</div>
+        <div class="info">
+          <div class="type">{{client.type | capitalize}} -</div>
+          <div class="address">{{client.address | capitalize}}</div>
+        </div>
       </div>
     </ion-item>
   </ion-virtual-scroll>

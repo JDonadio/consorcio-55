@@ -1,12 +1,7 @@
 <form [formGroup]="clientForm" (ngSubmit)="addClient()">
-  <ion-row>
-    <ion-col (click)="changeOwnership(true)">
-      <div class="client" [ngClass]="{'selected': isOwner}">Propietario</div>
-    </ion-col>
-
-    <ion-col (click)="changeOwnership(false)">
-      <div class="client" [ngClass]="{'selected': !isOwner}">Inquilino</div>
-    </ion-col>
+  <ion-row class="client">
+    <div class="prop" [ngClass]="{'selected': isOwner}" (click)="changeOwnership(true)">Propietario</div>
+    <div class="inq" [ngClass]="{'selected': !isOwner}" (click)="changeOwnership(false)">Inquilino</div>
   </ion-row>
 
   <ion-row>
@@ -23,6 +18,7 @@
       </ion-item>
     </ion-col>
   </ion-row>
+
   <ion-row>
     <ion-col size="12">
       <ion-item>
@@ -39,13 +35,22 @@
     <ion-col>
       <ion-item>
         <ion-label position="stacked">Piso</ion-label>
-        <ion-input type="text" formControlName="address"></ion-input>
+        <ion-input type="text" formControlName="floor"></ion-input>
       </ion-item>
     </ion-col>
     <ion-col>
       <ion-item>
         <ion-label position="stacked">Dpto</ion-label>
-        <ion-input type="text" formControlName="address"></ion-input>
+        <ion-input type="text" formControlName="apartment"></ion-input>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col>
+      <ion-item>
+        <ion-label position="stacked">Teléfono</ion-label>
+        <ion-input type="number" formControlName="cellphone"></ion-input>
       </ion-item>
     </ion-col>
   </ion-row>
@@ -98,17 +103,23 @@
         <ion-input type="text" formControlName="contractURL" readonly></ion-input>
       </ion-item>
     </ion-col>
+    <ion-col size="1">
+      <div class="upload-btn-wrapper">
+        <ion-icon name="document"></ion-icon>
+        <input type="file" name="myfile" (change)="selectedFile($event.target.files)">
+      </div>
+    </ion-col>
   </ion-row>
 </form>
 
-<ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="!isOwner">
+<!-- <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="!isOwner">
   <ion-fab-button size="small">
     <div class="upload-btn-wrapper">
       <ion-icon name="document"></ion-icon>
       <input type="file" name="myfile" (change)="selectedFile($event.target.files)">
     </div>
   </ion-fab-button>
-</ion-fab>
+</ion-fab> -->
 
 <ion-footer>
   <ion-button class="btn submit" expand="block" [disabled]="clientForm.invalid" block (click)="addClient()">Agregar</ion-button>

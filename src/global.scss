@@ -30,6 +30,9 @@ ion-content {
 ion-footer {
   background: var(--bg-color);
 }
+ion-alert {
+  --min-width: 360px !important;
+}
 .blue {
   --background: var(--ion-color-primary);
   background: var(--ion-color-primary);
@@ -62,6 +65,7 @@ ion-footer {
   background: var(--ion-color-light);
 }
 .person {
+  color: var(--ion-color-secondary);
   background: var(--ion-color-light);
 }
 .img {

@@ -14,6 +14,9 @@ ion-footer {
     height: 3rem;
   }
 }
+ion-avatar {
+  margin-right: 1rem;
+}
 .label-stacked {
   font-size: 24px;
   margin-bottom: 1rem;
@@ -21,9 +24,11 @@ ion-footer {
 .selector {
   display: flex;
   justify-content: space-around;
-  padding: .5rem 0 1rem;
+  padding: .5rem 0 2rem;
   .item {
     opacity: .3;
+    display: flex;
+    align-items: center;
     &.selected {
       transition: transform .2s;
       transform: scale(1.2);

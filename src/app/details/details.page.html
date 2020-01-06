@@ -33,13 +33,13 @@
       </ion-list-header>
       <ion-item>
         <div class="info">
-          <div class="property">{{'Nombre' | uppercase}}</div>
+          <div class="property">{{'Nombre'}}</div>
           <div class="description">{{data.lastName | capitalize}} {{data.name | capitalize}}</div>
         </div>
       </ion-item>
       <ion-item>
         <div class="info">
-          <div class="property">{{'Tipo' | uppercase}}</div>
+          <div class="property">{{'Tipo'}}</div>
           <div class="description">
             {{data.type == 'client' ? (data.isOwner ? 'Cliente - Propietario' : 'Cliente - Inquilino') : 'Consorcio'}}
           </div>
@@ -47,13 +47,13 @@
       </ion-item>
       <ion-item>
         <div class="info">
-          <div class="property">{{'Dirección' | uppercase}}</div>
+          <div class="property">{{'Dirección'}}</div>
           <div class="description">{{data.address | capitalize}}</div>
         </div>
       </ion-item>
       <ion-item *ngIf="data.type == 'client' && !isOwner">
         <div class="info">
-          <div class="property">{{'Contrato' | uppercase}}</div>
+          <div class="property">{{'Contrato'}}</div>
           <div class="description">{{data.dateContractFrom | date}} - {{data.dateContractTo | date}}</div>
         </div>
         <ion-button fill="outline" class="button-contract" (click)="openContract()">Ver</ion-button>
@@ -66,7 +66,7 @@
     <ion-list>
       <ion-list-header>
         <ion-label>Servicios</ion-label>
-        <div class="date">{{selectedDateStr | capitalize}}</div>
+        <div class="date pointer">{{selectedDateStr | capitalize}}</div>
       </ion-list-header>
 
       <ion-item (click)="addPayment(s.name)" *ngFor="let s of services">

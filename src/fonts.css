@@ -11,3 +11,13 @@
     url('./assets/fonts/roboto-slab/roboto-slab-v10-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
     url('./assets/fonts/roboto-slab/roboto-slab-v10-latin-regular.svg#RobotoSlab') format('svg'); /* Legacy iOS */
 }
+
+@font-face{
+    font-family: Anton;
+    src : url('../assets/fonts/anton/anton.woff2')
+}
+
+@font-face{
+    font-family: Roboto Mono;
+    src : url('../assets/fonts/roboto-mono/roboto-mono.woff2')
+}

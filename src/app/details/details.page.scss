@@ -42,9 +42,10 @@ ion-card {
   }
   .property {
     color: var(--ion-color-primary);
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
-    font-family: var(--roboto-slab);
+    font-family: var(--roboto-mono);
+    text-transform: uppercase;
   }
   .description {
     font-size: 16px;
@@ -60,12 +61,45 @@ ion-card {
     }
   }
 }
-.date {
-  padding-right: 15px;
-  color: var(--ion-color-primary);
-  font-weight: 600;
-}
 .padding-bottom {
   padding: 35px 0;
   width: 100%;
+}
+.date {
+  padding-right: 15px;
+  color: white;
+  font-weight: 600;
+  font-size: 18px;
+}
+.pointer {
+  width: 215px;
+  height: 40px;
+  position: relative;
+  background: var(--ion-color-primary);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 15px;
+}
+.pointer:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 0;
+  border-left: 20px solid white;
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+}
+.pointer:before {
+  content: "";
+  position: absolute;
+  right: -20px;
+  bottom: 0;
+  width: 0;
+  height: 0;
+  border-left: 20px solid red;
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
 }

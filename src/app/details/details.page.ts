@@ -63,7 +63,7 @@ export class DetailsPage implements OnInit {
     this.editMode = false;
     this.monthCounter = this.now.getMonth();
     this.selectedDate = new Date();
-    this.selectedDateStr = this.selectedDate.toLocaleDateString('es-AR', { year: 'numeric', month: 'short' });
+    this.selectedDateStr = this.selectedDate.toLocaleDateString('es-AR', { year: 'numeric', month: 'long' });
   }
 
   ionViewWillLeave() {
@@ -86,7 +86,7 @@ export class DetailsPage implements OnInit {
     this.monthCounter--;
     this.selectedDate.setMonth(this.monthCounter);
     if (this.monthCounter == -1) this.monthCounter = 11;
-    this.selectedDateStr = this.selectedDate.toLocaleDateString('es-AR', { year: 'numeric', month: 'short' });
+    this.selectedDateStr = this.selectedDate.toLocaleDateString('es-AR', { year: 'numeric', month: 'long' });
     this.processPayments();
   }
 
@@ -94,7 +94,7 @@ export class DetailsPage implements OnInit {
     this.monthCounter++;
     this.selectedDate.setMonth(this.monthCounter);
     if (this.monthCounter == 12) this.monthCounter = 0;
-    this.selectedDateStr = this.selectedDate.toLocaleDateString('es-AR', { year: 'numeric', month: 'short' });
+    this.selectedDateStr = this.selectedDate.toLocaleDateString('es-AR', { year: 'numeric', month: 'long' });
     this.processPayments();
   }
 

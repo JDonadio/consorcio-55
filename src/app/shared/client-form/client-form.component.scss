@@ -1,9 +1,13 @@
 ion-item {
   ion-label {
     color: var(--ion-color-primary);
+    &.label-stacked {
+      font-size: 25px !important;
+    }
   }
   ion-icon {
     color: #3e67dc;
+    font-size: 30px;
     margin-right: .3rem;
   }
 }
@@ -11,35 +15,71 @@ ion-footer {
   margin-top: 50px;
 }
 .client {
+  margin-bottom: 5px;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
-  padding: 2rem;
   background: white;
   border-radius: 3px;
-  font-size: 14px;
+  font-size: 17px;
+  font-weight: 600;
   text-transform: uppercase;
-  &.selected {
-    filter: drop-shadow(0px 0px 6px #9fd4f3);
-    border: 1px solid #9dccd2;
-    font-size: 17px;
-    font-weight: 600;
-    letter-spacing: .3px;
+  .prop {
+    padding: 20px;
+    width: 50%;
+    text-align: center;
+    border-bottom: 2px solid var(--ion-color-primary);
+    border-right: none;
+    color: #989aa2;
+    background: #efefef61;
+    &.selected {
+      background: white;
+      color: var(--ion-color-primary);
+      border-top: 2px solid var(--ion-color-primary);
+      border-right: 2px solid var(--ion-color-primary);
+      border-bottom: none;
+      border-radius: 2px 4px 0px 0px;
+    }
+  }
+  .inq {
+    padding: 20px;
+    width: 50%;
+    text-align: center;
+    border-bottom: 2px solid var(--ion-color-primary);
+    border-left: none;
+    color: #989aa2;
+    background: #efefef61;
+    &.selected {
+      background: white;
+      color: var(--ion-color-primary);
+      border-top: 2px solid var(--ion-color-primary);
+      border-left: 2px solid var(--ion-color-primary);
+      border-bottom: none;
+      border-radius: 4px 2px 0px 0px;
+    }
   }
 }
 .upload-btn-wrapper {
-  position: relative;
   overflow: hidden;
   display: inline-block;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  padding: 20px;
+  transform: translate(-50%, -50%);
   ion-icon {
-    font-size: 25px;
+    font-size: 35px;
+    color: var(--ion-color-primary);
   }
 }
 .upload-btn-wrapper input[type=file] {
   font-size: 100px;
+  margin: 0;
   position: absolute;
-  left: -10px;
-  top: -8px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 35px;
   opacity: 0;
   height: 35px;
