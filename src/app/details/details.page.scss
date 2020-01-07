@@ -15,6 +15,12 @@ ion-card {
     align-items: center;
   }
 }
+ion-label {
+  font-family: var(--tempo);
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #909090;
+}
 .close-button {
   ion-icon {
     font-size: 22px;
@@ -44,7 +50,7 @@ ion-card {
     color: var(--ion-color-primary);
     font-size: 16px;
     font-weight: 600;
-    font-family: var(--roboto-mono);
+    font-family: var(--anton);
     text-transform: uppercase;
   }
   .description {

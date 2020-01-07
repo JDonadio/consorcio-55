@@ -29,7 +29,7 @@
     <ion-col>
       <ion-item>
         <ion-label position="stacked">Numero</ion-label>
-        <ion-input type="text" formControlName="address"></ion-input>
+        <ion-input type="text" formControlName="number"></ion-input>
       </ion-item>
     </ion-col>
     <ion-col>
@@ -59,18 +59,20 @@
     <ion-col>
       <ion-item>
         <ion-label>Consorcios</ion-label>
-        <ion-select interface="alert" multiple disabled="{{!consortiums[0]}}" (ionChange)="selectConsortiums($event)">
+        <ion-select interface="alert" [selectedText]="selectedConsortiumsText" multiple disabled="{{!consortiums[0]}}" 
+          (ionChange)="selectConsortiums($event)">
           <ion-select-option *ngFor="let c of consortiums" value={{c.key}}>{{c.name}}</ion-select-option>
         </ion-select>
       </ion-item>
     </ion-col>
   </ion-row>
 
-  <ion-row>
+  <ion-row [hidden]="isOwner">
     <ion-col>
-      <ion-item *ngIf="!isOwner">
+      <ion-item>
         <ion-label>Propietarios</ion-label>
-        <ion-select interface="alert" disabled="{{!owners[0]}}" (ionChange)="selectOwners($event)">
+        <ion-select interface="alert" [selectedText]="selectedOwnerText" disabled="{{!owners[0]}}" 
+          (ionChange)="selectOwners($event)">
           <ion-select-option *ngFor="let o of owners" value={{o.key}}>{{o.name}} {{o.lastName}}</ion-select-option>
         </ion-select>
       </ion-item>

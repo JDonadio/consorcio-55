@@ -13,11 +13,21 @@
 }
 
 @font-face{
-    font-family: Anton;
-    src : url('../assets/fonts/anton/anton.woff2')
+	font-family: 'Anton-Regular';
+		src: url('./assets/fonts/anton/Anton-Regular.ttf') format('truetype'), /* Safari, Android, iOS */
 }
 
 @font-face{
-    font-family: Roboto Mono;
-    src : url('../assets/fonts/roboto-mono/roboto-mono.woff2')
+	font-family: 'Roboto Mono';
+		src: url('./assets/fonts/roboto-mono/RobotoMono-Regular.ttf') format('truetype'), /* Safari, Android, iOS */
+}
+
+@font-face{
+	font-family: 'Roboto Mono Bold';
+		src: url('./assets/fonts/roboto-mono/RobotoMono-Bold.ttf') format('truetype'), /* Safari, Android, iOS */
+}
+
+@font-face {
+	font-family: 'TempoStd-HeavyCondensed';
+	src: url('assets/fonts/tempo/TempoStd-HeavyCondensed.ttf') format('truetype')
 }
