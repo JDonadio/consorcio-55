@@ -88,27 +88,6 @@ export class DetailsPage implements OnInit {
       if (_.isEmpty(currentConsortium)) return;
       this.setClient(currentConsortium);
     }));
-
-    // this.sub.add(this.sharingService.currentClient.subscribe(currentClient => {
-    //   this.sub.add(this.sharingService.currentConsortiums.subscribe(consortiums => {
-    //     if (_.isEmpty(consortiums) || _.isEmpty(currentClient)) return;
-
-    //     console.log('consortiums:', consortiums)
-
-    //     this.sub.add(this.db.object('clients/' + currentClient.key).valueChanges().subscribe(async (client: any) => {
-    //       if (_.isEmpty(client)) return;
-
-    //       if (!client.isOwner) {
-    //         currentClient.ownerObj = await this.firebaseService.getObject('clients/', client.owner);
-    //       }
-    //       this.client = _.cloneDeep(client);
-    //       this.data = _.cloneDeep(currentClient);
-    //       this.processPayments();
-    //       this.setClientForm(client);
-    //       console.log('this.data:', this.data);
-    //     }));
-    //   }));
-    // }));
   }
 
   ionViewWillLeave() {

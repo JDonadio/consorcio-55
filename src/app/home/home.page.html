@@ -21,17 +21,19 @@
 <ion-content>
   <ion-virtual-scroll [items]="filteredObjects" approxItemHeight="90px">
     <ion-item *virtualItem="let client" (click)="openDetails(client)">
-      <div class="img">
-        <ion-icon name="business" *ngIf="client.type == 'consortium'" class="consortium"></ion-icon>
-        <ion-icon name="person" *ngIf="client.type != 'consortium'" class="person"></ion-icon>
-      </div>
-      <div class="content">
-        <ion-label>{{client.name | capitalize}}</ion-label>
-        <div class="info">
-          <div class="type">{{client.type == 'consortium' ? 'Consorcio' : (client.isOwner ? 'Propietario' : 'Inquilino') | capitalize}} -</div>
-          <div class="address">{{client.address | capitalize}}</div>
+      <ion-card>
+        <div class="img">
+          <ion-icon name="business" *ngIf="client.type == 'consortium'" class="consortium"></ion-icon>
+          <ion-icon name="person" *ngIf="client.type != 'consortium'" class="person"></ion-icon>
         </div>
-      </div>
+        <div class="content">
+          <ion-label>{{client.name | capitalize}}</ion-label>
+          <div class="info">
+            <div class="type">{{client.type == 'consortium' ? 'Consorcio' : (client.isOwner ? 'Propietario' : 'Inquilino') | capitalize}} -</div>
+            <div class="description">{{client.address | capitalize}} {{client.number}} {{(client.floor || '') + ((client.apartment | capitalize) || '')}}</div>
+          </div>
+        </div>
+      </ion-card>
     </ion-item>
   </ion-virtual-scroll>
 </ion-content>

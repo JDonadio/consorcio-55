@@ -7,6 +7,8 @@
   .info {
     display: flex;
     align-items: center;
+    margin-top: 5px;
+    font-size: 16px;
     .type {
       color: var(--ion-color-primary);
     }
@@ -19,4 +21,18 @@
 .active {
   border: 1px dashed #f1f1f1;
   border-radius: 10px;
+}
+ion-card {
+  display: flex;
+  align-items: center;
+  max-height: 85px;
+  width: 100%;
+  background: white;
+  .img {
+    margin: 0 .7rem 0 20px !important;
+  }
+}
+ion-item {
+  --background: var(--bg-color);
+  --border-style: none;
 }
