@@ -62,17 +62,27 @@ export class ClientFormComponent implements OnInit {
   ngOnInit() {
     let clientsRef = this.db.database.ref('clients');
     clientsRef.on('value', (snap: any) => {
-      this.zone.run(() => { 
+      this.zone.run(() => {
         snap.forEach(data => { 
           if (data.val().type == 'client') this.clients.push({ key: data.key, ...data.val() });
           else this.consortiums.push({ key: data.key, ...data.val() });
         });
         this.clients = _.uniqBy(this.clients, 'key');
-        this.consortiums = _.uniqBy(this.consortiums, 'key');
         console.log('clients:', this.clients)
-        console.log('consortiums:', this.consortiums)
         this.owners = _.filter(this.clients, c => c.isOwner);
         this.noOwners = _.filter(this.clients, c => !c.isOwner);
+      })
+    });
+
+    let consortiumsRef = this.db.database.ref('consortiums');
+    consortiumsRef.on('value', (snap: any) => {
+      this.zone.run(() => {
+        snap.forEach(data => {
+          if (data.val().type == 'client') this.consortiums.push({ key: data.key, ...data.val() });
+          else this.consortiums.push({ key: data.key, ...data.val() });
+        });
+        this.consortiums = _.uniqBy(this.consortiums, 'key');
+        console.log('consortiums:', this.consortiums)
       })
     });
   }
