@@ -19,6 +19,7 @@
 </form>
 
 <ion-footer>
-  <ion-button class="btn submit" expand="block" [disabled]="consortiumForm.invalid" block (click)="addConsortium()">Agregar
+  <ion-button class="btn submit" expand="block" [disabled]="consortiumForm.invalid" block (click)="addConsortium()">
+    {{editMode ? 'Editar' : 'Agregar'}}
   </ion-button>
 </ion-footer>

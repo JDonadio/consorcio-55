@@ -120,27 +120,10 @@
   <div *ngIf="editMode && data.type == 'client'" padding>
     <app-client-form [editMode]="editMode" [data]="data"></app-client-form>
   </div>
-  
-  <!-- <app-consortium-form *ngIf="!editMode && data.type == 'consortium'"></app-consortium-form> -->
 
-  <!-- Fab buttons -->
-  <!-- <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="!editMode">
-    <ion-fab-button size="small">
-      <ion-icon name="more"></ion-icon>
-    </ion-fab-button>
-  
-    <ion-fab-list side="start">
-      <ion-fab-button (click)="askForRemove()">
-        <ion-icon name="trash" color="danger"></ion-icon>
-      </ion-fab-button>
-    </ion-fab-list>
-  
-    <ion-fab-list side="top">
-      <ion-fab-button (click)="editMode = !editMode">
-        <ion-icon name="create" color="primary"></ion-icon>
-      </ion-fab-button>
-    </ion-fab-list>
-  </ion-fab> -->
+  <div *ngIf="editMode && data.type == 'consortium'" padding>
+    <app-consortium-form [editMode]="editMode" [data]="data"></app-consortium-form>
+  </div>
 
   <div class="padding-bottom"></div>
 </ion-content>
@@ -148,7 +131,7 @@
 <ion-footer>
   <ion-card class="footer" *ngIf="!editMode">
     <ion-button fill="outline" (click)="getPreviousMonthInformation()">&lt;</ion-button>
-    <ion-button fill="outline" expand="block" type="submit" (click)="openHistory()">Ver historial</ion-button>
+    <ion-button fill="outline" (click)="openHistory()" expand="block" type="submit">Ver historial</ion-button>
     <ion-button fill="outline" (click)="getNextMonthInformation()">&gt;</ion-button>
   </ion-card>
 </ion-footer>

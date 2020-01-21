@@ -61,24 +61,6 @@ export class ClientFormComponent implements OnInit {
     this.currentYear = new Date().getFullYear();
     this.file = null;
   }
-
-  private setForm() {
-    this.changeOwnership(this.data.isOwner);
-    this.clientForm.patchValue({ isOwner: this.data.isOwner });
-    this.clientForm.patchValue({ name: this.data.name });
-    this.clientForm.patchValue({ lastName: this.data.lastName });
-    this.clientForm.patchValue({ address: this.data.address });
-    this.clientForm.patchValue({ number: this.data.number });
-    this.clientForm.patchValue({ floor: this.data.floor });
-    this.clientForm.patchValue({ apartment: this.data.apartment });
-    this.clientForm.patchValue({ cellphone: this.data.cellphone });
-    this.clientForm.patchValue({ type: this.data.type });
-    this.clientForm.patchValue({ dateContractFrom: this.data.dateContractFrom });
-    this.clientForm.patchValue({ dateContractTo: this.data.dateContractTo });
-    this.clientForm.patchValue({ owner: null });
-    this.clientForm.patchValue({ consortiums: null });
-    this.clientForm.patchValue({ contractURL: null });
-  }
   
   ngOnInit() {
     console.log('this.editMode', this.editMode)
@@ -113,6 +95,24 @@ export class ClientFormComponent implements OnInit {
     });
   }
 
+  private setForm() {
+    this.changeOwnership(this.data.isOwner);
+    this.clientForm.patchValue({ isOwner: this.data.isOwner });
+    this.clientForm.patchValue({ name: this.data.name });
+    this.clientForm.patchValue({ lastName: this.data.lastName });
+    this.clientForm.patchValue({ address: this.data.address });
+    this.clientForm.patchValue({ number: this.data.number });
+    this.clientForm.patchValue({ floor: this.data.floor });
+    this.clientForm.patchValue({ apartment: this.data.apartment });
+    this.clientForm.patchValue({ cellphone: this.data.cellphone });
+    this.clientForm.patchValue({ type: this.data.type });
+    this.clientForm.patchValue({ dateContractFrom: this.data.dateContractFrom });
+    this.clientForm.patchValue({ dateContractTo: this.data.dateContractTo });
+    this.clientForm.patchValue({ owner: null });
+    this.clientForm.patchValue({ consortiums: null });
+    this.clientForm.patchValue({ contractURL: null });
+  }
+
   public changeOwnership(isOwner: boolean) {
     this.isOwner = isOwner;
     this.clientForm.patchValue({ isOwner });
@@ -142,7 +142,8 @@ export class ClientFormComponent implements OnInit {
   
   public async addClient() {
     console.log(this.clientForm);
-    this.messagesService.showLoading({ msg: 'Agregando cliente...' });
+    let msg = { msg: (this.editMode ? 'Modificando' : 'Agregando') + ' cliente...' };
+    this.messagesService.showLoading(msg);
 
     let name = this.clientForm.get('name').value;
     let lastName = this.clientForm.get('lastName').value;
