@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { DetailsPage } from './details.page';
 import { SharedModule } from '../shared/shared-module.module';
+import { PopoverComponent } from './popover/popover.component';
 
 const routes: Routes = [
   {
@@ -22,8 +23,14 @@ const routes: Routes = [
     IonicModule,
     ReactiveFormsModule,
     RouterModule.forChild(routes),
-    SharedModule
+    SharedModule,
   ],
-  declarations: [DetailsPage]
+  declarations: [
+    DetailsPage,
+    PopoverComponent,
+  ],
+  entryComponents: [
+    PopoverComponent,
+  ]
 })
 export class DetailsPageModule {}

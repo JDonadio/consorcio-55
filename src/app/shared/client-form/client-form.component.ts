@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone, ViewChild } from '@angular/core';
+import { Component, OnInit, NgZone, ViewChild, Input } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { FirebaseService } from 'src/services/firebase.service';
@@ -12,7 +12,10 @@ import * as _ from 'lodash';
   styleUrls: ['./client-form.component.scss'],
 })
 export class ClientFormComponent implements OnInit {
+  @Input() editMode: boolean;
+  @Input() data: any;
   @ViewChild('name') name: any;
+  
   public clientForm: FormGroup;
   public currentYear: number;
   public clients: any;
@@ -59,7 +62,30 @@ export class ClientFormComponent implements OnInit {
     this.file = null;
   }
 
+  private setForm() {
+    this.changeOwnership(this.data.isOwner);
+    this.clientForm.patchValue({ isOwner: this.data.isOwner });
+    this.clientForm.patchValue({ name: this.data.name });
+    this.clientForm.patchValue({ lastName: this.data.lastName });
+    this.clientForm.patchValue({ address: this.data.address });
+    this.clientForm.patchValue({ number: this.data.number });
+    this.clientForm.patchValue({ floor: this.data.floor });
+    this.clientForm.patchValue({ apartment: this.data.apartment });
+    this.clientForm.patchValue({ cellphone: this.data.cellphone });
+    this.clientForm.patchValue({ type: this.data.type });
+    this.clientForm.patchValue({ dateContractFrom: this.data.dateContractFrom });
+    this.clientForm.patchValue({ dateContractTo: this.data.dateContractTo });
+    this.clientForm.patchValue({ owner: null });
+    this.clientForm.patchValue({ consortiums: null });
+    this.clientForm.patchValue({ contractURL: null });
+  }
+  
   ngOnInit() {
+    console.log('this.editMode', this.editMode)
+    console.log('this.data', this.data)
+
+    if (this.data) this.setForm();
+
     let clientsRef = this.db.database.ref('clients');
     clientsRef.on('value', (snap: any) => {
       this.zone.run(() => {
@@ -142,15 +168,29 @@ export class ClientFormComponent implements OnInit {
       consortiums: this.selectedConsortiums[0] ? this.selectedConsortiums : null,
       contractURL: downloadURL,
     }
-    this.firebaseService.createObject('clients', opts)
-      .then(() => {
-        this.onSuccess({ msg: `Cliente ${opts.name} agregado correctamente!` });
-        this.resetForm();
-        setTimeout(() => { this.name.setFocus() }, 1000);
-      })
-      .catch(err => {
-        this.onError({ msg: 'Ha ocurrido un error. ', err });
-      });
+
+    if (this.editMode) {
+      this.firebaseService.updateObject(`clients/${this.data.key}`, opts)
+        .then(() => {
+          this.onSuccess({ msg: `Cliente ${opts.name} modificado correctamente!` });
+          this.resetForm();
+          setTimeout(() => { this.name.setFocus() }, 1000);
+        })
+        .catch(err => {
+          this.onError({ msg: 'Ha ocurrido un error. ', err });
+        });
+    }
+    else {
+      this.firebaseService.createObject('clients', opts)
+        .then(() => {
+          this.onSuccess({ msg: `Cliente ${opts.name} agregado correctamente!` });
+          this.resetForm();
+          setTimeout(() => { this.name.setFocus() }, 1000);
+        })
+        .catch(err => {
+          this.onError({ msg: 'Ha ocurrido un error. ', err });
+        });
+    }
   }
 
   private resetForm() {

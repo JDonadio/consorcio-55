@@ -4,6 +4,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';  
 import { CapitalizePipe } from '../pipes/capitalize/capitalize.pipe';
 import { PesosPipe } from '../pipes/currency/pesos.pipe';
+import { ClientFormComponent } from './client-form/client-form.component';
+import { ConsortiumFormComponent } from './consortium-form/consortium-form.component';
 
 @NgModule({
   imports: [
@@ -16,10 +18,14 @@ import { PesosPipe } from '../pipes/currency/pesos.pipe';
   declarations: [
     CapitalizePipe,
     PesosPipe,
+    ClientFormComponent,
+    ConsortiumFormComponent,
   ],
   exports: [
     CapitalizePipe,
     PesosPipe,
+    ClientFormComponent,
+    ConsortiumFormComponent,
   ],
   entryComponents: [
   ],

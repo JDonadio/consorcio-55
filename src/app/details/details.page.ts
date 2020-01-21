@@ -6,7 +6,9 @@ import { Router } from '@angular/router';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { SharingService } from 'src/services/sharing.service';
 import { Subscription } from 'rxjs';
+import { PopoverController } from '@ionic/angular';
 import * as _ from 'lodash';
+import { PopoverComponent } from './popover/popover.component';
 
 const SERVICES = [
   { name: 'Alquiler', type: '' },
@@ -47,6 +49,7 @@ export class DetailsPage implements OnInit {
     private db: AngularFireDatabase,
     private sharingService: SharingService,
     private zone: NgZone,
+    private popoverController: PopoverController,
   ) {
     this.services = SERVICES;
     this.currentYear = new Date().getFullYear();
@@ -197,36 +200,10 @@ export class DetailsPage implements OnInit {
     try {
       this.firebaseService.removeObject(`clients/${this.data.key}`);
       this.messagesService.showToast({ msg: `El cliente ${this.data.name} ha sido eliminado correctamente!` });
-      this.router.navigate(['history']);
+      this.router.navigate(['home']);
     } catch (err) {
       console.log(err);
       this.messagesService.showToast({ msg: 'Ha ocurrido un error. No se pudo eliminar el cliente.' });
-    }
-  }
-
-  public async askForEdit() {
-    let resp = await this.messagesService.showConfirm(
-      { title: 'Editar cliente', msg: `¿Estás seguro de editar a ${this.data.name.toUpperCase()}?` }
-    );
-
-    if (!resp) return;
-
-    let opts = {
-      name: this.clientForm.get('name').value,
-      type: this.clientForm.get('type').value,
-      owner: this.clientForm.get('owner').value,
-      address: this.clientForm.get('address').value,
-      contractURL: this.clientForm.get('contractURL').value,
-      dateContractFrom: this.clientForm.get('dateContractFrom').value,
-      dateContractTo: this.clientForm.get('dateContractTo').value,
-    }
-
-    try {
-      this.firebaseService.updateObject(`clients/${this.data.key}`, opts);
-      this.messagesService.showToast({ msg: `El cliente ${this.data.name} ha sido modificado correctamente!` });
-    } catch (err) {
-      console.log(err);
-      this.messagesService.showToast({ msg: 'Ha ocurrido un error. No se pudo modificar el cliente.' });
     }
   }
 
@@ -238,6 +215,20 @@ export class DetailsPage implements OnInit {
   public async openContract() {
     if (_.isEmpty(this.client.contractURL)) return;
     window.open(this.client.contractURL);
+  }
+
+  public async presentPopover(ev: any) {
+    const popover = await this.popoverController.create({
+      component: PopoverComponent,
+      event: ev,
+      translucent: true,
+      mode: 'md',
+    });
+    await popover.present();
+    const response = await popover.onDidDismiss();
+    if (_.isEmpty(response) || _.isEmpty(response.data)) return;
+    this.editMode = response.data == 'edit';
+    if (response.data == 'remove') this.askForRemove();
   }
 
   public openOwnerDetails(owner) {

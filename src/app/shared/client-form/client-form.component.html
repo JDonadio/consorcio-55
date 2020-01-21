@@ -114,15 +114,8 @@
   </ion-row>
 </form>
 
-<!-- <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="!isOwner">
-  <ion-fab-button size="small">
-    <div class="upload-btn-wrapper">
-      <ion-icon name="document"></ion-icon>
-      <input type="file" name="myfile" (change)="selectedFile($event.target.files)">
-    </div>
-  </ion-fab-button>
-</ion-fab> -->
-
 <ion-footer>
-  <ion-button class="btn submit" expand="block" [disabled]="clientForm.invalid" block (click)="addClient()">Agregar</ion-button>
+  <ion-button class="btn submit" expand="block" [disabled]="clientForm.invalid" block (click)="addClient()">
+    {{editMode ? 'Editar' : 'Agregar'}}
+  </ion-button>
 </ion-footer>

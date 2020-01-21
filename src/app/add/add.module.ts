@@ -6,8 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { AddPage } from './add.page';
-import { ClientFormComponent } from '../shared/client-form/client-form.component';
-import { ConsortiumFormComponent } from '../shared/consortium-form/consortium-form.component';
+import { SharedModule } from '../shared/shared-module.module';
 
 const routes: Routes = [
   {
@@ -22,12 +21,11 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     ReactiveFormsModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    SharedModule,
   ],
   declarations: [
     AddPage,
-    ClientFormComponent,
-    ConsortiumFormComponent,
   ]
 })
 export class AddPageModule {}
