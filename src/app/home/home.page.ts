@@ -11,10 +11,12 @@ import * as _ from 'lodash';
 })
 export class HomePage implements OnInit {
 
-  private clients: any;
-  public filteredClients: any;
   public searchText: string;
   public activeFilter: any;
+  public filteredObjects: any;
+  private allObjects: any;
+  private consortiums: any;
+  private clients: any;
   
   constructor(
     private zone: NgZone,
@@ -24,35 +26,62 @@ export class HomePage implements OnInit {
   ) {
     this.searchText = '';
     this.activeFilter = null;
+    this.filteredObjects = [];
+    this.allObjects = [];
+    this.consortiums = [];
+    this.clients = [];
     this.sharingService.currentClients.subscribe(clients => {
       this.zone.run(() => {
-        this.clients = clients;
-        this.filteredClients = _.clone(clients);
+        this.clients = clients || [];
+        console.log('clients:', clients)
+        this.updateObjects();
+      });
+    });
+    this.sharingService.currentConsortiums.subscribe(consortiums => {
+      this.zone.run(() => {
+        this.consortiums = consortiums || [];
+        console.log('consortiums:', consortiums)
+        this.updateObjects();
       });
     });
   }
   
-  ngOnInit() {}
+  ngOnInit() {
+    this.sharingService.setClient(null);
+    this.sharingService.setConsortium(null);
+  }
 
-  public openClientDetails(client: any) {
-    this.sharingService.setClient(client);
+  public openDetails(obj: any) {
+    obj.type == 'client' ? this.sharingService.setClient(obj) : this.sharingService.setConsortium(obj);
     this.router.navigate(['details']);
+  }
+
+  private updateObjects() {
+    this.zone.run(() => {
+      this.allObjects = this.consortiums.concat(this.clients);
+      this.filteredObjects = _.clone(this.allObjects);
+      console.log('this.filteredObjects:', this.filteredObjects)
+    });
   }
 
   public searchClient() {
     if (this.searchText == '' || !this.searchText) {
-      this.filteredClients = _.clone(this.clients);
+      this.filteredObjects = _.clone(this.allObjects);
       return;
     }
 
-    let byName = _.filter(this.clients, c => { return c.name.toLowerCase().includes(this.searchText.toLowerCase()) });
-    let byAddress = _.filter(this.clients, c => { return c.address.toLowerCase().includes(this.searchText.toLowerCase()) });
-    let byType = _.filter(this.clients, c => { return c.type.toLowerCase().includes(this.searchText.toLowerCase()) });
+    let byName = _.filter(this.allObjects, c => { return c.name.toLowerCase().includes(this.searchText.toLowerCase()) });
+    let byAddress = _.filter(this.allObjects, c => { return c.address.toLowerCase().includes(this.searchText.toLowerCase()) });
+    let byType = _.filter(this.allObjects, c => { return c.type.toLowerCase().includes(this.searchText.toLowerCase()) });
+    let byOwner = _.filter(this.allObjects, c => { return c.isOwner });
+    let byRenter = _.filter(this.allObjects, c => { return !c.isOwner });
 
-    if (!_.isEmpty(byName)) this.filteredClients = _.clone(byName);
-    else if (!_.isEmpty(byAddress)) this.filteredClients = _.clone(byAddress);
-    else if (!_.isEmpty(byType)) this.filteredClients = _.clone(byType);
-    else this.filteredClients = [];
+    if (!_.isEmpty(byName)) this.filteredObjects = _.clone(byName);
+    else if (!_.isEmpty(byAddress)) this.filteredObjects = _.clone(byAddress);
+    else if (!_.isEmpty(byType)) this.filteredObjects = _.clone(byType);
+    else if (!_.isEmpty(byOwner)) this.filteredObjects = _.clone(byOwner);
+    else if (!_.isEmpty(byRenter)) this.filteredObjects = _.clone(byRenter);
+    else this.filteredObjects = [];
   }
 
   public async showFilter() {
@@ -70,6 +99,20 @@ export class HomePage implements OnInit {
         label: 'Consorcio',
         value: 'consortium',
         checked: this.activeFilter == 'consortium'
+      },
+      {
+        name: 'owner',
+        type: 'radio',
+        label: 'Propietarios',
+        value: 'owner',
+        checked: this.activeFilter == 'owner'
+      },
+      {
+        name: 'renter',
+        type: 'radio',
+        label: 'Inquilinos',
+        value: 'renter',
+        checked: this.activeFilter == 'renter'
       }
     ];
     opts.unshift({ type: 'radio', label: 'Borrar filtro', value: 'none' });
@@ -91,20 +134,31 @@ export class HomePage implements OnInit {
     await alert.present();
   }
 
-  private applyFilter(type) {
-    let byType = _.filter(this.clients, c => { return c.type == type });
-    if (!_.isEmpty(byType)) {
-      this.activeFilter = type;
-      this.filteredClients = _.clone(byType);
+  private applyFilter(filter: string) {
+    if (filter == 'client') {
+      this.filteredObjects = _.clone(this.clients);
+      this.activeFilter = filter;
+    }
+    else if (filter == 'consortium') {
+      this.filteredObjects = _.clone(this.consortiums);
+      this.activeFilter = filter;
+    }
+    else if (filter == 'owner') {
+      this.filteredObjects = _.filter(this.clients, c => { return c.isOwner });
+      this.activeFilter = filter;
+    }
+    else if (filter == 'renter') {
+      this.filteredObjects = _.filter(this.clients, c => { return c.type == 'client' && !c.isOwner });
+      this.activeFilter = filter;
     }
     else {
-      this.filteredClients = [];
+      this.filteredObjects = [];
       this.activeFilter = null;
-    } 
+    }
   }
   
   private clearFilter() {
-    this.filteredClients = _.clone(this.clients);
+    this.updateObjects();
     this.activeFilter = null;
   }
 }

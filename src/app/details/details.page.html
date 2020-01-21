@@ -39,22 +39,35 @@
       </ion-item>
       <ion-item>
         <div class="info">
+          <div class="property">{{'Dirección'}}</div>
+          <div class="description">{{data.address | capitalize}} {{data.number}} {{(data.floor || '') + ((data.apartment | capitalize) || '')}}</div>
+        </div>
+      </ion-item>
+      <ion-item>
+        <div class="info">
           <div class="property">{{'Tipo'}}</div>
           <div class="description">
             {{data.type == 'client' ? (data.isOwner ? 'Cliente - Propietario' : 'Cliente - Inquilino') : 'Consorcio'}}
           </div>
         </div>
       </ion-item>
-      <ion-item>
+      <ion-item *ngIf="data.type == 'client'">
         <div class="info">
-          <div class="property">{{'Dirección'}}</div>
-          <div class="description">{{data.address | capitalize}}</div>
+          <div class="property">{{'Consorcio(s)'}}</div>
+          <div class="description">{{data.consortiumsStr | capitalize}}</div>
         </div>
       </ion-item>
-      <ion-item *ngIf="data.type == 'client' && !isOwner">
+      <ion-item *ngIf="data.type == 'client' && !data.isOwner">
+        <div class="info">
+          <div class="property">{{'Propietario'}}</div>
+          <div class="description">{{data.ownerObj.lastName | capitalize}} {{data.ownerObj.name | capitalize}}</div>
+        </div>
+        <ion-button fill="outline" class="button-contract" (click)="openOwnerDetails(data.ownerObj)">Ver</ion-button>
+      </ion-item>
+      <ion-item *ngIf="data.type == 'client' && !data.isOwner">
         <div class="info">
           <div class="property">{{'Contrato'}}</div>
-          <div class="description">{{data.dateContractFrom | date}} - {{data.dateContractTo | date}}</div>
+          <div class="description">{{data.dateContractFrom | date:'dd/MM/yyyy'}} - {{data.dateContractTo | date:'dd/MM/yyyy'}}</div>
         </div>
         <ion-button fill="outline" class="button-contract" (click)="openContract()">Ver</ion-button>
       </ion-item>

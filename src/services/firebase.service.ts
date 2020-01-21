@@ -10,6 +10,14 @@ export class FirebaseService {
     private db: AngularFireDatabase,
   ) { }
 
+  getObject(ref: string, key: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.db.database.ref(ref + key).once('value').then(snapshot => {
+        resolve(snapshot && snapshot.val() || null)
+      });
+    });
+  }
+
   createObject(ref: string, opts: any): Promise<any> {
     return new Promise((resolve, reject) => {
       try {

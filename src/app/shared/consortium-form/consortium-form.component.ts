@@ -34,7 +34,7 @@ export class ConsortiumFormComponent implements OnInit {
     }
 
     this.messagesService.showLoading({ msg: 'Agregando consorcio...' });
-    this.firebaseService.createObject('clients', opts)
+    this.firebaseService.createObject('consortiums', opts)
       .then(() => {
         this.onSuccess({ msg: `Consorcio "${opts.name}" agregado correctamente!` });
         this.consortiumForm.patchValue({ name: '', address: '' });

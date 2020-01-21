@@ -7,7 +7,7 @@
     <ion-title>Inicio</ion-title>
 
     <ion-buttons slot="primary">
-      <ion-button (click)="showFilter()">
+      <ion-button (click)="showFilter()" [ngClass]="{'active': activeFilter}">
         <ion-icon slot="icon-only" name="options"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -19,8 +19,8 @@
 </ion-header>
 
 <ion-content>
-  <ion-virtual-scroll [items]="filteredClients" approxItemHeight="90px">
-    <ion-item *virtualItem="let client" (click)="openClientDetails(client)">
+  <ion-virtual-scroll [items]="filteredObjects" approxItemHeight="90px">
+    <ion-item *virtualItem="let client" (click)="openDetails(client)">
       <div class="img">
         <ion-icon name="business" *ngIf="client.type == 'consortium'" class="consortium"></ion-icon>
         <ion-icon name="person" *ngIf="client.type != 'consortium'" class="person"></ion-icon>
@@ -28,7 +28,7 @@
       <div class="content">
         <ion-label>{{client.name | capitalize}}</ion-label>
         <div class="info">
-          <div class="type">{{client.type | capitalize}} -</div>
+          <div class="type">{{client.type == 'consortium' ? 'Consorcio' : (client.isOwner ? 'Propietario' : 'Inquilino') | capitalize}} -</div>
           <div class="address">{{client.address | capitalize}}</div>
         </div>
       </div>

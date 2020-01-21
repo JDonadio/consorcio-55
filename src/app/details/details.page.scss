@@ -2,6 +2,9 @@ ion-col {
   min-width: 300px;
 }
 ion-list {
+  ion-list-header {
+    margin-bottom: 1rem;
+  }
   .item:last-child {
     --border-style: none;
   }

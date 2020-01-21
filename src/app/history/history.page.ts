@@ -66,6 +66,8 @@ export class HistoryPage implements OnInit {
     this.selectedDateStr = this.selectedDate.toLocaleDateString('es-AR', { year: 'numeric', month: 'short' });
 
     this.sub = this.sharingService.currentClient.subscribe(client => {
+      if (_.isEmpty(client)) return;
+      
       console.log(client.payments);
       this.client = client;
       this.processPayments();
