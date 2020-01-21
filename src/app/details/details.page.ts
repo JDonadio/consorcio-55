@@ -191,8 +191,9 @@ export class DetailsPage implements OnInit {
   }
 
   public async askForRemove() {
+    let type = this.data.type == 'client' ? 'Cliente' : 'Consorcio';
     let resp = await this.messagesService.showConfirm(
-      { title: 'Eliminar cliente', msg: `¿Estás seguro de eliminar a ${this.data.name.toUpperCase()}?` }
+      { title: 'Eliminar ' + type, msg: `¿Estás seguro de eliminar a ${this.data.lastName || ''} ${this.data.name.toUpperCase()}?` }
     );
 
     if (!resp) return;
