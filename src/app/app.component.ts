@@ -41,6 +41,10 @@ export class AppComponent {
     });
   }
 
+  checkStatus() {
+    this.router.navigate(['/expiration']);
+  }
+
   add() {
     this.router.navigate(['/add']);
   }

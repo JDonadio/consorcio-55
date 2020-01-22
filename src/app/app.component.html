@@ -6,24 +6,31 @@
           <ion-title>Menu</ion-title>
         </ion-toolbar>
       </ion-header>
+
       <ion-content class="blue">
         <ion-list class="blue">
           <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages">
             <ion-item [routerDirection]="'root'" [routerLink]="[p.url]">
               <ion-icon slot="start" [name]="p.icon"></ion-icon>
-              <ion-label>
-                {{p.title}}
-              </ion-label>
+              <ion-label>{{p.title}}</ion-label>
             </ion-item>
+            
             <ion-item *ngIf="!isLoggedIn" (click)="login()" class="menu-item">
               <ion-icon slot="start" name="log-in"></ion-icon>
               <ion-label>Ingresar</ion-label>
             </ion-item>
+            
             <div *ngIf="isLoggedIn">
               <ion-item (click)="add()" class="menu-item">
                 <ion-icon slot="start" name="add"></ion-icon>
                 <ion-label>Agregar</ion-label>
               </ion-item>
+            
+              <ion-item (click)="checkStatus()" class="menu-item">
+                <ion-icon slot="start" name="pulse"></ion-icon>
+                <ion-label>Estado</ion-label>
+              </ion-item>
+            
               <ion-item (click)="logout()" class="menu-item">
                 <ion-icon slot="start" name="log-out"></ion-icon>
                 <ion-label>Salir</ion-label>
@@ -33,6 +40,7 @@
         </ion-list>
       </ion-content>
     </ion-menu>
+  
     <ion-router-outlet main></ion-router-outlet>
   </ion-split-pane>
 </ion-app>
