@@ -27,7 +27,7 @@
           <ion-icon name="person" *ngIf="client.type != 'consortium'" class="person"></ion-icon>
         </div>
         <div class="content">
-          <ion-label>{{client.name | capitalize}}</ion-label>
+          <ion-label>{{client.lastName | capitalize}} {{client.name | capitalize}}</ion-label>
           <div class="info">
             <div class="type">{{client.type == 'consortium' ? 'Consorcio' : (client.isOwner ? 'Propietario' : 'Inquilino') | capitalize}} -</div>
             <div class="description">{{client.address | capitalize}} {{client.number}} {{(client.floor || '') + ((client.apartment | capitalize) || '')}}</div>
