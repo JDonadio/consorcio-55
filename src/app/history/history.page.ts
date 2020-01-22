@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { SharingService } from 'src/services/sharing.service';
-import { Chart } from "chart.js";
+// import { Chart } from "chart.js";
 import * as _ from 'lodash';
 
 const MONTHS = {
@@ -158,34 +158,34 @@ export class HistoryPage implements OnInit {
     // this.drawChart();
   }
 
-  private drawChart() {
-    let commons = _.sumBy(Array.from(_.values(_.map(this.totalCommonsArray, 'amount')), v => Number(v)));
-    let extras = _.sumBy(Array.from(_.values(_.map(this.totalExtrasArray, 'amount')), v => Number(v)));
-    let y = [commons, extras, this.superTotal];
-    let x = ['Gastos comunes', 'Gastos extras', 'Total anual'];
+  // private drawChart() {
+  //   let commons = _.sumBy(Array.from(_.values(_.map(this.totalCommonsArray, 'amount')), v => Number(v)));
+  //   let extras = _.sumBy(Array.from(_.values(_.map(this.totalExtrasArray, 'amount')), v => Number(v)));
+  //   let y = [commons, extras, this.superTotal];
+  //   let x = ['Gastos comunes', 'Gastos extras', 'Total anual'];
 
-    // If a chart is already drew, clean chart object it before re-draw it
-    if (this.chart) {
-      this.chart.destroy();
-      this.chart = null;
-    }
+  //   // If a chart is already drew, clean chart object it before re-draw it
+  //   if (this.chart) {
+  //     this.chart.destroy();
+  //     this.chart = null;
+  //   }
 
-    this.chart = new Chart(this.balanceCanvas.nativeElement, {
-      type: "doughnut",
-      data: {
-        labels: x,
-        datasets: [
-          {
-            data: y,
-            backgroundColor: [
-              "rgba(255, 99, 132, 0.65)",
-              "rgba(54, 162, 235, 0.65)",
-              "rgba(255, 206, 86, 0.65)",
-            ],
-            hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"]
-          }
-        ]
-      }
-    });
-  }
+  //   this.chart = new Chart(this.balanceCanvas.nativeElement, {
+  //     type: "doughnut",
+  //     data: {
+  //       labels: x,
+  //       datasets: [
+  //         {
+  //           data: y,
+  //           backgroundColor: [
+  //             "rgba(255, 99, 132, 0.65)",
+  //             "rgba(54, 162, 235, 0.65)",
+  //             "rgba(255, 206, 86, 0.65)",
+  //           ],
+  //           hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"]
+  //         }
+  //       ]
+  //     }
+  //   });
+  // }
 }
