@@ -12,8 +12,8 @@ export class FirestoreService {
 
   ngOnInit() {}
 
-  public uploadFile(consortium: string, folder: string, file: File): Promise<any> {
-    const path = `${consortium}/${folder}/${file.name}`;
+  public uploadFile(consortiumFolder: string, clientFolderName: string, file: File): Promise<any> {
+    const path = `${consortiumFolder}/${clientFolderName}/${file.name}`;
     const ref = this.storage.ref(path);
 
     return new Promise((resolve, reject) => {

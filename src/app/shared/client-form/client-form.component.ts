@@ -147,11 +147,12 @@ export class ClientFormComponent implements OnInit {
 
     let name = this.clientForm.get('name').value;
     let lastName = this.clientForm.get('lastName').value;
-    let consortium = this.selectedConsortiums.join('-');
-    let folderName = `${lastName}-${name}`;
+    let consortiumsNames = _.map(_.filter(this.consortiums, c => this.selectedConsortiums.includes(c.key)), 'name') || [];
+    let consortiumFolder = consortiumsNames.join('-');
+    let clientFolderName = `${lastName}-${name}`;
     let downloadURL = '';
 
-    if (!this.isOwner) downloadURL = await this.firestoreService.uploadFile(consortium, folderName, this.file);
+    if (!this.isOwner) downloadURL = await this.firestoreService.uploadFile(consortiumFolder, clientFolderName, this.file);
     
     let opts = {
       name,

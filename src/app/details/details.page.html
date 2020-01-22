@@ -17,8 +17,12 @@
     </ion-title>
 
     <ion-buttons slot="end">
-      <ion-button (click)="presentPopover($event)" class="close-button">
+      <ion-button (click)="presentPopover($event)" class="close-button" *ngIf="!editMode">
         <ion-icon slot="icon-only" name="more"></ion-icon>
+      </ion-button>
+
+      <ion-button (click)="cancelEditionMode()" class="close-button" *ngIf="editMode">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>

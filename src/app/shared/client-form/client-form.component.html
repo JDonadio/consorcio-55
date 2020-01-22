@@ -59,7 +59,7 @@
     <ion-col>
       <ion-item>
         <ion-label>Consorcios</ion-label>
-        <ion-select interface="alert" [selectedText]="selectedConsortiumsText" multiple disabled="{{!consortiums[0]}}" 
+        <ion-select interface="alert" multiple disabled="{{!consortiums[0]}}" 
           (ionChange)="selectConsortiums($event)">
           <ion-select-option *ngFor="let c of consortiums" value={{c.key}}>{{c.name}}</ion-select-option>
         </ion-select>
@@ -71,7 +71,7 @@
     <ion-col>
       <ion-item>
         <ion-label>Propietarios</ion-label>
-        <ion-select interface="alert" [selectedText]="selectedOwnerText" disabled="{{!owners[0]}}" 
+        <ion-select interface="alert" disabled="{{!owners[0]}}" 
           (ionChange)="selectOwners($event)">
           <ion-select-option *ngFor="let o of owners" value={{o.key}}>{{o.name}} {{o.lastName}}</ion-select-option>
         </ion-select>

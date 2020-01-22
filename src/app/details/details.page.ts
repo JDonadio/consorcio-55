@@ -254,4 +254,8 @@ export class DetailsPage implements OnInit {
     let total = _.concat(commons, _.concat(extras, services));
     this.data.balance = _.sumBy(Array.from(_.values(total), v => Number(v)));
   }
+
+  public cancelEditionMode() {
+    this.editMode = false;    
+  }
 }
