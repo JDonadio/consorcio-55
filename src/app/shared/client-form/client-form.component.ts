@@ -175,7 +175,6 @@ export class ClientFormComponent implements OnInit {
       this.firebaseService.updateObject(`clients/${this.data.key}`, opts)
         .then(() => {
           this.onSuccess({ msg: `Cliente ${opts.name} modificado correctamente!` });
-          this.resetForm();
           setTimeout(() => { this.name.setFocus() }, 1000);
         })
         .catch(err => {

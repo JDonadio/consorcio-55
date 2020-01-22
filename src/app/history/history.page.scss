@@ -14,9 +14,11 @@
   }
   .no-payments {
     text-align: right;
+    border-bottom: 1px solid lightgray;
   }
   .payments {
     margin-top: 1rem;
+    border-bottom: 1px solid lightgray;
     .details {
       display: flex;
       justify-content: space-between;

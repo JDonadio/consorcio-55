@@ -1,14 +1,13 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { FirebaseService } from 'src/services/firebase.service';
 import { MessagesService } from 'src/services/messages.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { SharingService } from 'src/services/sharing.service';
 import { Subscription } from 'rxjs';
 import { PopoverController } from '@ionic/angular';
-import * as _ from 'lodash';
 import { PopoverComponent } from './popover/popover.component';
+import * as _ from 'lodash';
 
 const SERVICES = [
   { name: 'Alquiler', type: '' },
@@ -32,7 +31,6 @@ export class DetailsPage implements OnInit {
   public clients: any;
   public consortiums: any;
   public data: any;
-  public clientForm: FormGroup;
   public editMode: boolean;
   public currentYear: number;
   public monthCounter: number;
@@ -44,7 +42,6 @@ export class DetailsPage implements OnInit {
   constructor(
     private firebaseService: FirebaseService,
     private messagesService: MessagesService,
-    private formBuilder: FormBuilder,
     private router: Router,
     private db: AngularFireDatabase,
     private sharingService: SharingService,
@@ -105,41 +102,30 @@ export class DetailsPage implements OnInit {
         if (_.isEmpty(clientSub)) return;
 
         if (!clientSub.isOwner) {
-          client.ownerObj = _.find(this.clients, c => c.key == clientSub.owner);
+          clientSub.ownerObj = _.find(this.clients, c => c.key == clientSub.owner);
         }
-        let consortiumsObj = _.filter(this.consortiums, c => client.consortiums.includes(c.key)) || [];
-        client.consortiumsStr = _.map(consortiumsObj, 'name').join(', ');
+        let consortiumsObj = _.filter(this.consortiums, c => clientSub.consortiums.includes(c.key)) || [];
+        clientSub.consortiumsStr = _.map(consortiumsObj, 'name').join(', ');
 
-        this.refreshData(client, clientSub);
+        clientSub = { ...clientSub, key: client.key };
+        this.refreshData(clientSub);
       }));
     } 
     else {
       this.sub.add(this.db.object('consortiums/' + client.key).valueChanges().subscribe((clientSub: any) => {
         if (_.isEmpty(clientSub)) return;
 
-        this.refreshData(client, clientSub);
+        clientSub = { ...clientSub, key: client.key };
+        this.refreshData(clientSub);
       }));
     }
   }
 
-  private refreshData(client, data) {
-    this.client = _.cloneDeep(data);
+  private refreshData(client) {
+    this.client = _.cloneDeep(client);
     this.data = _.cloneDeep(client);
     this.processPayments();
-    this.setClientForm(client);
     console.log('this.data:', this.data);
-  }
-
-  private setClientForm(client: any) {
-    this.clientForm = this.formBuilder.group({
-      name: [client.name, Validators.required],
-      type: [client.type, Validators.required],
-      owner: [client.owner, Validators.required],
-      address: [client.address, Validators.required],
-      contractURL: [client.contractURL, Validators.required], // File URL
-      dateContractFrom: [client.dateContractFrom, Validators.required],
-      dateContractTo: [client.dateContractTo, Validators.required],
-    });
   }
 
   public getPreviousMonthInformation() {
@@ -256,6 +242,7 @@ export class DetailsPage implements OnInit {
   }
 
   public cancelEditionMode() {
-    this.editMode = false;    
+    this.editMode = false;
+    this.setClient(this.client);
   }
 }

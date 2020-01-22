@@ -43,7 +43,6 @@
       <ion-card-header>{{'Gastos comunes (anual)' | uppercase}}</ion-card-header>
       <ion-card-content>
         <div class="balance-by-month" *ngFor="let common of totalCommonsArray">
-          <div class="no-payments" *ngIf="common.amount == 0">No se realizaron pagos</div>
           <div class="payments" *ngIf="common.amount > 0">
             <div class="details">
               <div>{{common.name | capitalize}}</div>
