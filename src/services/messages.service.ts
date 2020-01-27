@@ -84,7 +84,10 @@ export class MessagesService {
       this.loading.dismiss();
       this.loading = null;
     } catch (error) {
-      console.log('Error trying to dismiss loading', error);
+      console.log('Error trying to dismiss loading');
+      setTimeout(() => {
+        this.dismissLoading();
+      }, 1000);
     }
   }
 }

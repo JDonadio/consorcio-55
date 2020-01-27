@@ -34,7 +34,8 @@
           </div>
         </div>
         <div class="ribbon ribbon-bottom-right" *ngIf="client.type == 'client' && client.class" 
-          [ngClass]="(client.class)"><span>{{client.diff + ' días'}}</span></div>
+          [ngClass]="(client.class)"><span>{{client.diff >= 0 ? client.diff + ' días': 'vencido'}}</span>
+        </div>
       </ion-card>
     </ion-item>
   </ion-virtual-scroll>

@@ -35,8 +35,8 @@ export class ExpirationService {
         };
 
         if (diff <= 90) {
-          if (diff <= 0) resObj.class = 'expired';
-          if (diff > 0 && diff <= 30) resObj.class = 'danger';
+          if (diff < 0) resObj.class = 'expired';
+          if (diff >= 0 && diff <= 30) resObj.class = 'danger';
           if (diff > 30 && diff <= 60) resObj.class = 'alert';
           if (diff > 60 && diff <= 90) resObj.class = 'warning';
         }
@@ -88,8 +88,8 @@ export class ExpirationService {
       r.diff = Math.ceil((r.date - today) / dayFormater);
 
       if (r.diff <= 90) {
-        if (r.diff <= 0) r.class = 'expired';
-        if (r.diff > 0 && r.diff <= 30) r.class = 'danger';
+        if (r.diff < 0) r.class = 'expired';
+        if (r.diff >= 0 && r.diff <= 30) r.class = 'danger';
         if (r.diff > 30 && r.diff <= 60) r.class = 'alert';
         if (r.diff > 60 && r.diff <= 90) r.class = 'warning';
       } else r.class = '';
