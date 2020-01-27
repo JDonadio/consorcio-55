@@ -73,16 +73,15 @@ export class DetailsPage implements OnInit {
     this.sub.add(this.sharingService.currentClients.subscribe(currentClients => {
       if (_.isEmpty(currentClients)) return;
       this.clients = currentClients;
-      console.log('this.clients:', this.clients)
     }));
     this.sub.add(this.sharingService.currentConsortiums.subscribe(currentConsortiums => {
       if (_.isEmpty(currentConsortiums)) return;
       this.consortiums = currentConsortiums;
-      console.log('this.consortiums:', this.consortiums)
     }));
     this.sub.add(this.sharingService.currentClient.subscribe(currentClient => {
       if (_.isEmpty(currentClient)) return;
       this.setClient(currentClient);
+      console.log('currentClient:', currentClient)
     }));
     this.sub.add(this.sharingService.currentConsortium.subscribe(currentConsortium => {
       if (_.isEmpty(currentConsortium)) return;
@@ -107,7 +106,7 @@ export class DetailsPage implements OnInit {
         let consortiumsObj = _.filter(this.consortiums, c => clientSub.consortiums.includes(c.key)) || [];
         clientSub.consortiumsStr = _.map(consortiumsObj, 'name').join(', ');
 
-        clientSub = { ...clientSub, key: client.key };
+        clientSub = { ...clientSub, key: client.key, diff: client.diff, class: client.class };
         this.refreshData(clientSub);
       }));
     } 

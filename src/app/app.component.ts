@@ -38,6 +38,8 @@ export class AppComponent {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+      this.sharingService.setClient(null);
+      this.sharingService.setConsortium(null);
     });
   }
 

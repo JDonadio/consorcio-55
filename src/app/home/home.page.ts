@@ -2,6 +2,7 @@ import { Component, OnInit, NgZone } from '@angular/core';
 import { SharingService } from 'src/services/sharing.service';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { ExpirationService } from 'src/services/expiration.service';
 import * as _ from 'lodash';
 
 @Component({
@@ -23,6 +24,7 @@ export class HomePage implements OnInit {
     private sharingService: SharingService,
     private alertCtrl: AlertController,
     private router: Router,
+    private expirationService: ExpirationService,
   ) {
     this.searchText = '';
     this.activeFilter = null;
@@ -31,34 +33,30 @@ export class HomePage implements OnInit {
     this.consortiums = [];
     this.clients = [];
     this.sharingService.currentClients.subscribe(clients => {
-      this.zone.run(() => {
-        this.clients = clients || [];
-        console.log('clients:', clients)
-        this.updateObjects();
-      });
+      if (_.isEmpty(clients)) return;
+
+      this.clients = clients;
+      this.updateObjects();
     });
     this.sharingService.currentConsortiums.subscribe(consortiums => {
-      this.zone.run(() => {
-        this.consortiums = consortiums || [];
-        console.log('consortiums:', consortiums)
-        this.updateObjects();
-      });
+      if (_.isEmpty(consortiums)) return;
+
+      this.consortiums = consortiums;
+      this.updateObjects();
     });
   }
   
-  ngOnInit() {
-    this.sharingService.setClient(null);
-    this.sharingService.setConsortium(null);
-  }
+  ngOnInit() {}
 
   public openDetails(obj: any) {
     obj.type == 'client' ? this.sharingService.setClient(obj) : this.sharingService.setConsortium(obj);
     this.router.navigate(['details']);
   }
 
-  private updateObjects() {
+  private async updateObjects() {
+    await this.expirationService.processExpirationContractDates(this.clients);
+    this.allObjects = this.consortiums.concat(this.clients);
     this.zone.run(() => {
-      this.allObjects = this.consortiums.concat(this.clients);
       this.filteredObjects = _.clone(this.allObjects);
       console.log('this.filteredObjects:', this.filteredObjects)
     });
@@ -79,12 +77,6 @@ export class HomePage implements OnInit {
       return c.name.toLowerCase().includes(this.searchText.toLocaleLowerCase()) 
     }), 'key');
     let byConsortium = _.filter(this.clients, c => { return c.consortiums.some(_c => consortiumKeys.indexOf(_c) >= 0) });
-    
-    // console.log('byName:', byName)
-    // console.log('byAddress:', byAddress)
-    // console.log('byType:', byType)
-    // console.log('consortiumKeys:', consortiumKeys)
-    // console.log('byConsortium:', byConsortium)
 
     let result = [].concat(byName, byAddress, byType, byConsortium);
     this.filteredObjects = _.clone(_.uniqBy(result, 'key'));

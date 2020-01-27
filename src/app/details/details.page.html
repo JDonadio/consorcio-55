@@ -68,7 +68,7 @@
         </div>
         <ion-button fill="outline" class="button-contract" (click)="openOwnerDetails(data.ownerObj)">Ver</ion-button>
       </ion-item>
-      <ion-item *ngIf="data.type == 'client' && !data.isOwner">
+      <ion-item *ngIf="data.type == 'client' && !data.isOwner" [ngClass]="(client.class || '')">
         <div class="info">
           <div class="property">{{'Contrato'}}</div>
           <div class="description">{{data.dateContractFrom | date:'dd/MM/yyyy'}} - {{data.dateContractTo | date:'dd/MM/yyyy'}}</div>

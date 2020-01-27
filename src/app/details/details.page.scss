@@ -112,3 +112,15 @@ ion-label {
   border-top: 20px solid transparent;
   border-bottom: 20px solid transparent;
 }
+.expired {
+  border: 2px solid gray;
+}
+.danger {
+  border: 2px solid red;
+}
+.alert {
+  border: 2px solid orange;
+}
+.warning {
+  border: 2px solid yellow;
+}

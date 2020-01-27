@@ -83,3 +83,45 @@ ion-alert {
     --height: 90%;
   }
 }
+
+.ribbon {
+  width: 150px;
+  height: 150px;
+  overflow: hidden;
+  position: absolute;
+}
+.ribbon span {
+  position: absolute;
+  display: block;
+  width: 225px;
+  padding: 15px 0;
+  box-shadow: 0 5px 10px rgba(0,0,0,.1);
+  color: #fff;
+  font: 700 18px/1 'Lato', sans-serif;
+  text-shadow: 0 1px 1px rgba(0,0,0,.2);
+  text-transform: uppercase;
+  text-align: center;
+}
+/* bottom right*/
+.ribbon-bottom-right {
+  bottom: -10px;
+  right: -10px;
+}
+.ribbon-bottom-right span {
+  left: -30px;
+  bottom: 20px;
+  transform: rotate(-45deg);
+}
+.expired span {
+  background-color: gray;
+}
+.danger span {
+  background-color: red;
+}
+.alert span {
+  background-color: orange;
+}
+.warning span {
+  color: gray;
+  background-color: yellow;
+}

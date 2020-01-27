@@ -33,7 +33,7 @@
             <div class="description">{{client.address | capitalize}} {{client.number}} {{(client.floor || '') + ((client.apartment | capitalize) || '')}}</div>
           </div>
         </div>
-        <div class="ribbon ribbon-bottom-right" [ngClass]="(client.expiration.class)"><span>{{client.expiration.diff + ' días'}}</span></div>
+        <div class="ribbon ribbon-bottom-right" *ngIf="client.expiration.class" [ngClass]="(client.expiration.class)"><span>{{client.expiration.diff + ' días'}}</span></div>
       </ion-card>
     </ion-item>
   </ion-virtual-scroll>
