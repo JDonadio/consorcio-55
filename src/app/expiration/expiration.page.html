@@ -4,11 +4,21 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     
-    <ion-title>Estado</ion-title>
+    <ion-title>
+      <div class="last-report">Actualizado: {{ now | date:'short'}}</div>
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-item *ngIf="!filteredClients || !filteredClients[0]">
+    <ion-card>
+      <div class="content">
+        No se encontraron resultados.
+      </div>
+    </ion-card>
+  </ion-item>
+  
   <ion-virtual-scroll [items]="filteredClients" approxItemHeight="90px">
     <ion-item *virtualItem="let client" (click)="openDetails(client)">
       <ion-card>
@@ -23,6 +33,7 @@
             <div class="description">{{client.address | capitalize}} {{client.number}} {{(client.floor || '') + ((client.apartment | capitalize) || '')}}</div>
           </div>
         </div>
+        <div class="ribbon ribbon-bottom-right" [ngClass]="(client.expiration.class)"><span>{{client.expiration.diff + ' días'}}</span></div>
       </ion-card>
     </ion-item>
   </ion-virtual-scroll>
@@ -30,7 +41,7 @@
 
 <ion-footer>
   <ion-card>
-    <ion-button [disabled]="!clients || !clients[0]" 
+    <ion-button fill="outline" [disabled]="!clients || !clients[0]" 
       (click)="checkExpirationContractDates()">Verificar estado de contratos</ion-button>
   </ion-card>
 </ion-footer>
