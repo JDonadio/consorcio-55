@@ -165,9 +165,10 @@ export class DetailsPage implements OnInit {
 
     let year = this.selectedDate.getFullYear();
     let month = (this.selectedDate.getMonth() + 1).toString().padStart(2, '0');
+    let collection = this.data.type == 'client' ? 'clients' : 'consortiums';
 
     try {
-      await this.firebaseService.updateObject(`clients/${this.data.key}/payments/${year}/${month}`, opts);
+      await this.firebaseService.updateObject(`${collection}/${this.data.key}/payments/${year}/${month}`, opts);
       this.processPayments();
       this.messagesService.showToast({ msg: `El pago ha sido agregado correctamente!` });
     } catch (err) {

@@ -70,18 +70,24 @@ export class HomePage implements OnInit {
       return;
     }
 
-    let byName = _.filter(this.allObjects, c => { return c.name.toLowerCase().includes(this.searchText.toLowerCase()) });
+    let byName = _.filter(this.allObjects, c => { 
+      return [c.name, c.lastName || ''].join(' ').toLowerCase().includes(this.searchText.toLowerCase()) 
+    });
     let byAddress = _.filter(this.allObjects, c => { return c.address.toLowerCase().includes(this.searchText.toLowerCase()) });
     let byType = _.filter(this.allObjects, c => { return c.type.toLowerCase().includes(this.searchText.toLowerCase()) });
-    let byOwner = _.filter(this.allObjects, c => { return c.isOwner });
-    let byRenter = _.filter(this.allObjects, c => { return !c.isOwner });
+    let consortiumKeys = _.map(_.filter(this.consortiums, c  => { 
+      return c.name.toLowerCase().includes(this.searchText.toLocaleLowerCase()) 
+    }), 'key');
+    let byConsortium = _.filter(this.clients, c => { return c.consortiums.some(_c => consortiumKeys.indexOf(_c) >= 0) });
+    
+    // console.log('byName:', byName)
+    // console.log('byAddress:', byAddress)
+    // console.log('byType:', byType)
+    // console.log('consortiumKeys:', consortiumKeys)
+    // console.log('byConsortium:', byConsortium)
 
-    if (!_.isEmpty(byName)) this.filteredObjects = _.clone(byName);
-    else if (!_.isEmpty(byAddress)) this.filteredObjects = _.clone(byAddress);
-    else if (!_.isEmpty(byType)) this.filteredObjects = _.clone(byType);
-    else if (!_.isEmpty(byOwner)) this.filteredObjects = _.clone(byOwner);
-    else if (!_.isEmpty(byRenter)) this.filteredObjects = _.clone(byRenter);
-    else this.filteredObjects = [];
+    let result = [].concat(byName, byAddress, byType, byConsortium);
+    this.filteredObjects = _.clone(_.uniqBy(result, 'key'));
   }
 
   public async showFilter() {
