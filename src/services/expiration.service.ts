@@ -46,26 +46,26 @@ export class ExpirationService {
 
       setTimeout(() => {
         let filteredClients = _.compact(_.map(clients, c => {
-          if (_.map(res, 'key').includes(c.key)) return { ...c, expiration: _.find(res, r => r.key == c.key) }
+          if (_.map(res, 'key').includes(c.key)) return { ...c, ..._.find(res, r => r.key == c.key) }
         }));
-
+        
         // Testing purpose
 
         // let sim1 = _.cloneDeep(filteredClients[0]);
-        // sim1.expiration.diff = -10;
-        // sim1.expiration.class =  'expired';
+        // sim1.diff = -10;
+        // sim1.class =  'expired';
         // let sim2 = _.cloneDeep(filteredClients[0]);
-        // sim2.expiration.diff = 10;
-        // sim2.expiration.class = 'danger';
+        // sim2.diff = 10;
+        // sim2.class = 'danger';
         // let sim3 = _.cloneDeep(filteredClients[0]);
-        // sim3.expiration.diff = 40;
-        // sim3.expiration.class = 'alert';
+        // sim3.diff = 40;
+        // sim3.class = 'alert';
         // let sim4 = _.cloneDeep(filteredClients[0]);
-        // sim4.expiration.diff = 70;
-        // sim4.expiration.class = 'warning';
+        // sim4.diff = 70;
+        // sim4.class = 'warning';
         // let sim5 = _.cloneDeep(filteredClients[0]);
-        // sim5.expiration.diff = 100;
-        // sim5.expiration.class = '';
+        // sim5.diff = 100;
+        // sim5.class = '';
         // filteredClients = filteredClients.concat(sim1, sim2, sim3, sim4, sim5);
 
         let checkedClients = _.compact(filteredClients);
@@ -93,8 +93,6 @@ export class ExpirationService {
         if (r.diff > 30 && r.diff <= 60) r.class = 'alert';
         if (r.diff > 60 && r.diff <= 90) r.class = 'warning';
       } else r.class = '';
-    })
-
-    console.log('### ', clients)
+    });
   };
 }

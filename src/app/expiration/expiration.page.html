@@ -33,9 +33,9 @@
             <div class="description">{{client.address | capitalize}} {{client.number}} {{(client.floor || '') + ((client.apartment | capitalize) || '')}}</div>
           </div>
         </div>
-        <div class="ribbon ribbon-bottom-right" *ngIf="client.expiration.class" 
-          [ngClass]="(client.expiration.class)">
-          <span>{{client.expiration.diff >= 0  ? client.expiration.diff+ ' días' : 'vencido'}}</span>
+        <div class="ribbon ribbon-bottom-right" *ngIf="client.class" 
+          [ngClass]="(client.class)">
+          <span>{{client.diff >= 0  ? client.diff+ ' días' : 'vencido'}}</span>
         </div>
       </ion-card>
     </ion-item>
