@@ -34,7 +34,12 @@
     <ion-list>
       <ion-list-header>
         <ion-label>Datos personales</ion-label>
+        <ion-button fill="clear" (click)="displayMoreInfo()" [ngClass]="{'chevron-expanded': showMore, 'chevron-collapsed': !showMore}"
+          *ngIf="data.type == 'client'">
+          <ion-icon slot="icon-only" name="arrow-dropdown"></ion-icon>
+        </ion-button>
       </ion-list-header>
+
       <ion-item>
         <div class="info">
           <div class="property">{{'Nombre'}}</div>
@@ -75,6 +80,39 @@
         </div>
         <ion-button fill="outline" class="button-contract" (click)="openContract()">Ver</ion-button>
       </ion-item>
+
+      <div class="more-info" [ngClass]="{'expanded': showMore, 'fadeIn': showMore}" *ngIf="data.type == 'client'">
+        <ion-item>
+          <div class="info">
+            <div class="property">{{'TELEFONO'}}</div>
+            <div class="description">{{data.cellphone || '---'}}</div>
+          </div>
+        </ion-item>
+        <ion-item>
+          <div class="info">
+            <div class="property">{{'EDET'}}</div>
+            <div class="description">{{data.edet || '---'}}</div>
+          </div>
+        </ion-item>
+        <ion-item>
+          <div class="info">
+            <div class="property">{{'GASNOR'}}</div>
+            <div class="description">{{data.gasnor || '---'}}</div>
+          </div>
+        </ion-item>
+        <ion-item>
+          <div class="info">
+            <div class="property">{{'CISI'}}</div>
+            <div class="description">{{data.cisi || '---'}}</div>
+          </div>
+        </ion-item>
+        <ion-item>
+          <div class="info">
+            <div class="property">{{'DGR'}}</div>
+            <div class="description">{{data.dgr || '---'}}</div>
+          </div>
+        </ion-item>
+      </div>
     </ion-list>
   </ion-card>
 

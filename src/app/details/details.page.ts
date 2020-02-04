@@ -32,6 +32,7 @@ export class DetailsPage implements OnInit {
   public consortiums: any;
   public data: any;
   public editMode: boolean;
+  public showMore: boolean;
   public currentYear: number;
   public monthCounter: number;
   public now: Date;
@@ -56,6 +57,7 @@ export class DetailsPage implements OnInit {
       this.data = null;
       this.clients = [];
       this.consortiums = [];
+      this.showMore = false;
     });
   }
   
@@ -93,6 +95,10 @@ export class DetailsPage implements OnInit {
     this.sub.unsubscribe();
     this.sharingService.setClient(null);
     this.sharingService.setConsortium(null);
+  }
+
+  public displayMoreInfo() {
+    this.showMore = !this.showMore;
   }
 
   private setClient(client: any) {

@@ -45,6 +45,10 @@ export class ClientFormComponent implements OnInit {
       apartment: [''],
       cellphone: [''],
       type: ['client'],
+      edet: [''],
+      gasnor: [''],
+      cisi: [''],
+      dgr: [''],
       dateContractFrom: [''],
       dateContractTo: [''],
       owner: [''],
@@ -105,6 +109,10 @@ export class ClientFormComponent implements OnInit {
     this.clientForm.patchValue({ floor: this.data.floor });
     this.clientForm.patchValue({ apartment: this.data.apartment });
     this.clientForm.patchValue({ cellphone: this.data.cellphone });
+    this.clientForm.patchValue({ edet: this.data.edet });
+    this.clientForm.patchValue({ gasnor: this.data.gasnor });
+    this.clientForm.patchValue({ cisi: this.data.cisi });
+    this.clientForm.patchValue({ dgr: this.data.dgr });
     this.clientForm.patchValue({ type: this.data.type });
     this.clientForm.patchValue({ dateContractFrom: this.data.dateContractFrom });
     this.clientForm.patchValue({ dateContractTo: this.data.dateContractTo });
@@ -164,6 +172,10 @@ export class ClientFormComponent implements OnInit {
       floor: this.clientForm.get('floor').value,
       apartment: this.clientForm.get('apartment').value,
       cellphone: this.clientForm.get('cellphone').value,
+      edet: this.clientForm.get('edet').value,
+      gasnor: this.clientForm.get('gasnor').value,
+      cisi: this.clientForm.get('cisi').value,
+      dgr: this.clientForm.get('dgr').value,
       dateContractFrom: this.clientForm.get('dateContractFrom').value,
       dateContractTo: this.clientForm.get('dateContractTo').value,
       owner: !this.isOwner && this.selectedOwner ? this.selectedOwner : null,
@@ -202,6 +214,10 @@ export class ClientFormComponent implements OnInit {
     this.clientForm.patchValue({ floor: '' });
     this.clientForm.patchValue({ apartment: '' });
     this.clientForm.patchValue({ cellphone: '' });
+    this.clientForm.patchValue({ edet: '' });
+    this.clientForm.patchValue({ gasnor: '' });
+    this.clientForm.patchValue({ cisi: '' });
+    this.clientForm.patchValue({ dgr: '' });
     this.clientForm.patchValue({ type: 'client' });
     this.clientForm.patchValue({ dateContractFrom: '' });
     this.clientForm.patchValue({ dateContractTo: '' });

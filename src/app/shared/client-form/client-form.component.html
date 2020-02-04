@@ -58,6 +58,36 @@
   <ion-row>
     <ion-col>
       <ion-item>
+        <ion-label position="stacked">EDET</ion-label>
+        <ion-input type="number" formControlName="edet"></ion-input>
+      </ion-item>
+    </ion-col>
+    
+    <ion-col>
+      <ion-item>
+        <ion-label position="stacked">GASNOR</ion-label>
+        <ion-input type="number" formControlName="gasnor"></ion-input>
+      </ion-item>
+    </ion-col>
+    
+    <ion-col>
+      <ion-item>
+        <ion-label position="stacked">CISI</ion-label>
+        <ion-input type="number" formControlName="cisi"></ion-input>
+      </ion-item>
+    </ion-col>
+    
+    <ion-col>
+      <ion-item>
+        <ion-label position="stacked">DGR</ion-label>
+        <ion-input type="number" formControlName="dgr"></ion-input>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col>
+      <ion-item>
         <ion-label>Consorcios</ion-label>
         <ion-select interface="alert" multiple disabled="{{!consortiums[0]}}" 
           (ionChange)="selectConsortiums($event)">
