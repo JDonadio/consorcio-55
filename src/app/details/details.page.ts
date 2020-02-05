@@ -206,8 +206,8 @@ export class DetailsPage implements OnInit {
   }
 
   public async openContract() {
-    if (_.isEmpty(this.client.contractURLs)) return;
-    window.open(this.client.contractURLs);
+    if (_.isEmpty(this.client.contractURL)) return;
+    window.open(this.client.contractURL);
   }
 
   public async presentPopover(ev: any) {
