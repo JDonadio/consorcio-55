@@ -131,14 +131,14 @@
   <ion-row *ngIf="!isOwner">
     <ion-col>
       <ion-item>
-        <ion-label position="stacked">Contrato</ion-label>
-        <ion-input type="text" formControlName="contractURL" readonly></ion-input>
+        <ion-label position="stacked">Contrato(s)</ion-label>
+        <ion-input type="text" formControlName="contractURLs" readonly></ion-input>
       </ion-item>
     </ion-col>
     <ion-col size="1">
       <div class="upload-btn-wrapper">
         <ion-icon name="document"></ion-icon>
-        <input type="file" name="myfile" (change)="selectedFile($event.target.files)">
+        <input type="file" name="myfile" multiple (change)="selectedFile($event.target.files)">
       </div>
     </ion-col>
   </ion-row>

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/storage';
+import * as _ from 'lodash';
 
 @Injectable({
   providedIn: 'root'
@@ -12,24 +13,34 @@ export class FirestoreService {
 
   ngOnInit() {}
 
-  public uploadFile(consortiumFolder: string, clientFolderName: string, file: File): Promise<any> {
-    const path = `${consortiumFolder}/${clientFolderName}/${file.name}`;
-    const ref = this.storage.ref(path);
+  public async uploadFiles(clientFolderName: string, files: any) {
+    let response = [];
 
+    for (let f of files) {
+      let result = await this.doUpload(clientFolderName, f);
+      response.push(result);
+    };
+
+    return response;
+  }
+
+  private doUpload(folder: string, f: any): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.storage.upload(path, file)
+      let path = `${folder}/${f.name}`;
+      let ref = this.storage.ref(path);
+      this.storage.upload(path, f)
         .then(() => {
           ref.getDownloadURL().toPromise()
-            .then(url => { return resolve(url) })
-            .catch(err => {
+            .then(url => resolve(url))
+            .catch(err => { 
               console.log('Error trying to get the download URL', err);
-              return resolve('');
+              resolve('');
             })
         })
         .catch(err => {
           console.log('Error trying to upload file', err);
-          return resolve('');
+          resolve('');
         })
-    });
+    })
   }
 }

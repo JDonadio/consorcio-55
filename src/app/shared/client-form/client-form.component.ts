@@ -25,7 +25,7 @@ export class ClientFormComponent implements OnInit {
   public isOwner: boolean;
   private selectedConsortiums: any;
   private selectedOwner: any;
-  private file: File;
+  private files: Array<File>;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -53,7 +53,7 @@ export class ClientFormComponent implements OnInit {
       dateContractTo: [''],
       owner: [''],
       consortiums: ['', Validators.required],
-      contractURL: [''],
+      contractURLs: [''],
     });
     this.clients = [];
     this.consortiums = [];
@@ -63,7 +63,7 @@ export class ClientFormComponent implements OnInit {
     this.selectedOwner = [];
     this.isOwner = true;
     this.currentYear = new Date().getFullYear();
-    this.file = null;
+    this.files = null;
   }
   
   ngOnInit() {
@@ -118,7 +118,7 @@ export class ClientFormComponent implements OnInit {
     this.clientForm.patchValue({ dateContractTo: this.data.dateContractTo });
     this.clientForm.patchValue({ owner: null });
     this.clientForm.patchValue({ consortiums: null });
-    this.clientForm.patchValue({ contractURL: null });
+    this.clientForm.patchValue({ contractURLs: null });
   }
 
   public changeOwnership(isOwner: boolean) {
@@ -128,24 +128,25 @@ export class ClientFormComponent implements OnInit {
     if (isOwner) {
       this.clientForm.get('dateContractFrom').setValidators(null);
       this.clientForm.get('dateContractTo').setValidators(null);
-      this.clientForm.get('contractURL').setValidators(null);
+      this.clientForm.get('contractURLs').setValidators(null);
       this.clientForm.get('owner').setValidators(null);
     } else {
       this.clientForm.get('dateContractFrom').setValidators([Validators.required]);
       this.clientForm.get('dateContractTo').setValidators([Validators.required]);
-      this.clientForm.get('contractURL').setValidators([Validators.required]);
+      this.clientForm.get('contractURLs').setValidators([Validators.required]);
       this.clientForm.get('owner').setValidators([Validators.required]);
     }
     this.clientForm.get('dateContractFrom').updateValueAndValidity();
     this.clientForm.get('dateContractTo').updateValueAndValidity();
-    this.clientForm.get('contractURL').updateValueAndValidity();
+    this.clientForm.get('contractURLs').updateValueAndValidity();
     this.clientForm.get('owner').updateValueAndValidity();
   }
 
-  public selectedFile(files: FileList) {
-    this.file = files[0];
-    this.clientForm.patchValue({ contractURL: this.file.name });
-    console.log('this.file:', this.file);
+  public selectedFile(files: any) {
+    this.files = files;
+    console.log('Selected files: ', this.files);
+    let fileNames = _.map(files, 'name').join(', ');
+    this.clientForm.patchValue({ contractURLs: fileNames });
   }
   
   public async addClient() {
@@ -155,12 +156,13 @@ export class ClientFormComponent implements OnInit {
 
     let name = this.clientForm.get('name').value;
     let lastName = this.clientForm.get('lastName').value;
-    let consortiumsNames = _.map(_.filter(this.consortiums, c => this.selectedConsortiums.includes(c.key)), 'name') || [];
-    let consortiumFolder = consortiumsNames.join('-');
     let clientFolderName = `${lastName}-${name}`;
-    let downloadURL = '';
+    let downloadURLs = [];
 
-    if (!this.isOwner) downloadURL = await this.firestoreService.uploadFile(consortiumFolder, clientFolderName, this.file);
+    if (!this.isOwner) {
+      downloadURLs = await this.firestoreService.uploadFiles(clientFolderName, this.files);
+      console.log('downloadURLs', downloadURLs)
+    }
     
     let opts = {
       name,
@@ -180,7 +182,7 @@ export class ClientFormComponent implements OnInit {
       dateContractTo: this.clientForm.get('dateContractTo').value,
       owner: !this.isOwner && this.selectedOwner ? this.selectedOwner : null,
       consortiums: this.selectedConsortiums[0] ? this.selectedConsortiums : null,
-      contractURL: downloadURL,
+      contractURLs: downloadURLs,
     }
 
     if (this.editMode) {
@@ -221,7 +223,7 @@ export class ClientFormComponent implements OnInit {
     this.clientForm.patchValue({ type: 'client' });
     this.clientForm.patchValue({ dateContractFrom: '' });
     this.clientForm.patchValue({ dateContractTo: '' });
-    this.clientForm.patchValue({ contractURL: '' });
+    this.clientForm.patchValue({ contractURLs: '' });
     this.selectedOwner = null;
     this.selectedConsortiums = null;
   }
