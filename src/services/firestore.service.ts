@@ -15,10 +15,12 @@ export class FirestoreService {
 
   public async uploadFiles(clientFolderName: string, files: any) {
     let response = [];
+    let index = 0;
 
     for (let f of files) {
       let result = await this.doUpload(clientFolderName, f);
-      response.push(result);
+      response.push({ index, url: result });
+      index++;
     };
 
     return response;

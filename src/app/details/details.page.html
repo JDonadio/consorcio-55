@@ -11,7 +11,7 @@
           <ion-icon name="person" *ngIf="data.type != 'consortium'" class="person"></ion-icon>
         </div>
         <div class="ttl">
-          {{data.name | capitalize}} {{ editMode ? ' - Modificar' : ''}}
+          {{data.lastName | capitalize}} {{data.name | capitalize}} {{ editMode ? ' - Modificar' : ''}}
         </div>
       </div>
     </ion-title>
@@ -73,12 +73,15 @@
         </div>
         <ion-button fill="outline" class="button-contract" (click)="openOwnerDetails(data.ownerObj)">Ver</ion-button>
       </ion-item>
+      
       <ion-item *ngIf="data.type == 'client' && !data.isOwner" [ngClass]="(client.class || '')">
-        <div class="info">
-          <div class="property">{{'Contrato(s)'}}</div>
-          <div class="description">{{data.dateContractFrom | date:'dd/MM/yyyy'}} - {{data.dateContractTo | date:'dd/MM/yyyy'}}</div>
+        <div class="contracts">
+          <div class="label">{{'Contrato(s)'}}</div>
+          <div class="contract" *ngFor="let c of data.contracts">
+            <div class="description">{{c.dateContractFrom | date:'dd/MM/yyyy'}} - {{c.dateContractTo | date:'dd/MM/yyyy'}}</div>
+            <ion-button fill="outline" class="button-contract" (click)="openContract(c.contractURL)">Ver</ion-button>
+          </div>
         </div>
-        <ion-button fill="outline" class="button-contract" (click)="openContract()">Ver</ion-button>
       </ion-item>
 
       <div class="more-info" [ngClass]="{'expanded': showMore, 'fadeIn': showMore}" *ngIf="data.type == 'client'">

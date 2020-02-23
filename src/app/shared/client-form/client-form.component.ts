@@ -145,7 +145,7 @@ export class ClientFormComponent implements OnInit {
   public selectedFile(file: any, index: number) {
     console.log('file', file[0])
     if (_.isEmpty(file)) return;
-    this.files[index] = file;
+    this.files[index] = file[0];
     console.log('Selected files: ', _.compact(this.files));
 
     let obj = {};
@@ -162,10 +162,19 @@ export class ClientFormComponent implements OnInit {
     let lastName = this.clientForm.get('lastName').value;
     let clientFolderName = `${lastName}-${name}`;
     let downloadURLs = [];
-
+    let contracts = [];
+    
     if (!this.isOwner) {
-      downloadURLs = await this.firestoreService.uploadFiles(clientFolderName, this.files);
-      console.log('downloadURLs', downloadURLs)
+      downloadURLs = await this.firestoreService.uploadFiles(clientFolderName, _.compact(this.files));
+      console.log('downloadURLs', downloadURLs);
+      _.each(downloadURLs, item => {
+        contracts[item.index] = {
+          dateContractFrom: this.clientForm.get('dateContractFrom_' + item.index).value,
+          dateContractTo: this.clientForm.get('dateContractTo_' + item.index).value,
+          contractURL: item.url,
+        };
+      });
+      console.log('contracts:', contracts);
     }
 
     let opts = {
@@ -182,11 +191,9 @@ export class ClientFormComponent implements OnInit {
       gasnor: this.clientForm.get('gasnor').value,
       cisi: this.clientForm.get('cisi').value,
       dgr: this.clientForm.get('dgr').value,
-      dateContractFrom: this.clientForm.get('dateContractFrom').value,
-      dateContractTo: this.clientForm.get('dateContractTo').value,
       owner: !this.isOwner && this.selectedOwner ? this.selectedOwner : null,
       consortiums: this.selectedConsortiums[0] ? this.selectedConsortiums : null,
-      contractURL: downloadURLs,
+      contracts,
     }
 
     if (this.editMode) {
@@ -255,7 +262,7 @@ export class ClientFormComponent implements OnInit {
 
     this.selectedConsortiums = event.target.value;
     this.clientForm.patchValue({ consortiums: this.selectedConsortiums });
-    
+
     _.each(this.selectedConsortiums, (c, index) => {
       this.clientForm.addControl('dateContractFrom_' + index, new FormControl('', Validators.required));
       this.clientForm.addControl('dateContractTo_' + index, new FormControl('', Validators.required));
