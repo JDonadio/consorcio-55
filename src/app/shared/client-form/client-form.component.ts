@@ -143,11 +143,14 @@ export class ClientFormComponent implements OnInit {
   }
 
   public selectedFile(file: any, index: number) {
-    console.log('file', file)
+    console.log('file', file[0])
     if (_.isEmpty(file)) return;
     this.files[index] = file;
-    console.log('Selected file: ', this.files);
-    this.clientForm.patchValue({ contractURL: file.name });
+    console.log('Selected files: ', _.compact(this.files));
+
+    let obj = {};
+    obj['contractURL_' + index] = file[0].name;
+    this.clientForm.patchValue(obj);
   }
   
   public async addClient() {
@@ -242,12 +245,32 @@ export class ClientFormComponent implements OnInit {
   }
 
   public selectConsortiums(event) {
+    let previousSelectedConsortiums = _.clone(this.selectedConsortiums);
+
+    _.each(previousSelectedConsortiums, (c, index) => {
+      this.clientForm.removeControl('dateContractFrom_' + index);
+      this.clientForm.removeControl('dateContractTo_' + index);
+      this.clientForm.removeControl('contractURL_' + index);
+    });
+
     this.selectedConsortiums = event.target.value;
     this.clientForm.patchValue({ consortiums: this.selectedConsortiums });
+    
     _.each(this.selectedConsortiums, (c, index) => {
       this.clientForm.addControl('dateContractFrom_' + index, new FormControl('', Validators.required));
       this.clientForm.addControl('dateContractTo_' + index, new FormControl('', Validators.required));
       this.clientForm.addControl('contractURL_' + index, new FormControl('', Validators.required));
+
+      let objFrom = {};
+      let objTo = {};
+      let objURL = {};
+      objFrom['dateContractFrom_' + index] = '';
+      objTo['dateContractTo_' + index] = '';
+      objURL['contractURL_' + index] = '';
+
+      this.clientForm.patchValue(objFrom);
+      this.clientForm.patchValue(objTo);
+      this.clientForm.patchValue(objURL);
     });
     this.clientForm.updateValueAndValidity();
     console.log(this.clientForm)
