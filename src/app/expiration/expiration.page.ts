@@ -13,7 +13,7 @@ import * as _ from 'lodash';
 export class ExpirationPage implements OnInit {
   public filteredClients: any;
   public now: any;
-  private clients: any;
+  public clients: any;
 
   constructor(
     private sharingService: SharingService,

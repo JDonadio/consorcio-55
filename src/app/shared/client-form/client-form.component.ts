@@ -23,7 +23,7 @@ export class ClientFormComponent implements OnInit {
   public owners: any;
   public noOwners: any;
   public isOwner: boolean;
-  private selectedConsortiums: any;
+  public selectedConsortiums: any;
   private selectedOwner: any;
   private files: Array<File>;
 
