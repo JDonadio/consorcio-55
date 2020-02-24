@@ -205,9 +205,9 @@ export class DetailsPage implements OnInit {
     this.router.navigate(['history']);
   }
 
-  public async openContract() {
-    if (_.isEmpty(this.client.contractURL)) return;
-    window.open(this.client.contractURL);
+  public async openContract(url) {
+    if (_.isEmpty(url)) return;
+    window.open(url);
   }
 
   public async presentPopover(ev: any) {

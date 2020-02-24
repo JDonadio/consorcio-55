@@ -29,13 +29,13 @@
     <ion-col>
       <ion-item>
         <ion-label position="stacked">Numero</ion-label>
-        <ion-input type="text" formControlName="number"></ion-input>
+        <ion-input type="number" min="0" formControlName="number"></ion-input>
       </ion-item>
     </ion-col>
     <ion-col>
       <ion-item>
         <ion-label position="stacked">Piso</ion-label>
-        <ion-input type="text" formControlName="floor"></ion-input>
+        <ion-input type="number" min="0" formControlName="floor"></ion-input>
       </ion-item>
     </ion-col>
     <ion-col>
@@ -59,28 +59,28 @@
     <ion-col>
       <ion-item>
         <ion-label position="stacked">EDET</ion-label>
-        <ion-input type="number" formControlName="edet"></ion-input>
+        <ion-input type="number" min="0" formControlName="edet"></ion-input>
       </ion-item>
     </ion-col>
     
     <ion-col>
       <ion-item>
         <ion-label position="stacked">GASNOR</ion-label>
-        <ion-input type="number" formControlName="gasnor"></ion-input>
+        <ion-input type="number" min="0" formControlName="gasnor"></ion-input>
       </ion-item>
     </ion-col>
     
     <ion-col>
       <ion-item>
         <ion-label position="stacked">CISI</ion-label>
-        <ion-input type="number" formControlName="cisi"></ion-input>
+        <ion-input type="number" min="0" formControlName="cisi"></ion-input>
       </ion-item>
     </ion-col>
     
     <ion-col>
       <ion-item>
         <ion-label position="stacked">DGR</ion-label>
-        <ion-input type="number" formControlName="dgr"></ion-input>
+        <ion-input type="number" min="0" formControlName="dgr"></ion-input>
       </ion-item>
     </ion-col>
   </ion-row>
@@ -109,39 +109,41 @@
     </ion-col>
   </ion-row>
 
-  <ion-row *ngIf="!isOwner">
-    <ion-col>
-      <ion-item>
-        <ion-icon name="calendar"></ion-icon>
-        <ion-label>Desde</ion-label>
-        <ion-datetime display-format="DD MMM, YYYY" [min]="currentYear - 5" [max]="currentYear + 5"
-          formControlName="dateContractFrom"></ion-datetime>
-      </ion-item>
-    </ion-col>
-    <ion-col>
-      <ion-item>
-        <ion-icon name="calendar"></ion-icon>
-        <ion-label>Hasta</ion-label>
-        <ion-datetime display-format="DD MMM, YYYY" [min]="currentYear - 5" [max]="currentYear + 5"
-          formControlName="dateContractTo"></ion-datetime>
-      </ion-item>
-    </ion-col>
-  </ion-row>
-
-  <ion-row *ngIf="!isOwner">
-    <ion-col>
-      <ion-item>
-        <ion-label position="stacked">Contrato</ion-label>
-        <ion-input type="text" formControlName="contractURL" readonly></ion-input>
-      </ion-item>
-    </ion-col>
-    <ion-col size="1">
-      <div class="upload-btn-wrapper">
-        <ion-icon name="document"></ion-icon>
-        <input type="file" name="myfile" (change)="selectedFile($event.target.files)">
-      </div>
-    </ion-col>
-  </ion-row>
+  <div *ngFor="let c of selectedConsortiums; let i = index">
+    <ion-row *ngIf="!isOwner && selectedConsortiums[0]">
+      <ion-col>
+        <ion-item>
+          <ion-icon name="calendar"></ion-icon>
+          <ion-label>Desde</ion-label>
+          <ion-datetime display-format="DD MMM, YYYY" [min]="currentYear - 5" [max]="currentYear + 5"
+            [formControlName]="'dateContractFrom_' + i"></ion-datetime>
+        </ion-item>
+      </ion-col>
+      <ion-col>
+        <ion-item>
+          <ion-icon name="calendar"></ion-icon>
+          <ion-label>Hasta</ion-label>
+          <ion-datetime display-format="DD MMM, YYYY" [min]="currentYear - 5" [max]="currentYear + 5"
+            [formControlName]="'dateContractTo_' + i"></ion-datetime>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  
+    <ion-row *ngIf="!isOwner">
+      <ion-col>
+        <ion-item>
+          <ion-label position="stacked">Contrato</ion-label>
+          <ion-input type="text" [formControlName]="'contractURL_' + i" readonly></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="1">
+        <div class="upload-btn-wrapper">
+          <ion-icon name="document"></ion-icon>
+          <input type="file" name="myfile_{{i}}" (change)="selectedFile($event.target.files, i)">
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
 </form>
 
 <ion-footer>

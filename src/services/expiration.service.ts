@@ -84,15 +84,17 @@ export class ExpirationService {
     let dayFormater = 1000 * 60 * 60 * 24; // miliseconds to -> seconds -> minutes -> hours -> days
 
     _.each(renters, r => {
-      r.date = new Date(r.dateContractTo.substr(0, 10)).getTime();
-      r.diff = Math.ceil((r.date - today) / dayFormater);
-
-      if (r.diff <= 90) {
-        if (r.diff < 0) r.class = 'expired';
-        if (r.diff >= 0 && r.diff <= 30) r.class = 'danger';
-        if (r.diff > 30 && r.diff <= 60) r.class = 'alert';
-        if (r.diff > 60 && r.diff <= 90) r.class = 'warning';
-      } else r.class = '';
+      _.each(r.contracts, c => {
+        r.date = new Date(c.dateContractTo.substr(0, 10)).getTime();
+        r.diff = Math.ceil((r.date - today) / dayFormater);
+  
+        if (r.diff <= 90) {
+          if (r.diff < 0) r.class = 'expired';
+          if (r.diff >= 0 && r.diff <= 30) r.class = 'danger';
+          if (r.diff > 30 && r.diff <= 60) r.class = 'alert';
+          if (r.diff > 60 && r.diff <= 90) r.class = 'warning';
+        } else r.class = '';
+      });
     });
   };
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, NgZone, ViewChild, Input } from '@angular/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { FirebaseService } from 'src/services/firebase.service';
 import { FirestoreService } from 'src/services/firestore.service';
@@ -25,7 +25,7 @@ export class ClientFormComponent implements OnInit {
   public isOwner: boolean;
   private selectedConsortiums: any;
   private selectedOwner: any;
-  private file: File;
+  private files: Array<File>;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -49,11 +49,8 @@ export class ClientFormComponent implements OnInit {
       gasnor: [''],
       cisi: [''],
       dgr: [''],
-      dateContractFrom: [''],
-      dateContractTo: [''],
       owner: [''],
       consortiums: ['', Validators.required],
-      contractURL: [''],
     });
     this.clients = [];
     this.consortiums = [];
@@ -63,12 +60,24 @@ export class ClientFormComponent implements OnInit {
     this.selectedOwner = [];
     this.isOwner = true;
     this.currentYear = new Date().getFullYear();
-    this.file = null;
+    this.files = [];
   }
   
   ngOnInit() {
     console.log('this.editMode', this.editMode)
     console.log('this.data', this.data)
+
+    if (this.isOwner) {
+      _.each([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], i => {
+        try {
+          this.clientForm.removeControl('dateContractFrom_' + i);
+          this.clientForm.removeControl('dateContractTo_' + i);
+          this.clientForm.removeControl('contractURL_' + i);
+        } catch (error) {
+          console.log('Form field does not exist');
+        }
+      });
+    }
 
     if (this.data) this.setForm();
 
@@ -114,11 +123,8 @@ export class ClientFormComponent implements OnInit {
     this.clientForm.patchValue({ cisi: this.data.cisi });
     this.clientForm.patchValue({ dgr: this.data.dgr });
     this.clientForm.patchValue({ type: this.data.type });
-    this.clientForm.patchValue({ dateContractFrom: this.data.dateContractFrom });
-    this.clientForm.patchValue({ dateContractTo: this.data.dateContractTo });
     this.clientForm.patchValue({ owner: null });
     this.clientForm.patchValue({ consortiums: null });
-    this.clientForm.patchValue({ contractURL: null });
   }
 
   public changeOwnership(isOwner: boolean) {
@@ -126,26 +132,22 @@ export class ClientFormComponent implements OnInit {
     this.clientForm.patchValue({ isOwner });
 
     if (isOwner) {
-      this.clientForm.get('dateContractFrom').setValidators(null);
-      this.clientForm.get('dateContractTo').setValidators(null);
-      this.clientForm.get('contractURL').setValidators(null);
       this.clientForm.get('owner').setValidators(null);
     } else {
-      this.clientForm.get('dateContractFrom').setValidators([Validators.required]);
-      this.clientForm.get('dateContractTo').setValidators([Validators.required]);
-      this.clientForm.get('contractURL').setValidators([Validators.required]);
       this.clientForm.get('owner').setValidators([Validators.required]);
     }
-    this.clientForm.get('dateContractFrom').updateValueAndValidity();
-    this.clientForm.get('dateContractTo').updateValueAndValidity();
-    this.clientForm.get('contractURL').updateValueAndValidity();
     this.clientForm.get('owner').updateValueAndValidity();
   }
 
-  public selectedFile(files: FileList) {
-    this.file = files[0];
-    this.clientForm.patchValue({ contractURL: this.file.name });
-    console.log('this.file:', this.file);
+  public selectedFile(file: any, index: number) {
+    console.log('file', file[0])
+    if (_.isEmpty(file)) return;
+    this.files[index] = file[0];
+    console.log('Selected files: ', _.compact(this.files));
+
+    let obj = {};
+    obj['contractURL_' + index] = file[0].name;
+    this.clientForm.patchValue(obj);
   }
   
   public async addClient() {
@@ -155,13 +157,23 @@ export class ClientFormComponent implements OnInit {
 
     let name = this.clientForm.get('name').value;
     let lastName = this.clientForm.get('lastName').value;
-    let consortiumsNames = _.map(_.filter(this.consortiums, c => this.selectedConsortiums.includes(c.key)), 'name') || [];
-    let consortiumFolder = consortiumsNames.join('-');
     let clientFolderName = `${lastName}-${name}`;
-    let downloadURL = '';
-
-    if (!this.isOwner) downloadURL = await this.firestoreService.uploadFile(consortiumFolder, clientFolderName, this.file);
+    let downloadURLs = [];
+    let contracts = [];
     
+    if (!this.isOwner) {
+      downloadURLs = await this.firestoreService.uploadFiles(clientFolderName, _.compact(this.files));
+      console.log('downloadURLs', downloadURLs);
+      _.each(downloadURLs, item => {
+        contracts[item.index] = {
+          dateContractFrom: this.clientForm.get('dateContractFrom_' + item.index).value,
+          dateContractTo: this.clientForm.get('dateContractTo_' + item.index).value,
+          contractURL: item.url,
+        };
+      });
+      console.log('contracts:', contracts);
+    }
+
     let opts = {
       name,
       lastName,
@@ -176,11 +188,9 @@ export class ClientFormComponent implements OnInit {
       gasnor: this.clientForm.get('gasnor').value,
       cisi: this.clientForm.get('cisi').value,
       dgr: this.clientForm.get('dgr').value,
-      dateContractFrom: this.clientForm.get('dateContractFrom').value,
-      dateContractTo: this.clientForm.get('dateContractTo').value,
       owner: !this.isOwner && this.selectedOwner ? this.selectedOwner : null,
       consortiums: this.selectedConsortiums[0] ? this.selectedConsortiums : null,
-      contractURL: downloadURL,
+      contracts,
     }
 
     if (this.editMode) {
@@ -219,9 +229,6 @@ export class ClientFormComponent implements OnInit {
     this.clientForm.patchValue({ cisi: '' });
     this.clientForm.patchValue({ dgr: '' });
     this.clientForm.patchValue({ type: 'client' });
-    this.clientForm.patchValue({ dateContractFrom: '' });
-    this.clientForm.patchValue({ dateContractTo: '' });
-    this.clientForm.patchValue({ contractURL: '' });
     this.selectedOwner = null;
     this.selectedConsortiums = null;
   }
@@ -239,8 +246,35 @@ export class ClientFormComponent implements OnInit {
   }
 
   public selectConsortiums(event) {
+    let previousSelectedConsortiums = _.clone(this.selectedConsortiums);
+
+    _.each(previousSelectedConsortiums, (c, index) => {
+      this.clientForm.removeControl('dateContractFrom_' + index);
+      this.clientForm.removeControl('dateContractTo_' + index);
+      this.clientForm.removeControl('contractURL_' + index);
+    });
+
     this.selectedConsortiums = event.target.value;
     this.clientForm.patchValue({ consortiums: this.selectedConsortiums });
+
+    _.each(this.selectedConsortiums, (c, index) => {
+      this.clientForm.addControl('dateContractFrom_' + index, new FormControl('', this.isOwner ? null : Validators.required));
+      this.clientForm.addControl('dateContractTo_' + index, new FormControl('', this.isOwner ? null : Validators.required));
+      this.clientForm.addControl('contractURL_' + index, new FormControl('', this.isOwner ? null : Validators.required));
+
+      let objFrom = {};
+      let objTo = {};
+      let objURL = {};
+      objFrom['dateContractFrom_' + index] = '';
+      objTo['dateContractTo_' + index] = '';
+      objURL['contractURL_' + index] = '';
+
+      this.clientForm.patchValue(objFrom);
+      this.clientForm.patchValue(objTo);
+      this.clientForm.patchValue(objURL);
+    });
+    this.clientForm.updateValueAndValidity();
+    console.log(this.clientForm)
   }
 
   public selectOwners(event) {
