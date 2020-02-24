@@ -138,15 +138,31 @@ ion-label {
 }
 .expired {
   border: 2px solid gray;
+  border-radius: 2px;
+  .contracts {
+    background-image: repeating-linear-gradient(-45deg, transparent 0 20px, #ececec 0px 25px);
+  }
 }
 .danger {
   border: 2px solid red;
+  border-radius: 2px;
+  .contracts {
+    background-image: repeating-linear-gradient(-45deg, transparent 0 20px, #f5d9d961 0px 25px);
+  }
 }
 .alert {
   border: 2px solid orange;
+  border-radius: 2px;
+  .contracts {
+    background-image: repeating-linear-gradient(-45deg, transparent 0 20px, #fffae9 0px 25px);
+  }
 }
 .warning {
   border: 2px solid yellow;
+  border-radius: 2px;
+  .contracts {
+    background-image: repeating-linear-gradient(-45deg, transparent 0 20px, #ffeeb559 0px 25px);
+  }
 }
 
 .more-info {
