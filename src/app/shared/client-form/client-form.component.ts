@@ -51,9 +51,6 @@ export class ClientFormComponent implements OnInit {
       dgr: [''],
       owner: [''],
       consortiums: ['', Validators.required],
-      // dateContractFrom: [''],
-      // dateContractTo: [''],
-      // contractURLs: [''],
     });
     this.clients = [];
     this.consortiums = [];
@@ -69,6 +66,18 @@ export class ClientFormComponent implements OnInit {
   ngOnInit() {
     console.log('this.editMode', this.editMode)
     console.log('this.data', this.data)
+
+    if (this.isOwner) {
+      _.each([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], i => {
+        try {
+          this.clientForm.removeControl('dateContractFrom_' + i);
+          this.clientForm.removeControl('dateContractTo_' + i);
+          this.clientForm.removeControl('contractURL_' + i);
+        } catch (error) {
+          console.log('Form field does not exist');
+        }
+      });
+    }
 
     if (this.data) this.setForm();
 
@@ -116,9 +125,6 @@ export class ClientFormComponent implements OnInit {
     this.clientForm.patchValue({ type: this.data.type });
     this.clientForm.patchValue({ owner: null });
     this.clientForm.patchValue({ consortiums: null });
-    // this.clientForm.patchValue({ dateContractFrom: this.data.dateContractFrom });
-    // this.clientForm.patchValue({ dateContractTo: this.data.dateContractTo });
-    // this.clientForm.patchValue({ contractURLs: null });
   }
 
   public changeOwnership(isOwner: boolean) {
@@ -126,19 +132,10 @@ export class ClientFormComponent implements OnInit {
     this.clientForm.patchValue({ isOwner });
 
     if (isOwner) {
-      // this.clientForm.get('dateContractFrom').setValidators(null);
-      // this.clientForm.get('dateContractTo').setValidators(null);
-      // this.clientForm.get('contractURLs').setValidators(null);
       this.clientForm.get('owner').setValidators(null);
     } else {
-      // this.clientForm.get('dateContractFrom').setValidators([Validators.required]);
-      // this.clientForm.get('dateContractTo').setValidators([Validators.required]);
-      // this.clientForm.get('contractURLs').setValidators([Validators.required]);
       this.clientForm.get('owner').setValidators([Validators.required]);
     }
-    // this.clientForm.get('dateContractFrom').updateValueAndValidity();
-    // this.clientForm.get('dateContractTo').updateValueAndValidity();
-    // this.clientForm.get('contractURLs').updateValueAndValidity();
     this.clientForm.get('owner').updateValueAndValidity();
   }
 
@@ -232,9 +229,6 @@ export class ClientFormComponent implements OnInit {
     this.clientForm.patchValue({ cisi: '' });
     this.clientForm.patchValue({ dgr: '' });
     this.clientForm.patchValue({ type: 'client' });
-    // this.clientForm.patchValue({ dateContractFrom: '' });
-    // this.clientForm.patchValue({ dateContractTo: '' });
-    // this.clientForm.patchValue({ contractURLs: '' });
     this.selectedOwner = null;
     this.selectedConsortiums = null;
   }
@@ -264,9 +258,9 @@ export class ClientFormComponent implements OnInit {
     this.clientForm.patchValue({ consortiums: this.selectedConsortiums });
 
     _.each(this.selectedConsortiums, (c, index) => {
-      this.clientForm.addControl('dateContractFrom_' + index, new FormControl('', Validators.required));
-      this.clientForm.addControl('dateContractTo_' + index, new FormControl('', Validators.required));
-      this.clientForm.addControl('contractURL_' + index, new FormControl('', Validators.required));
+      this.clientForm.addControl('dateContractFrom_' + index, new FormControl('', this.isOwner ? null : Validators.required));
+      this.clientForm.addControl('dateContractTo_' + index, new FormControl('', this.isOwner ? null : Validators.required));
+      this.clientForm.addControl('contractURL_' + index, new FormControl('', this.isOwner ? null : Validators.required));
 
       let objFrom = {};
       let objTo = {};

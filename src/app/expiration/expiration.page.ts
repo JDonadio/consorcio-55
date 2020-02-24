@@ -40,8 +40,8 @@ export class ExpirationPage implements OnInit {
     this.messagesService.showLoading({ msg: 'Calculando vencimientos...' });
     this.filteredClients = [];
     this.zone.run(async () => {
-      this.filteredClients = await this.expirationService.checkExpirationContractDates(this.clients);
-      console.log('this.filteredClients:', this.filteredClients);
+      await this.expirationService.processExpirationContractDates(this.clients);
+      this.filteredClients = _.clone(_.filter(this.clients, c => c.class != ''));
     });
     setTimeout(() => {
       this.messagesService.dismissLoading();

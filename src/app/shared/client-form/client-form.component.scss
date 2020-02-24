@@ -3,6 +3,7 @@ ion-item {
     color: var(--ion-color-primary);
     &.label-stacked {
       font-size: 25px !important;
+      margin-bottom: 15px;
     }
   }
   ion-icon {
