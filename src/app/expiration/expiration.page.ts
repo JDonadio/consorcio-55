@@ -41,7 +41,7 @@ export class ExpirationPage implements OnInit {
     this.filteredClients = [];
     this.zone.run(async () => {
       await this.expirationService.processExpirationContractDates(this.clients);
-      this.filteredClients = _.clone(_.filter(this.clients, c => c.class != ''));
+      this.filteredClients = _.clone(_.filter(this.clients, c => c.class));
     });
     setTimeout(() => {
       this.messagesService.dismissLoading();
