@@ -20,6 +20,7 @@ export class ClientFormComponent implements OnInit {
   public currentYear: number;
   public clients: any;
   public consortiums: any;
+  public consortiumsFor: any;
   public owners: any;
   public noOwners: any;
   public isOwner: boolean;
@@ -54,6 +55,7 @@ export class ClientFormComponent implements OnInit {
     });
     this.clients = [];
     this.consortiums = [];
+    this.consortiumsFor = {};
     this.owners = [];
     this.noOwners = [];
     this.selectedConsortiums = [];
@@ -246,6 +248,7 @@ export class ClientFormComponent implements OnInit {
   }
 
   public selectConsortiums(event) {
+    this.consortiumsFor = {};
     let previousSelectedConsortiums = _.clone(this.selectedConsortiums);
 
     _.each(previousSelectedConsortiums, (c, index) => {
@@ -272,6 +275,8 @@ export class ClientFormComponent implements OnInit {
       this.clientForm.patchValue(objFrom);
       this.clientForm.patchValue(objTo);
       this.clientForm.patchValue(objURL);
+
+      this.consortiumsFor[c] = _.find(this.consortiums, _c => _c.key == c);
     });
     this.clientForm.updateValueAndValidity();
     console.log(this.clientForm)

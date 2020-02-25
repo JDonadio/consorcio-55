@@ -95,6 +95,24 @@ ion-footer {
   &.expanded {
     max-height: 3000px;
   }
+
+  &.hidden {
+    display: none;
+  }
+}
+
+.contracts-box {
+  border: 1px solid #00b6ff;
+  border-radius: 4px;
+  padding: 5px 0;
+  margin: 10px 0;
+  background: #cae3f96b;
+}
+.contract-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 5px 0 6px 6px;
+  color: #3c68b7;
 }
 
 .fadeIn {
@@ -116,11 +134,6 @@ ion-footer {
   100% {
     opacity:1;
   }
-}
-
-.chevron-expanded {
-	-webkit-animation: expanded 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-	        animation: expanded 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 }
 @-webkit-keyframes expanded {
   0% {
