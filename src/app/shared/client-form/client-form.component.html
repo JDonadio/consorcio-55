@@ -4,100 +4,102 @@
     <div class="inq" [ngClass]="{'selected': !isOwner}" (click)="changeOwnership(false)">Inquilino</div>
   </ion-row>
 
-  <ion-row>
-    <ion-col size="7">
-      <ion-item>
-        <ion-label position="stacked">Nombre</ion-label>
-        <ion-input type="text" #name formControlName="name"></ion-input>
-      </ion-item>
-    </ion-col>
-    <ion-col size="5">
-      <ion-item>
-        <ion-label position="stacked">Apellido</ion-label>
-        <ion-input type="text" formControlName="lastName"></ion-input>
-      </ion-item>
-    </ion-col>
-  </ion-row>
+  <div class="more-info fadeIn expanded">
+    <ion-row>
+      <ion-col size="7">
+        <ion-item>
+          <ion-label position="stacked">Nombre</ion-label>
+          <ion-input type="text" #name formControlName="name"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="5">
+        <ion-item>
+          <ion-label position="stacked">Apellido</ion-label>
+          <ion-input type="text" formControlName="lastName"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  
+    <ion-row>
+      <ion-col size="12">
+        <ion-item>
+          <ion-label position="stacked">Dirección</ion-label>
+          <ion-input type="text" formControlName="address"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col>
+        <ion-item>
+          <ion-label position="stacked">Numero</ion-label>
+          <ion-input type="number" min="0" formControlName="number"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col>
+        <ion-item>
+          <ion-label position="stacked">Piso</ion-label>
+          <ion-input type="number" min="0" formControlName="floor"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col>
+        <ion-item>
+          <ion-label position="stacked">Dpto</ion-label>
+          <ion-input type="text" formControlName="apartment"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="stacked">Teléfono</ion-label>
+          <ion-input type="number" formControlName="cellphone"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="stacked">EDET</ion-label>
+          <ion-input type="number" min="0" formControlName="edet"></ion-input>
+        </ion-item>
+      </ion-col>
+      
+      <ion-col>
+        <ion-item>
+          <ion-label position="stacked">GASNOR</ion-label>
+          <ion-input type="number" min="0" formControlName="gasnor"></ion-input>
+        </ion-item>
+      </ion-col>
+      
+      <ion-col>
+        <ion-item>
+          <ion-label position="stacked">CISI</ion-label>
+          <ion-input type="number" min="0" formControlName="cisi"></ion-input>
+        </ion-item>
+      </ion-col>
+      
+      <ion-col>
+        <ion-item>
+          <ion-label position="stacked">DGR</ion-label>
+          <ion-input type="number" min="0" formControlName="dgr"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label>Consorcios</ion-label>
+          <ion-select interface="alert" multiple disabled="{{!consortiums[0]}}" 
+            (ionChange)="selectConsortiums($event)">
+            <ion-select-option *ngFor="let c of consortiums" value={{c.key}}>{{c.name}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </div>
 
-  <ion-row>
-    <ion-col size="12">
-      <ion-item>
-        <ion-label position="stacked">Dirección</ion-label>
-        <ion-input type="text" formControlName="address"></ion-input>
-      </ion-item>
-    </ion-col>
-    <ion-col>
-      <ion-item>
-        <ion-label position="stacked">Numero</ion-label>
-        <ion-input type="number" min="0" formControlName="number"></ion-input>
-      </ion-item>
-    </ion-col>
-    <ion-col>
-      <ion-item>
-        <ion-label position="stacked">Piso</ion-label>
-        <ion-input type="number" min="0" formControlName="floor"></ion-input>
-      </ion-item>
-    </ion-col>
-    <ion-col>
-      <ion-item>
-        <ion-label position="stacked">Dpto</ion-label>
-        <ion-input type="text" formControlName="apartment"></ion-input>
-      </ion-item>
-    </ion-col>
-  </ion-row>
-
-  <ion-row>
-    <ion-col>
-      <ion-item>
-        <ion-label position="stacked">Teléfono</ion-label>
-        <ion-input type="number" formControlName="cellphone"></ion-input>
-      </ion-item>
-    </ion-col>
-  </ion-row>
-
-  <ion-row>
-    <ion-col>
-      <ion-item>
-        <ion-label position="stacked">EDET</ion-label>
-        <ion-input type="number" min="0" formControlName="edet"></ion-input>
-      </ion-item>
-    </ion-col>
-    
-    <ion-col>
-      <ion-item>
-        <ion-label position="stacked">GASNOR</ion-label>
-        <ion-input type="number" min="0" formControlName="gasnor"></ion-input>
-      </ion-item>
-    </ion-col>
-    
-    <ion-col>
-      <ion-item>
-        <ion-label position="stacked">CISI</ion-label>
-        <ion-input type="number" min="0" formControlName="cisi"></ion-input>
-      </ion-item>
-    </ion-col>
-    
-    <ion-col>
-      <ion-item>
-        <ion-label position="stacked">DGR</ion-label>
-        <ion-input type="number" min="0" formControlName="dgr"></ion-input>
-      </ion-item>
-    </ion-col>
-  </ion-row>
-
-  <ion-row>
-    <ion-col>
-      <ion-item>
-        <ion-label>Consorcios</ion-label>
-        <ion-select interface="alert" multiple disabled="{{!consortiums[0]}}" 
-          (ionChange)="selectConsortiums($event)">
-          <ion-select-option *ngFor="let c of consortiums" value={{c.key}}>{{c.name}}</ion-select-option>
-        </ion-select>
-      </ion-item>
-    </ion-col>
-  </ion-row>
-
-  <ion-row [hidden]="isOwner">
+  <ion-row [hidden]="isOwner" class="more-info fadeIn expanded">
     <ion-col>
       <ion-item>
         <ion-label>Propietarios</ion-label>
@@ -109,7 +111,7 @@
     </ion-col>
   </ion-row>
 
-  <div *ngFor="let c of selectedConsortiums; let i = index">
+  <div *ngFor="let c of selectedConsortiums; let i = index" class="more-info fadeIn expanded">
     <ion-row *ngIf="!isOwner && selectedConsortiums[0]">
       <ion-col>
         <ion-item>
